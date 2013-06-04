@@ -11,7 +11,6 @@ class Customer < ActiveRecord::Base
   #scope :scoped_location, :conditions => { :drop_location_id => self.drop_loacation_id }
   scope :scoped_location, lambda { |location| where(:drop_location_id => location.id) }
   scope :scoped_new, where( "created_at > ?", (DateTime.now - 7.days))
-  #scope :scoped_credits, where("self.total_credits >", 0)
    
   def name
     "#{first_name} #{last_name}"

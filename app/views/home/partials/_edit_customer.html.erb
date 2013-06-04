@@ -64,9 +64,19 @@
 		    <%= f.select :contact_method,  options_for_select([["email", "email"], ["phone", "phone"]], @customer.contact_method) %>
 		  </div></td>
 	</tr>
-	<tr><td>
+	<tr><td colspan="2" style="width:100px">
 		<%= f.label :share_type %><br />
+		<% check_start_date(@customer_drop_location) %>	
+		<% check_next_date(@next_date)%>
+		<% check_hold_date(@customer, @location_merged_datetime)%>
+		<% if @location_merged_datetime < DateTime.now %>	
+		<% @location_merged_datetime = (@location_merged_datetime + 1.week) %>	
+		<% end %>
+		<% if (@location_merged_datetime) >= (DateTime.now + 5.days)%>
 	    <%= f.select :share_type,  options_from_collection_for_select(ShareType.all, "share_type", "share_type", @customer.share_type) %>
+		<% else %>
+		<em>Sorry, your next pick up is less than 5 days from now. Please make changes to your share type from <%= @customer_drop_location.start_time.strftime('%l%p')  %> <%= Date::DAYNAMES[@drop_location.day.to_i]  %> to <%= @customer_drop_location.start_time.strftime('%l%p')  %> <%= Date::DAYNAMES[@drop_location.day.to_i + 2]  %>.</em>
+		<% end %>
 	</td>
 	</tr>
 </table>

@@ -34,6 +34,12 @@ module ApplicationHelper
      @template.content_tag(:ul, errors_list.html_safe, :class => "error-recap round-border")
    end
    
+   def check_next_date(next_date)
+ 		if @next_date < DateTime.now
+ 		  @next_date = (@next_date + 1.week)
+ 		end
+   end
+   
    def get_start_date(location_id)
      drop_location = DropLocation.find_by_id(location_id)
      @next_date = (drop_location.commercial_date + 1.week)

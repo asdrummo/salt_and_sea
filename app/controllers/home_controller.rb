@@ -21,13 +21,7 @@ class HomeController < ApplicationController
     @eight_weeks = []
   	@date = Time.now.beginning_of_week
     @hold_date = HoldDate.new
-    @next_date = (@customer_drop_location.commercial_date)
-    time_to_merge = @customer_drop_location.start_time 
-    date_to_merge = @next_date
-    @location_merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
-    if DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@location_merged_datetime - 7.days)
-      @next_date = (@location_merged_datetime - 7.days)
-    end
+    get_next_date
     if @customer != nil
       @orders = Order.where(:customer_id => @customer.id)
       @credits = CustomerCredit.where(:customer_id => @customer.id)
@@ -71,6 +65,16 @@ class HomeController < ApplicationController
      redirect_to(:action => 'my_account')
   end
   
+  def get_next_date
+    @next_date = (@customer_drop_location.commercial_date)
+    time_to_merge = @customer_drop_location.start_time 
+    date_to_merge = @next_date
+    @location_merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
+    if DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@location_merged_datetime - 7.days)
+      @next_date = (@location_merged_datetime - 7.days)
+    end
+  end
+  
   def save_customer
       @customer = Customer.new(params[:customer])
       @drop_location = DropLocation.find(params[:customer][:drop_location_id])
@@ -103,7 +107,10 @@ class HomeController < ApplicationController
   end
   
   def edit_customer
+      get_next_date
        @orders = Order.where(:customer_id => @customer.id)
+       @date = Time.now.beginning_of_week
+     	 @drop_location = DropLocation.find(@customer.drop_location_id)
        if @customer.preference != nil
          @preference = @customer.preference
         else

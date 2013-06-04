@@ -19,6 +19,7 @@
 			<% @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)%>
 			<%= form_for(@hold_date, :url => {:action => 'hold_dates'}) do |f| %>
 				<%= select_tag 'hold_dates[]', options_for_select(@eight_weeks, @customer_hold_dates.map {|g| g.date.strftime('%a %d %b %Y')}),{ :multiple => true, :size => 8 } %>
+				<%= f.hidden_field :customer_id, :value => @customer.id %>
 			<div class="actions">
 			  <%= f.submit %>
 			</div>
