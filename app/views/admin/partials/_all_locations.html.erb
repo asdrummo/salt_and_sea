@@ -293,27 +293,27 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		</td>
 		<!-- week 7 -->
 		<% @date = (@week1_date + 6.weeks) %>
-		<% if customer.hold_check((@location_next_date + 6.weeks)) == false %>
-		<td><%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13, location, @date) %> 
+		<td><% if customer.hold_check((@location_next_date + 6.weeks)) == false %>
+		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13, location, @date) %> 
 			<% @week7 << @weekly_product %>
 			<% else %>
 				on hold
 				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
-			<% end %>	
+			<% end %>			
 		</td>
 		<!-- week 8 -->
 		<% @date = (@week1_date + 7.weeks) %>
-		<% if customer.hold_check((@location_next_date + 7.weeks)) == false %>
-		<td><%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15, location, @date) %> 
+		<td><% if customer.hold_check((@location_next_date + 7.weeks)) == false %>
+		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15, location, @date) %> 
 			<% @week8 << @weekly_product %>
 			<% else %>
 				on hold
 				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
-			<% end %>		
+			<% end %>			
 		</td>	
 	</tr>
 	<% @fish_credits = 0 %>

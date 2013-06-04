@@ -39,11 +39,6 @@ class Customer < ActiveRecord::Base
         @hold = true
       end
     end
-    # inactive.each do |location|
-    #   if self.drop_location_id == location.id
-    #     #@hold = false
-    #    end
-    #end
      return @hold
   end
   
