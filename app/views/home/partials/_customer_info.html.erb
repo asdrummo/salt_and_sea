@@ -57,6 +57,7 @@
 		<% if @location_merged_datetime < DateTime.now %>	
 		<% @location_merged_datetime = (@location_merged_datetime + 1.week) %>	
 		<% end %>
+		
 		<strong>Next pickup date is:</strong> <%= @location_merged_datetime.strftime('%a %d %b %Y') %>, from 
 		<%= @customer_drop_location.time %><br />
 		<% if @customer_drop_location.info %>
