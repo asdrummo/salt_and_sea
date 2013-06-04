@@ -1,0 +1,45 @@
+<h1>Listing drop_locations</h1>
+
+<table style="width:1500px">
+  <tr>
+    <th>Name</th>
+    <th>Street</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Zip code</th>
+    <th>Link</th>
+    <th>Day</th>
+<th>Info</td>
+    <th>Time (Start)</th>
+    <th>Time (End)</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @drop_locations.each do |drop_location| %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%= drop_location.name %></td>
+    <td><%= drop_location.street %></td>
+    <td><%= drop_location.city %></td>
+    <td><%= drop_location.state %></td>
+    <td><%= drop_location.zip_code %></td>
+    <td><%= drop_location.link %></td>
+    <td><%= Date::DAYNAMES[drop_location.day.to_i]  %></td>
+	<% if (drop_location.info != nil) && (drop_location.info != "")  %>
+    <td style="width:300px"><%= drop_location.info.split[0..15].join(" ").html_safe %>...</td>
+	<% else %>
+	 <td><%= drop_location.info %></td>
+	<% end %>
+    <td><%= drop_location.start_time.strftime('%H:%M') %></td>
+    <td><%= drop_location.end_time.strftime('%H:%M') %></td>
+    <td><%= link_to 'Show', drop_location %></td>
+    <td><%= link_to 'Edit', edit_drop_location_path(drop_location) %></td>
+    <td><%= link_to 'Destroy', drop_location, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Drop location', new_drop_location_path %>

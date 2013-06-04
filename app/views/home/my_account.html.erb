@@ -1,0 +1,11 @@
+<% if @edit_user == true %>
+<%= render(:partial => 'home/partials/edit_customer', :page => @page) %>
+<% elsif user_signed_in? && @customer != nil %>
+<%= render(:partial => 'home/partials/customer_info') %>
+<% elsif %>
+<%= render(:partial => 'home/partials/contact_form') %>
+<% end %>
+
+
+
+

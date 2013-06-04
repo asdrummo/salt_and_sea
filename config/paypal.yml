@@ -1,0 +1,20 @@
+development: &sandbox # change to your own
+  username: api.sandbox.paypal.com
+  password: AX0AsRBEJ5K9D67j8sUOBemSdi3meqWJsSSTpoMHm2vOI6DoZht-EzYgGKo1
+  signature: EHCr9hD4u_J6gAsujU6UiaymwmmbCs7Nuecy5XH-LUTJdegFEnMCPna92SND
+  sandbox: true
+
+test:
+  <<: *sandbox
+
+production: &production
+   # username: asdrummo_api1.gmail.com
+   # password: JCQJTDCC7M3C5PU2
+   # signature: AFcWxV21C7fd0v3bYYYRCpSSRl31AjbFV4UNNG0883SLlSsXVs0FPmH
+   # sandbox: false
+    
+    username: api.sandbox.paypal.com
+    password: AX0AsRBEJ5K9D67j8sUOBemSdi3meqWJsSSTpoMHm2vOI6DoZht-EzYgGKo1
+    signature: EHCr9hD4u_J6gAsujU6UiaymwmmbCs7Nuecy5XH-LUTJdegFEnMCPna92SND
+    sandbox: true
+

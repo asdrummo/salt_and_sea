@@ -1,0 +1,61 @@
+<p><strong>Active Customers:</strong> <%= @weekly_customers.count %>, <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %></p>
+<p><strong>Low credit customers (<%= @low_credit_customers.count %>):</strong> 
+<% @low_credit_customers.each do |customer| %>
+<%= link_to customer.name, customer %>,
+<% end %>
+(<%= link_to 'Send notifications', admin_low_credit_notifications_path %>)
+</p>
+this week's remaining drops:
+<% @this_week_active_locations.each do |location|%>
+<%= location.name %>, 
+<% end %>
+<br />
+next drop date = <%= @merged_datetime %>
+
+<% @customers_active.each do |customer| %>
+	<% customer.credits.each do |credit| %>
+	<% if Product.find(credit.product_id).category == 'fish' %>
+	<% @fish_credits += credit.credits_available %>
+	<% elsif Product.find(credit.product_id).category == 'shellfish' %>
+	<% @shellfish_credits += credit.credits_available %>
+	<% elsif Product.find(credit.product_id).category == 'basket' %>
+	<% @basket_credits += credit.credits_available %>
+	<% end %>
+	<% end %>
+
+
+<% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
+	<% @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 0, 1) %> 		
+	<% @week1 << @weekly_product %>
+	<% @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3) %>
+	<% @week2 << @weekly_product %>
+	<% @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 2, 5) %> 
+	<% @week3 << @weekly_product %>
+	<% @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 3, 7) %> 
+	<% @week4 << @weekly_product %>
+
+	<% @fish_credits = 0 %>
+	<% @shellfish_credits = 0 %>
+	<% @basket_credits = 0 %>
+<% end %>
+<% end %>
+<h2>Weekly Product Stats</h2>
+<b>Week of <%= @date1.strftime('%a %d %b %Y') %></b><br />
+Fish lbs: <%= fish(@week1) %><br />
+Shellfish lbs: <%= shellfish(@week1) %><br /><br />
+
+<b>Week of <%= (@date1 + 1.week).strftime('%a %d %b %Y') %></b><br />
+Fish lbs: <%= fish(@week2) %><br />
+Shellfish lbs: <%= shellfish(@week2) %><br /><br />
+
+<b>Week of <%= (@date1 + 2.weeks).strftime('%a %d %b %Y') %></b><br />
+Fish lbs: <%= fish(@week3) %><br />
+Shellfish lbs: <%= shellfish(@week3) %><br /><br />
+
+<b>Week of <%= (@date1 + 3.weeks).strftime('%a %d %b %Y') %></b><br />
+Fish lbs: <%= fish(@week4) %><br />
+Shellfish lbs: <%= shellfish(@week4) %><br /><br />
+
+
+
+

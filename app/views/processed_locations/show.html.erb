@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Location:</b>
+  <%= @processed_location.location_id %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%= @processed_location.date %>
+</p>
+
+
+<%= link_to 'Edit', edit_processed_location_path(@processed_location) %> |
+<%= link_to 'Back', processed_locations_path %>

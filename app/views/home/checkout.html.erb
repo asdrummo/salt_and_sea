@@ -1,0 +1,14 @@
+<h1 class="center">Checkout</h1>
+<% @page_title = 'My Account'%>
+<% @page = 'checkout' %>
+<% if @edit_user == true %>
+<%= render(:partial => 'home/partials/edit_customer', :page => @page) %>
+<% elsif @customer && user_signed_in? %>
+<%= render(:partial => 'home/partials/checkout_customer_info') %>
+<% elsif user_signed_in? %>
+<%= render(:partial => 'home/partials/contact_form') %>
+<% else %>
+<%= render(:partial => 'home/partials/checkout_signup') %>
+<% end %>
+<%= render(:partial => 'home/partials/cart') %>
+

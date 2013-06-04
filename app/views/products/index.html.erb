@@ -1,0 +1,37 @@
+<h1>Listing Products</h1>
+
+<table class="product" style="width:1000px">
+  <tr>
+    <th>Type</th>
+    <th>Name</th>
+    <th style="width:600px"> Description</th>
+	<th>Image URL</th>
+    <th>Option</th>
+    <th>Price</th>
+    <th>Stock</th>
+	<th>Credits</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @products.each do |product| %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%= product.category %></td>
+    <td><%= product.name %></td>
+    <td style="width:600px"><%= product.description.html_safe %></td>
+	<td style="width:100px"><%= safe_image_tag(product.image_url, :border => 0) %></td>
+    <td><%= product.option %></td>
+    <td><%= product.price %></td>
+    <td><%= product.stock %></td>
+	<td><%= product.credits %></td>
+    <td><%= link_to 'Show', product %></td>
+    <td><%= link_to 'Edit', edit_product_path(product) %></td>
+    <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New product', new_product_path %>

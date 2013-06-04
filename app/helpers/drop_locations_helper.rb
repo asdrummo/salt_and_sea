@@ -1,0 +1,2 @@
+module DropLocationsHelper
+end

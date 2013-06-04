@@ -1,0 +1,45 @@
+<% @page_title = 'Your Receipt' %>
+<% @work_count = 0 %>
+<% @comp_count = 0 %>
+<h2>Receipt</h2>
+<div id="invoice">
+PayPal Transaction #: <%= @order_transaction.authorization %><br /><br />	
+Date: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %><br />
+<br />
+Customer: <%= @order.first_name %> <%= @order.last_name %><br />
+<br />
+Has Successfully Purchased:<br />
+<br />
+<% total_price = 0 %>
+<table class="invoice_table">
+	<tr id="cart_header">
+
+		<th colspan="2">Name</th>
+		<th>Description</th>
+
+		<th>Price</th>
+	</tr>
+<% @purchased_cart.line_items.each do |line_item| %>
+<tr class="<%= cycle('odd', 'even') %>">
+	<td colspan="2">
+		<p><%= line_item.product.name %></p>
+	</td>
+	<td>
+		<p><%= line_item.product.description.html_safe %></p>
+	</td>
+	<td>
+		<p><%= line_item.quantity %> @ <%= number_to_currency(line_item.price) %></p>
+		
+	</td>
+	<td>
+		<p>subtotal: <%= number_to_currency(line_item.price * line_item.quantity) %></p>
+	</td>
+</tr>
+<% end %>
+<tr>
+	<td colspan="7"><h2>Total Amount Charged: <%= number_to_currency(Cart.find_by_id(@order.cart_id).total_price) %></h2></td>
+</tr>
+</table>
+
+</div><!-- end invoice -->
+<%= link_to("Return to your account", home_my_account_url) %>

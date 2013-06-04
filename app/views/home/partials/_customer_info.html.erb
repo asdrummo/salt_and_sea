@@ -1,0 +1,106 @@
+<br />
+<br />
+<div style="float:left"><!-- mailing address + drop location -->
+	<div class="account_title">
+	<span class="middle">Mailing Address:</span>
+	</div>
+	<div class="account_border">
+<p style="padding:0 10px 0 10px"><%= @customer.name %><br />
+<%= @customer.street %><br />
+<%= @customer.city %>, <%= @customer.state %> <%= @customer.zip_code %><br />
+<%= @customer.phone_number %> | <%= @customer.email %></p>
+<% if @show %>
+<% else %>
+<p style="padding:0 10px 0 10px"><%= link_to 'Edit Account', :action => 'edit_customer', :page => 'my_account' %> | <%= link_to 'Change Password', edit_user_registration_path %></p>
+<% end %>
+</div>
+<br />
+<div class="account_title">
+<span class="middle">Additional Preferences:</span>
+</div>
+<div class="account_border">
+<p style="padding:0 10px 0 10px">
+	  <b>Mailing list:</b>
+	  <%= @customer.mailing_list.titleize %>
+	</p>
+	<p style="padding:0 10px 0 10px">
+	  <b>Contact method:</b>
+	  <%= @customer.contact_method.titleize %>
+	</p>
+	<p style="padding:0 10px 0 10px">
+		<b>Fish preferences:</b>
+		Squid: <%= yesno(@preference.squid) %>, 
+		Mackerel: <%= yesno(@preference.mackerel) %>, 
+		Skate Wings: <%= yesno(@preference.skate) %>, 
+		Monkfish: <%= yesno(@preference.monkfish) %>
+	</p>
+	<p style="padding:0 10px 0 10px">
+		<b>Shellfish preferences:</b>
+		Clams: <%= yesno(@preference.clams) %>, 
+		Mussels: <%= yesno(@preference.mussels) %>, 
+		Oysters: <%= yesno(@preference.oysters) %>, 
+		Scallops: <%= yesno(@preference.scallops) %> 
+	</p>
+</div>
+<br />
+<%= render(:partial => 'home/partials/hold_dates') %>
+</div>
+<div style="float:right; margin-left:20px">
+	<div class="account_title">
+	<span class="middle">Drop Locations:</span>
+	</div>
+<div class="account_border">
+<p style="padding:0 10px 0 10px"><span style="font-size:18px"><b><%= @customer_drop_location.name %></b></span><br />
+		<% check_start_date(@customer_drop_location) %>	
+		<% check_next_date(@next_date)%>
+		<% check_hold_date(@customer, @location_merged_datetime)%>
+		<% if @location_merged_datetime < DateTime.now %>	
+		<% @location_merged_datetime = (@location_merged_datetime + 1.week) %>	
+		<% end %>
+		<strong>Next pickup date is:</strong> <%= @location_merged_datetime.strftime('%a %d %b %Y') %>, from 
+		<%= @customer_drop_location.time %><br />
+		<% if @customer_drop_location.info %>
+		<b>Additional Information:</b> <%= @customer_drop_location.info %>  
+		<% end %>
+	</p>
+	</div>
+	
+	<% if @credits %><br />
+	<div class="account_title">
+	<span class="middle">Credits Available:</span>
+	</div>
+	<div class="account_border">
+		<% if @fish_credits > 0 || @shellfish_credits > 0 || @basket_credits > 0%>
+		<p>
+		  <b>Share Type:</b>
+		  <%= @customer.share_type.titleize %>
+		</p>
+		<% end %>
+	<p style="padding:0 10px 0 10px">
+		<% @credits.each do |credit| %>
+			<% if Product.find(credit.product_id).category == 'fish' %>
+			<% @fish_count += 1 %>
+			<% @fish_credits += credit.credits_available %>
+			<% end %>
+			<% if Product.find(credit.product_id).category == 'shellfish'%>
+			<% @shellfish_count += 1 %>
+			<% @shellfish_credits += credit.credits_available %>
+			<% end %>
+			<% if Product.find(credit.product_id).category == 'basket'%>
+			<% @basket_count += 1 %>
+			<% @basket_credits += credit.credits_available %>
+			<% end %>
+		<% end %>
+		<strong>Fish Shares:</strong> <%= @fish_credits %> <br />
+		<strong>Shellfish Shares:</strong> <%= @shellfish_credits %> <br />
+		<strong>Basket Shares:</strong> <%= @basket_credits %> 
+	</p>
+	</div>
+	<br />
+	<% if @orders != nil %>
+	<%= render(:partial => 'home/partials/customer_orders') %>
+	<% end %>
+</div>
+<br />
+<% end %>
+<div class="clear"></div>

@@ -1,0 +1,52 @@
+<div class="account_title">
+<span class="middle">Account Activity:</span>
+</div>
+<div class="account_border">
+<div style="padding:10px">
+<% if @orders.count > 0 %>
+<% total = 0 %>
+<table class="basic_table" style="width:100%">
+	<tr>
+		<td colspan="5"><h3>Order History:</h3></td>
+	</tr>
+	<tr id="orders_header" >
+		<th>Date</th>
+		<th>Order #</th>
+		<th>Price</th>
+	</tr>
+	<% @orders.each do |order| %>
+	<% total = 0 %>
+	<% order_no = order.id %>
+	<tr class="<%= cycle('odd', 'even') %>">
+		<td><%= order.created_at.strftime("%m/%d/%y") %></td>
+		<td style="text-align:center"><%= link_to(order.id, :controller => 'home', :action => 'show_invoice', :id => order.id) %></td>
+		<td><%= number_to_currency(Cart.find_by_id(order.cart_id).total_price) %></td>
+		<% total = 0 %>
+	</tr>
+	<% end %>
+</table>
+<% else %>
+<b>You have no orders on record.</b>
+<% end %>
+<br />
+<% if (@used_customer_credits != nil) && (@used_customer_credits.count > 0 ) %>
+<h3>Recent Activity:</h3>
+<table class="basic_table" style="width:100%">
+	<tr>
+	<th>Date</th>
+	<th>Product</th>
+	<th>Shares Used</th>
+	</tr>
+<% @used_customer_credits.each do |credit| %>
+	<tr class="<%= cycle('even', 'odd') %>">
+	<td><%= credit.created_at.strftime("%B %d, %Y") %></td>
+	<td><%= Product.find_by_id(credit.product_id).name %></td>
+	<td style="text-align:center"><%= credit.credits_used %></td>
+	</tr>
+<% end %>	
+</table>
+<% else %>
+<b>You have no recent share activity.</b>
+<% end %>
+</div>
+</div>	

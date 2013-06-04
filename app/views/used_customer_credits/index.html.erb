@@ -1,0 +1,24 @@
+<h1>Listing Used Customer Credits</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Product</th>
+    <th>Credits Used</th>
+    <th>Date</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<%  @used_credits.each do |used_credit| %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%= Customer.find_by_id(used_credit.customer_id).name %></td>
+    <td><%= Product.find_by_id(used_credit.product_id).name %></td>
+    <td><%= used_credit.credits_used %></td>
+    <td><%= used_credit.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %></td>
+    <td><%= link_to 'Destroy', used_credit, method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+<br />

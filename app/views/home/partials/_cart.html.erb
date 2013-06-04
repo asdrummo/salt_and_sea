@@ -1,0 +1,71 @@
+<% @count = 0 %>
+<% if @cart.line_items.count == 0 %>
+	<table class="center">
+		<tr>
+			<td colspan="5" class="center"><h2>Your Cart is Empty, <%= link_to('return to products page', :action => 'index') %></h2></td>
+		</tr>
+	</table>
+<% else %>
+<table id="cart" class="center">
+
+	<tr>
+		<td colspan="5" class="center"><h1>Your Shopping Cart</h1></td>
+	</tr>
+
+
+
+		<tr>
+			<td colspan="5" class="center"><h2>Items</h2></td>
+		</tr>
+		<tr id="cart_header">
+			<th colspan="2">Name</th>
+			<th>Description</th>
+			<th>QTY</th>
+			<th>Price</th>
+			
+		</tr>
+<% for line_item in @cart.line_items %>
+	<tr class="<%= cycle('odd', 'even') %>">
+		<td colspan="2">
+			<p><%= line_item.product.name %></p>
+		</td>
+		<td>
+			<p><%= line_item.product.description.html_safe %></p>
+		</td>
+		<td>
+			<p><%= line_item.quantity %> @ <%= number_to_currency(line_item.price) %></p>
+			<p>&nbsp</p>
+		</td>
+		<td>
+			<p>subtotal: <%= number_to_currency(line_item.price * line_item.quantity) %></p>
+			<p><%= link_to 'remove', line_item, method: :delete %></p>
+		</td>
+	</tr>
+	<% @count += 1 %>
+<% end %>
+
+	<tr id="cart_total">
+		<td></td>
+		<td></td>
+		<td colspan="2">Shopping Cart Total</td>
+		<td><%= number_to_currency(@cart.total_price) %></td>
+	</tr>
+	<tr>
+		<td colspan="5" class="left"><%= link_to('Continue Shopping', :action => 'index') %> | <%= link_to('Checkout', :action => 'checkout') %> |
+		 <%= link_to('Empty Cart', {:action => 'empty_cart'}, :confirm => 'Are you 100% on this?') %>
+		<% if user_signed_in? && (current_user.admin == "admin") %>
+		<br /> <br /> <%= form_for(@order, :url => {:controller => 'orders', :action => 'pay_by_check'}) do |f| %>
+			<div class="field">
+			 <b> <%= f.label :customer_id, "Check Out Customer Via Check" %></b><br />
+			  <%= f.select :customer_id, options_from_collection_for_select(@customers, "id", "last_name_first") %>
+			</div>
+			
+			<div class="actions">
+			  <%= f.submit "Pay By Check"%>
+			</div>
+		<% end %>	
+		<% end %>
+		</td>
+	</tr>
+<% end %>
+</table>

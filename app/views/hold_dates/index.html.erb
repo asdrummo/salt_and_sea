@@ -1,0 +1,25 @@
+<h1>Listing hold_dates</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+	<th>Date</th>
+	<th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @hold_dates.each do |hold_date| %>
+  <tr>
+	<td><%= Customer.find(hold_date.customer_id).name %></td>
+	<td><%= hold_date.date %></td>
+    <td><%= link_to 'Show', hold_date %></td>
+    <td><%= link_to 'Edit', edit_hold_date_path(hold_date) %></td>
+    <td><%= link_to 'Destroy', hold_date, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hold date', new_hold_date_path %>

@@ -1,0 +1,144 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+body{background-color:#fff;color:#333;font-family: courier, arial, helvetica, sans-serif;font-size:14px;line-height:18px}
+
+a:link {color:#0c3052;}      /* unvisited link */
+a:visited {color:#0c3052;}  /* visited link */
+a:hover {color:#d0dfec;}  /* mouse over link */
+a:active {color:#0c3052;}  /* selected link */
+p,ol,ul,td{font-family:courier, arial, helvetica, sans-serif;font-size:14px;}
+#page_container {margin-left:auto; margin-right:auto; width:800px;}
+
+table.admin {margin-left:auto; margin-right:auto; border-collapse: collapse;}
+table.admin td {padding:10px}
+
+table.product {width: 800px; border-collapse: collapse;}
+table.product td {padding:10px}
+.product_name {width:20%;}
+
+table.basic_table {border-collapse: collapse;}
+table.basic_table td {padding:10px}
+a.admin_link {color:white; font-size:18px; text-decoration:none;}
+div.header_img {height:392px; margin-bottom:0;}
+div.header_banner_img {height:144px; margin-bottom:0;}
+.date_links a {color:white; text-decoration:none;}
+.odd {background: #aec0ce;}
+.even {background: #e9f2fa;}
+table.location tr td {text-align:center;}
+.float_right {float:right;}
+table#admin_links td {padding:0 5px 0 5px}
+#cart {text-align:right;}
+table.center {margin-left:auto; margin-right:auto; border-collapse: collapse;}
+.center {text-align:center;}
+/* shopping cart */
+#cart{
+	width: 800px;
+ 
+	border-collapse: collapse;
+	text-align:left;
+}
+#cart_header {
+	text-align:center;
+	text-transform:uppercase;
+}
+#cart th {
+	padding-bottom:10px;
+	border-bottom:2px dashed gray;
+}
+#cart td {
+	padding:10px;
+}
+a.remove_item  {
+	color: red;
+	text-decoration: underline;
+}
+#cart_total td {
+	text-align:right;
+	font-size: 20px;
+	color: #68A162;
+}
+#cart_links a {
+	font-size: 15px;
+}
+.item_title {
+
+	background-color:#fff;
+	border-top:none;
+}
+.item_title p {
+	
+	writing-mode: bt-lr;
+		font-size:30px;
+}
+table.invoice_table {
+	width:900px;
+	text-align: center;
+	margin-left:auto; 
+	margin-right:auto; 
+	border-collapse: collapse;
+}
+.invoice_label {
+	text-align: center;
+	margin:auto;
+	color: red;
+}
+
+.blue {
+	color: #0066cc;
+}
+
+:link img {
+	border:none;
+}
+
+.notice {
+  color: green;
+}
+.clear {clear:both;}
+.account_border {width:388px;border:1px solid black;}
+.admin_border {width:100%;border:1px solid black;}
+
+.middle {vertical-align:middle;}
+.account_title {background-color:#0c314e; color:white; height:25px; padding-left:10px;}
+.alert {
+  color: red;
+}
+.alert { background-color: #e7a0a0; border: 1px solid #722626; }
+.notice { background-color: #A4E7A0; border: 1px solid #26722D; }
+.error { background-color: #F0A8A8; border: 1px solid #900; }
+.notice, .error, .alert { width: 790px; margin: 0 auto 10px auto; padding: 5px;}
+#notice p, #error p, #alert p { margin-left: 20px; padding: 0; font-size: .75em; color: #000; }
+#notice a, #error a, #alert a { text-decoration: none; padding: 0 3px; }
+#notice a { border: 1px solid #26722D; color: #26722D; }
+#error a { border: 1px solid #900; color: #900; }
+#notice a:hover, #error a:hover { color: #fff; border: 1px solid #333; }
+
+.error-recap {}
+.round-border{}
+
+#error_explanation {
+	padding:10px;
+  color: #f00;
+	margin:5px 0 15px 0;
+	-moz-border-radius: 15px;
+	border-radius: 5px;
+	border:2px red solid;
+background-color:#ffcccc;
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+
+  }
+}

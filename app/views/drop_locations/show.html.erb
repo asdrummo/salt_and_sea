@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @drop_location.name %>
+</p>
+
+<p>
+  <b>Street:</b>
+  <%= @drop_location.street %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%= @drop_location.city %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @drop_location.state %>
+</p>
+
+<p>
+  <b>Zip code:</b>
+  <%= @drop_location.zip_code %>
+</p>
+
+<p>
+  <b>Link:</b>
+  <%= @drop_location.link %>
+</p>
+
+<p>
+  <b>Day:</b>
+  <%= Date::DAYNAMES[@drop_location.day.to_i]  %>
+</p>
+<p>
+  <b>Additional Information:</b>
+  <%= @drop_location.info %>
+</p>
+
+
+<p>
+  <b>Start Time:</b>
+  <%= @drop_location.start_time.strftime("%H:%M") %>
+</p>
+<p>
+  <b>End Time:</b>
+  <%= @drop_location.end_time.strftime("%H:%M") %>
+</p>
+
+
+<%= link_to 'Edit', edit_drop_location_path(@drop_location) %> |
+<%= link_to 'Back', drop_locations_path %>

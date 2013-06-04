@@ -1,0 +1,33 @@
+<table id="cart" class="center">
+
+		<tr id="cart_header">
+			<th colspan="2">Name</th>
+			<th>Description</th>
+			<th>QTY</th>
+			<th>Price</th>
+			
+		</tr>
+<% for line_item in @cart.line_items %>
+	<tr class="<%= cycle('odd', 'even') %>">
+		<td colspan="2">
+			<p><%= line_item.product.name %></p>
+		</td>
+		<td>
+			<p><%= line_item.product.description %></p>
+		</td>
+		<td>
+			<p><%= line_item.quantity %> @ <%= number_to_currency(line_item.price) %></p>
+		</td>
+		<td>
+			<p>subtotal: <%= number_to_currency(line_item.price * line_item.quantity) %></p>
+		</td>
+	</tr>
+<% end %>
+
+	<tr id="cart_total">
+		<td></td>
+		<td></td>
+		<td colspan="2">Shopping Cart Total</td>
+		<td><%= number_to_currency(@cart.total_price) %></td>
+	</tr>
+</table>

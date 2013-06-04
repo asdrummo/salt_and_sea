@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Customer:</b>
+  <%= Customer.find(@preference.customer_id).name %>
+</p>
+
+<p>
+  <b>Squid:</b>
+  <%= yesno(@preference.squid) %>
+</p>
+
+<p>
+  <b>Mackerel:</b>
+  <%= yesno(@preference.mackerel) %>
+</p>
+
+<p>
+  <b>Skate:</b>
+  <%= yesno(@preference.skate) %>
+</p>
+
+<p>
+  <b>Monkfish:</b>
+  <%= yesno(@preference.monkfish) %>
+</p>
+
+
+<%= link_to 'Edit', edit_preference_path(@preference) %> |
+<%= link_to 'Back', preferences_path %> | <%= link_to 'New Preference', new_preference_path %>
+	

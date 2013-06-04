@@ -1,0 +1,134 @@
+<%= form_for(@customer, :url => {:action => 'update_customer', :page => @page}) do |f| %>
+  <% if @customer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+      <% @customer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table>
+	<tr>
+		<td><div class="field">
+		    <%= f.label :first_name %><br />
+		    <%= f.text_field :first_name %>
+		  </div></td>
+		<td>  <div class="field">
+		    <%= f.label :last_name %><br />
+		    <%= f.text_field :last_name %>
+		  </div></td>
+	</tr>
+	
+	<tr>
+		<td colspan="2"><div class="field">
+	    <%= f.label :street %><br />
+	    <%= f.text_area :street, :cols => "20", :rows => "2"  %>
+	  </div></td>
+	</tr>
+	<tr>
+		<td><div class="field">
+	    <%= f.label :city %><br />
+	    <%= f.text_field :city %>
+	  </div></td>
+		<td><div class="field" style="float:left; padding-right:20px">
+	    <%= f.label :state %><br />
+	    <%= f.text_field :state, :size => 2 %>
+	  </div>	<div class="field">
+	    <%= f.label :zip_code %><br />
+	    <%= f.text_field :zip_code, :size => 5 %>
+	  </div></td>
+	</tr>
+	
+	<tr>
+		<td colspan="2"><div class="field" style="float:left; margin-right:20px; padding-right:20px">
+	    <%= f.label :phone_number %><br />
+	    <%= f.text_field :phone_number, :size => 11 %>
+	  </div>	
+		<div class="field">
+	    <%= f.label :email %><br />
+	    <%= f.text_field :email %>
+	  </div></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+
+		  <div class="field" style="float:left; padding-right:10px;">
+		    <%= f.label :mailing_list %><br />
+		    <%= f.select :mailing_list,  options_for_select([["yes", "yes"], ["no", "no"]], @customer.mailing_list) %>
+		  </div>
+		  <div class="field" style="float:left; padding-right:10px;">
+		    <%= f.label :contact_method %><br />
+		    <%= f.select :contact_method,  options_for_select([["email", "email"], ["phone", "phone"]], @customer.contact_method) %>
+		  </div></td>
+	</tr>
+	<tr><td>
+		<%= f.label :share_type %><br />
+	    <%= f.select :share_type,  options_from_collection_for_select(ShareType.all, "share_type", "share_type", @customer.share_type) %>
+	</td>
+	</tr>
+</table>
+<table>
+	<tr>
+	<td><br />
+		Fish (<em>un-tick if dislike</em>):</b>
+		<div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+		  
+    	<%= f.check_box :squid, :checked => @preference.squid %>
+<%= f.label :squid %>
+        </div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+	
+    	<%= f.check_box :mackerel, :checked => @preference.mackerel %>
+	<%= f.label :mackerel %>
+        </div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+	
+    	<%= f.check_box :skate, :checked => @preference.skate %>
+	<%= f.label "skate Wings" %>
+        </div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+	
+    	<%= f.check_box :monkfish, :checked => @preference.monkfish %>
+	<%= f.label :monkfish %>
+        </div>
+		<div>
+	</td><td></td>
+	</tr>
+	<tr>
+	<td>
+		Shellfish (<em>un-tick if dislike</em>):</b>
+		<div>
+
+		<div style="float:left; padding: 0 5px 0 5px;">
+		<%= f.check_box :clams, :checked => @preference.clams %>
+		<%= f.label :clams %>
+        </div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+		<%= f.check_box :mussels, :checked => @preference.mussels %>
+		<%= f.label :mussels %>
+    	</div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+    	<%= f.check_box :oysters, :checked => @preference.oysters %>
+		<%= f.label :oysters %>
+        </div>
+		<div style="float:left; padding: 0 5px 0 5px;">
+    	<%= f.check_box :scallops, :checked => @preference.scallops %>
+		<%= f.label :scallops %>
+        </div>
+		<div>
+		<%= f.hidden_field :order_count, :value => "0" %>
+	</td>
+	<td></td>
+	</tr>
+	
+</table>  
+<br />
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+

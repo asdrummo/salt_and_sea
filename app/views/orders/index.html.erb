@@ -1,0 +1,27 @@
+<h1>Listing Orders</h1>
+
+<table>
+  <tr>
+    <th>Order ID</th>
+    <th>Customer Name</th>
+    <th>Total Amount</th>
+    <th>Price</th>
+    <th>Date</th>
+
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orders.each do |order| %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%= order.id %></td>
+    <td><%= Customer.find(order.customer_id).name %></td>
+    <td><%= number_to_currency(Cart.find_by_id(order.cart_id).total_price) %> </td>
+    <td><%= order.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %></td>
+    <td><%= link_to 'Show', order %></td>
+    <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+

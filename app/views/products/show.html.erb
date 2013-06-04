@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Type:</b>
+  <%= @product.category %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @product.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @product.description.html_safe %>
+</p>
+<p>
+  <b>Image URL:</b>
+  <%= safe_image_tag(@product.image_url, :border => 0) %>
+</p>
+
+<p>
+  <b>Option:</b>
+  <%= @product.option %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%= @product.price %>
+</p>
+
+<p>
+  <b>Stock:</b>
+  <%= @product.stock %>
+</p>
+<p>
+  <b>Credits:</b>
+  <%= @product.credits %>
+</p>
+
+
+<%= link_to 'Edit', edit_product_path(@product) %> |
+<%= link_to 'Back', products_path %> | 
+<%= link_to 'Destroy', @product, method: :delete, data: { confirm: 'Are you sure?' } %>

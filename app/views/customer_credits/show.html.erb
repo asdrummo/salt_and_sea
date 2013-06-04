@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Customer:</b>
+  <%= Customer.find(@customer_credit.customer_id).name %>
+</p>
+
+<p>
+  <b>Item:</b>
+  <%= @customer_credit.product_id %>
+</p>
+
+<p>
+  <b>Credits available:</b>
+  <%= @customer_credit.credits_available %>
+</p>
+
+
+<%= link_to 'Edit', edit_customer_credit_path(@customer_credit) %> |
+<%= link_to 'Back', customer_credits_path %>
+<%= link_to 'New Customer credit', new_customer_credit_path %>

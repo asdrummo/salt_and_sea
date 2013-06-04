@@ -1,0 +1,11 @@
+development:
+  paypal_email: asdrummo-facilitator@gmail.com
+  paypal_secret: foobar
+  paypal_cert_id: UKLHJHZSBYX32
+  paypal_url: "https://www.sandbox.paypal.com/cgi-bin/webscr"
+
+production:
+  paypal_email: foo@example.com
+  paypal_secret: supersecret
+  paypal_cert_id: KLHZSK326HEDS
+  paypal_url: "https://www.paypal.com/cgi-bin/webscr"

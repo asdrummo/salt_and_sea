@@ -1,0 +1,44 @@
+Search Customers Based on Fish Prefs:
+Dislikes:
+<%= form_for(@preference_search, :url => {:action => 'index', :location_id => location.id}) do |f| %>
+ 
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :squid %>
+<%= f.label :squid %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :mackerel %>
+<%= f.label :mackerel %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :skate %>
+<%= f.label "skate Wings" %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :monkfish %>
+<%= f.label :monkfish %>
+</div><br /><br />
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :clams %>
+<%= f.label :clams %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :mussels %>
+<%= f.label :mussels %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :oysters %>
+<%= f.label :oysters %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :scallops %>
+<%= f.label :scallops %>
+</div>
+<div>
+  <div class="actions">
+    <%= f.submit "search" %>
+  </div>
+<% end %>
+<% if @customer_fish_prefs %>
+Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| u.email}.join(', ') %>
+<% end %>

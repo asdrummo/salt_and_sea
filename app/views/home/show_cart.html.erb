@@ -1,0 +1,53 @@
+<% if @cart.items.count == 0 %>
+	<table class="center">
+		<tr>
+			<td colspan="5" class="center"><h2>Empty As Satan's Heart</h2></td>
+		</tr>
+	</table>
+<% else %>
+<table id="cart" class="center">
+
+	<tr>
+		<td colspan="5" class="center"><h1>Your Shopping Cart</h1></td>
+	</tr>
+
+
+
+		<tr>
+			<td colspan="5" class="center"><h2>Items</h2></td>
+		</tr>
+		<tr id="cart_header">
+			<th colspan="2">Name</th>
+			<th>Description</th>
+			<th>QTY</th>
+			<th>Price</th>
+			
+		</tr>
+<% @cart.items.each do |item| %>
+	<tr class="<%= cycle('odd', 'even') %>">
+		<td colspan="2">
+			<p><%= item.item.name %></p>
+		</td>
+		<td>
+			<p><%= item.item.description %></p>
+		</td>
+		<td>
+			<p>quantity: <%= item.quantity %></p>
+		</td>
+		<td>
+			<p>subtotal: <%= number_to_currency(item.price) %></p>
+			<p><%= link_to('remove', {:action => 'remove_from_cart', :id => item.item.id}, :class => "remove_item") %></p>
+		</td>
+	</tr>
+	<% @count += 1 %>
+<% end %>
+
+	<tr id="cart_total">
+		<td></td>
+		<td></td>
+		<td colspan="2">Shopping Cart Total</td>
+		<td><%= number_to_currency(@cart.total_price) %></td>
+	</tr>
+<% end %>
+</table>
+<%= link_to('Empty Cart', {:action => 'empty_cart'}, :confirm => 'Are you Sure?') %>

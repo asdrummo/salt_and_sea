@@ -1,0 +1,39 @@
+<h1>Listing preferences</h1>
+
+<table>
+  <tr>
+    <th>Customer</th>
+    <th>Squid</th>
+    <th>Mackerel</th>
+    <th>Skate</th>
+    <th>Monkfish</th>
+    <th>Clams</th>
+    <th>Mussels</th>
+    <th>Oysters</th>
+    <th>Scallops</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @preferences.each do |preference| %>
+  <tr>
+    <td><%= Customer.find(preference.customer_id).name %></td>
+    <td><%= yesno(preference.squid) %></td>
+    <td><%= yesno(preference.mackerel) %></td>
+    <td><%= yesno(preference.skate) %></td>
+    <td><%= yesno(preference.monkfish) %></td>
+    <td><%= yesno(preference.clams) %></td>
+    <td><%= yesno(preference.mussels) %></td>
+    <td><%= yesno(preference.oysters) %></td>
+    <td><%= yesno(preference.scallops) %></td>
+    <td><%= link_to 'Show', preference %></td>
+    <td><%= link_to 'Edit', edit_preference_path(preference) %></td>
+    <td><%= link_to 'Destroy', preference, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Preference', new_preference_path %>

@@ -1,0 +1,261 @@
+<br />
+<div class="admin_border">
+<div class="account_title">
+<span class="middle">Current Week's Data:</span>
+</div>
+<div style="padding-left:10px">
+<b>Start Date:</b> <%= @week1_date.strftime('%a %d %b %Y') %><br />
+<b>Remaining Locations:</b> 
+<% if @this_week_active_locations == [] %>
+No locations left, week start date pushed to <%= @week1_date + 1.week %>
+<% @week1_date = (@week1_date + 1.week) %>
+<% else %>
+<%= @this_week_active_locations.collect{|u| u.name}.join(', ')%>
+<% end %>
+<br />
+<% if @this_week_inactive_locations == [] %>
+<b>No Locations processed</b>
+<% else %>
+<b>Processed Locations:</b>
+<%= @this_week_inactive_locations.collect{|u| u.name}.join(', ')%>
+<% end %>
+<p><strong>Active Customers:</strong> <%= @active_customer.count %>, <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= @customers_without_credits.count %></p>
+<p><strong>Low credit customers (<%= @low_credit_customers.count %>):</strong> 
+<% @low_credit_customers.each do |customer| %>
+<%= link_to customer.name, customer %>,
+<% end %>
+</div>
+</div>
+
+<%= render(:partial => 'admin/partials/totals') %>
+
+<h1><%= @selected_location.name %></h1>
+<p><b>Customer Email List:</b> <%= @drop_location_customers.collect{|u| u.email}.join(', ') %></p>
+Search Customers Based on Fish Prefs:
+Dislikes:
+<%= form_for(@preference_search, :url => {:action => 'index'}, :location_id => @selected_location.id) do |f| %>
+ 
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :squid %>
+<%= f.label :squid %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :mackerel %>
+<%= f.label :mackerel %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :skate %>
+<%= f.label "skate Wings" %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :monkfish %>
+<%= f.label :monkfish %>
+</div><br /><br />
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :clams %>
+<%= f.label :clams %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :mussels %>
+<%= f.label :mussels %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :oysters %>
+<%= f.label :oysters %>
+</div>
+<div style="float:left; padding: 0 5px 0 5px;">
+<%= f.check_box :scallops %>
+<%= f.label :scallops %>
+</div>
+<div>
+  <div class="actions">
+    <%= f.submit "search" %>
+  </div>
+<% end %>
+<% if @customer_fish_prefs %>
+Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| u.email}.join(', ') %>
+<% end %><br />
+hold date check: <%= @location_next_date %>
+inactive locations: <%= @this_week_inactive_locations.collect{|u| u.name}.join(', ')%>
+<table cellpadding="10">
+    <tr class="account_title" style="">
+	<th class="date_links"><%= link_to 'Process All', :controller => "customer_credits", :action => "use_credit_all", :id => @selected_location.id %></th>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Share</th>
+	<th>Fish Credits</th>
+	<th>Shellfish Credits</th>
+	<th>Basket Credits</th>
+	
+	<!-- drop dates -->
+	<div class="date_links">
+	<% @date = (@week1_date + @selected_location.day.to_i.days - 1.day)%>
+	<% (0..7).each do |i| %>
+	<% @location_date = (@location_merged_datetime + i.week) %>
+	<th class="date_links"><%= link_to (@location_merged_datetime + i.week).strftime('%a %d %b %Y'), :action => "put_on_hold", :id => @selected_location.id, :date => @location_date %></th>
+	<% end %>
+	</div>
+    </tr>
+
+<% @week1, @week2, @week3, @week4, @week5, @week6, @week7, @week8 = [], [], [], [], [], [], [], [] %>
+<% @drop_location_customers.each do |customer| %>
+<% customer.credits.each do |credit| %>
+<% if Product.find(credit.product_id).category == 'fish' %>
+<% @fish_credits += credit.credits_available %>
+<% elsif Product.find(credit.product_id).category == 'shellfish' %>
+<% @shellfish_credits += credit.credits_available %>
+<% elsif Product.find(credit.product_id).category == 'basket' %>
+<% @basket_credits += credit.credits_available %>
+<% end %>
+<% end %>
+
+<% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
+	<tr class="<%= cycle("odd", "even") %>">
+		<td><%= link_to 'process', :controller => "customer_credits", :action => "use_credit", :id => customer.id %>
+		<td><%= link_to customer.name, edit_customer_path(customer) %></td>
+		<td><%= customer.email %></td>
+		<td><%= customer.phone_number %></td>
+		<td><%= customer.share_type %></td>	
+		<td><%= link_to @fish_credits, :controller => "customer_credits", :action => "index", :id => customer.id %></td>
+		<td><%= @shellfish_credits %></td>
+		<td><%= @basket_credits %></td>
+		<td><% if customer.hold_check(@location_next_date, @this_week_inactive_locations) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 0, 1) %> 
+				<% @week1 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<td><% if customer.hold_check((@location_next_date + 1.week), @this_week_inactive_locations) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3) %>
+				<% @week2 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<td><% if customer.hold_check((@location_next_date + 2.weeks), @this_week_inactive_locations) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 2, 5) %>
+				<% @week3 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<td><% if customer.hold_check((@location_next_date + 3.weeks), @this_week_inactive_locations) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 3, 7) %> 
+				<% @week4 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<td><% if customer.hold_check((@location_next_date + 4.weeks), @this_week_inactive_locations) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 4, 9) %> 
+				<% @week5 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+			
+		</td>
+		<td><% if customer.hold_check((@location_next_date + 5.weeks), @this_week_inactive_locations) == false %>
+		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 5, 11) %> 
+			<% @week6 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>			
+		</td><% if customer.hold_check((@location_next_date + 6.weeks), @this_week_inactive_locations) == false %>
+		<td><%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13) %> 
+			<% @week7 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>	
+		</td><% if customer.hold_check((@location_next_date + 7.weeks), @this_week_inactive_locations) == false %>
+		<td><%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15) %> 
+			<% @week8 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>		
+		</td>	
+	</tr>
+	<% @fish_credits = 0 %>
+	<% @shellfish_credits = 0 %>
+	<% @basket_credits = 0 %>
+<% else %>
+<% @old_customers << customer %>
+<% end %>
+<% end %>
+<tr>
+	<td colspan="8"></td>
+	<td><%= @fish_lbs_text %><%= fish(@week1) %><br />
+		<%= @shellfish_lbs_text %><%= shellfish(@week1) %></td>
+		
+	<td><%= @fish_lbs_text %><%= fish(@week2) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week2) %></td>
+		
+	<td><%= @fish_lbs_text %><%= fish(@week3) %><br />
+			<%= @shellfish_lbs_text %>  <%= shellfish(@week3) %></td>
+	<td><%= @fish_lbs_text %><%= fish(@week4) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week4) %></td>
+	<td><%= @fish_lbs_text %><%= fish(@week5) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week5) %></td>
+	<td><%= @fish_lbs_text %><%= fish(@week6) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week6) %></td>
+	<td><%= @fish_lbs_text %><%= fish(@week7) %><br />
+			<%= @shellfish_lbs_text %> <%= shellfish(@week7) %></td>
+	<td><%= @fish_lbs_text %><%= fish(@week8) %><br />
+			<%= @shellfish_lbs_text %> <%= shellfish(@week8) %></td>	
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+</table>
+
+<% if @old_customers.count > 0 %>
+<h3 style="color:red;">Customers w/o credits</h3>
+<table cellpadding="10">
+    <tr>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Share</th>
+	  <td colspan="10"></td>
+	
+    </tr>
+<% @old_customers.each do |customer| %>
+	<tr>
+		<td><%= link_to customer.name, edit_customer_path(customer) %></td>
+		<td><%= customer.email %></td>
+		<td><%= customer.phone_number %></td>
+		<td><%= customer.share_type %></td>	
+		<td colspan="10"></td>
+		
+	</tr>
+<% end %>
+</table>
+<% end %>

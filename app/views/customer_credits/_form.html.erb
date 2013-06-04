@@ -1,0 +1,30 @@
+<%= form_for(@customer_credit) do |f| %>
+  <% if @customer_credit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer_credit.errors.count, "error") %> prohibited this customer_credit from being saved:</h2>
+
+      <ul>
+      <% @customer_credit.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :customer_id %><br />
+    <%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first", @customer_credit.customer_id) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :product_id %><br />
+    <%= f.select :product_id, options_from_collection_for_select(@products, "id", "category_name", @customer_credit.product_id) %>
+  </div>
+  <div class="field">
+    <%= f.label :credits_available %><br />
+    <%= f.number_field :credits_available %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

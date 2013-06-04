@@ -1,0 +1,316 @@
+<% @fish_lbs_text = 'F: ' %>
+<% @shellfish_lbs_text = 'S: '%>
+<br />
+<div class="noPrint">
+<%= link_to 'back to index', :action => 'index' %> | print page: <%= link_to 'all', :action => "index", :black_and_white => true %>, 
+<% DropLocation.all.each do |location| %>
+<%= link_to location.name, :action => "index", :black_and_white => true, :drop_location_id => location.id %>
+<% end %>
+</div>
+<% if @this_week_active_locations == [] %>
+No locations left, week start date pushed to <%= @week1_date + 1.week %>
+<% @week1_date = (@week1_date + 1.week) %>
+<% else %>
+<%= @this_week_active_locations.collect{|u| u.name}.join(', ')%>
+<% end %>
+
+<% if @selected_location %>
+<% @drop_locations = DropLocation.where(:id => @selected_location)%>
+<% end %>
+<!-- drop locations -->
+<% @drop_locations.each do |location| %>
+<!-- get location data -->
+<% @processed = false %>
+<% location.processed_locations.each do |pl| %>
+	<% if pl.date == @week1_date %>
+		<% @processed = true %>
+	<% end %>
+<% end %>
+
+
+
+<% @location_next_date = (location.commercial_date + 1.week) %>
+<% time_to_merge = location.start_time %>
+<% date_to_merge = @location_next_date %>
+<% @location_merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24)) %>
+
+<!-- merge date A -->
+<% if (DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@location_merged_datetime - 7.days)) || (@processed == false) %>
+<% @location_merged_datetime = (@location_merged_datetime - 7.days) %>
+<% @location_next_date = (@location_next_date - 7.days) %>
+<% end %>
+<% if location.start_date > @location_merged_datetime %>
+   <% @location_merged_datetime = location.start_date %>
+   <% @location_next_date = location.start_date %>
+<% end %>
+<!-- merge date A -->
+
+
+<% @drop_location_customers = Customer.where(:drop_location_id => location.id).order('last_name ASC') %>
+
+<% @fish_credits = 0 %>   
+<% @shellfish_credits = 0 %>  
+<% @basket_credits = 0 %> 
+<% @week1, @week2, @week3, @week4, @week5, @week6, @week7, @week8 = [], [], [], [], [], [], [], [] %>
+<h1><%= location.name %></h1>
+<% @active_customers = [] %>
+<% @drop_location_customers.each do |c| %>
+	<% c.credits.each do |credit| %>
+		<% if Product.find(credit.product_id).category == 'fish' %>
+		<% @fish_credits += credit.credits_available %>
+		<% elsif Product.find(credit.product_id).category == 'shellfish' %>
+		<% @shellfish_credits += credit.credits_available %>
+		<% elsif Product.find(credit.product_id).category == 'basket' %>
+		<% @basket_credits += credit.credits_available %>
+		<% end %>
+	<% end %>
+	<% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
+	<% @active_customers << c %>
+	<% end %>
+	<% @fish_credits = 0 %>
+	<% @shellfish_credits = 0 %>
+	<% @basket_credits = 0 %>
+<% end %>
+<% @location_low_credit_customers = [] %>
+<% @low_credit_customers.each do |c| %>
+<% if c.drop_location_id == location.id %>
+<% @location_low_credit_customers << c%>
+<% end %>
+<% end %>
+
+<table class="location" cellpadding="10">
+    <tr class="" style="">
+      <th colspan="2">Customer</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Share</th>
+	<th>F-Creds</th>
+	<th>S-Creds</th>
+	<th>B-Creds</th>
+	
+	<!-- drop dates -->
+	<div class="date_links">
+
+
+	<% @date = (@week1_date + location.day.to_i.days - 1.day)%>
+	
+	<% if location.processed == false %>
+
+	<% else %>
+		<% if @location_merged_datetime < DateTime.now %>
+			<% @location_merged_datetime = (@location_merged_datetime + 7.days) %>
+			<% @location_next_date = @location_next_date + 7.days %>
+		<% end %>
+	<% end %>
+	<% (0..7).each do |i| %>
+	<% @location_date = (@date + i.week) %>
+	<th class="date_links"><%= (@location_merged_datetime + i.week).strftime('%d %b') %></th>
+	<% end %>
+	</div>
+    </tr>
+
+<% @week1, @week2, @week3, @week4, @week5, @week6, @week7, @week8 = [], [], [], [], [], [], [], [] %>
+<% i = 0 %>
+<% @drop_location_customers.each do |customer| %>
+<% customer.credits.each do |credit| %>
+<% if Product.find(credit.product_id).category == 'fish' %>
+<% @fish_credits += credit.credits_available %>
+<% elsif Product.find(credit.product_id).category == 'shellfish' %>
+<% @shellfish_credits += credit.credits_available %>
+<% elsif Product.find(credit.product_id).category == 'basket' %>
+<% @basket_credits += credit.credits_available %>
+<% end %>
+<% end %>
+
+<% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
+<% i += 1%>
+	<tr class="<%= cycle("odd", "even") %>">
+		<td colspan="2"><%= customer.name %></td>
+		<td><%= customer.email %></td>
+		<td><%= customer.phone_number %></td>
+		<td><%= customer.share_type %></td>	
+		<td><%= @fish_credits %></td>
+		<td><%= @shellfish_credits %></td>
+		<td><%= @basket_credits %></td>
+		<!-- week 1 -->
+		<% @date = (@week1_date + 0.week) %>
+		<td><% if customer.hold_check(@location_next_date) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 0, 1, location, @date) %> 
+				<% @week1 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<!-- week 2 -->
+		<% @date = (@week1_date + 1.week) %>
+		<td><% if customer.hold_check((@location_next_date + 1.week)) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3, location, @date) %>
+				<% @week2 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<!-- week 3 -->
+		<% @date = (@week1_date + 2.weeks) %>
+		<td><% if customer.hold_check((@location_next_date + 2.weeks)) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 2, 5, location, @date) %>
+				<% @week3 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<!-- week 4 -->
+		<% @date = (@week1_date + 3.weeks) %>
+		<td><% if customer.hold_check((@location_next_date + 3.weeks)) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 3, 7, location, @date) %> 
+				<% @week4 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+		</td>
+		<!-- week 5 -->
+		<% @date = (@week1_date + 4.weeks) %>
+		<td><% if customer.hold_check((@location_next_date + 4.weeks)) == false %>
+				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 4, 9, location, @date) %> 
+				<% @week5 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>
+			
+		</td>
+		<!-- week 6 -->
+		<% @date = (@week1_date + 5.weeks) %>
+		<td><% if customer.hold_check((@location_next_date + 5.weeks)) == false %>
+		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 5, 11, location, @date) %> 
+			<% @week6 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>			
+		</td>
+		<!-- week 7 -->
+		<% @date = (@week1_date + 6.weeks) %>
+		<% if customer.hold_check((@location_next_date + 6.weeks)) == false %>
+		<td><%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13, location, @date) %> 
+			<% @week7 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>	
+		</td>
+		<!-- week 8 -->
+		<% @date = (@week1_date + 7.weeks) %>
+		<% if customer.hold_check((@location_next_date + 7.weeks)) == false %>
+		<td><%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15, location, @date) %> 
+			<% @week8 << @weekly_product %>
+			<% else %>
+				on hold
+				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
+				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
+				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
+			<% end %>		
+		</td>	
+	</tr>
+	<% @fish_credits = 0 %>
+	<% @shellfish_credits = 0 %>
+	<% @basket_credits = 0 %>
+<% end %>
+<% if (i == 12) && (@all == false) %>
+<% i = 0 %>
+</table>
+<br /><br /><br /><br /><br /><br /><br /><br />
+<h1><%= location.name %></h1>
+<table class="location" cellpadding="10">
+    <tr class="" style="">
+      <th colspan="2">Customer</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Share</th>
+	<th>F-Creds</th>
+	<th>S-Creds</th>
+	<th>B-Creds</th>
+	
+	<!-- drop dates -->
+	<div class="date_links">
+	
+		<% @date = (@week1_date + location.day.to_i.days)%>
+	
+	<% if location.processed == false %>
+
+	<% else %>
+		<% if @location_merged_datetime < DateTime.now %>
+			<% @location_merged_datetime = (@location_merged_datetime + 7.days) %>
+			<% @location_next_date = @location_next_date + 7.days %>
+		<% end %>
+	<% end %>
+	<% (0..7).each do |i| %>
+	<% @location_date = (@date + i.week) %>
+	<th class="date_links"><%= (@location_merged_datetime + i.week).strftime('%d %b') %></th>
+	<% end %>
+	</div>
+    </tr>
+<% end %>
+<% end %>
+
+<% @date = (@location_merged_datetime + location.day.to_i.days)%>
+<tr>
+	<td colspan="2">Total Customers: <%= @active_customers.count %></td>
+	<td colspan="6"></td>
+	<td>
+		<% @totals << [location.id, @date, fish(@week1), shellfish(@week1)] %>
+		<%= @fish_lbs_text %><%= fish(@week1) %><br />
+		<%= @shellfish_lbs_text %><%= shellfish(@week1) %></td>
+		
+	<td>
+		<% @totals << [location.id, (@date + 1.week), fish(@week2), shellfish(@week2)] %>
+		<%= @fish_lbs_text %><%= fish(@week2) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week2) %></td>
+		
+	<td>
+	<% @totals << [location.id, (@date + 2.week), fish(@week3), shellfish(@week3)] %>
+	<%= @fish_lbs_text %><%= fish(@week3) %><br />
+			<%= @shellfish_lbs_text %>  <%= shellfish(@week3) %></td>
+	<td>
+		<% @totals << [location.id, (@date + 3.week), fish(@week4), shellfish(@week4)] %>
+		<%= @fish_lbs_text %><%= fish(@week4) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week4) %></td>
+	<td>
+		<% @totals << [location.id, (@date + 4.week), fish(@week5), shellfish(@week5)] %>
+		<%= @fish_lbs_text %><%= fish(@week5) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week5) %></td>
+	<td>
+		<% @totals << [location.id, (@date + 5.week), fish(@week6), shellfish(@week6)] %>
+		<%= @fish_lbs_text %><%= fish(@week6) %><br />
+		<%= @shellfish_lbs_text %> <%= shellfish(@week6) %></td>
+	<td>
+		<% @totals << [location.id, (@date + 6.week), fish(@week7), shellfish(@week7)] %>
+		<%= @fish_lbs_text %><%= fish(@week7) %><br />
+			<%= @shellfish_lbs_text %> <%= shellfish(@week7) %></td>
+	<td>
+		<% @totals << [location.id, (@date + 7.week), fish(@week8), shellfish(@week8)] %>
+	<%= @fish_lbs_text %><%= fish(@week8) %><br />
+			<%= @shellfish_lbs_text %> <%= shellfish(@week8) %></td>	
+
+</tr>
+</table>
+<br /> <br /><br /> <br />
+<% end %>

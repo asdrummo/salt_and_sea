@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Salt &#43; Sea Marketplace</title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag 'jquery', 'jquery_ujs',  'application' %>
+  <%= csrf_meta_tags %>
+ <%= yield(:head) %>
+<% if @black_and_white == true %>
+	<style>
+	#page_container {margin: 0; width:1200px;}
+	.odd {background: #fff;}
+	.even {background: #fff;}
+	table.location, table.location td {border:1px solid black;}
+	thead {display: table-header-group; }
+	</style>
+	<style type="text/css">
+	    @media print
+	    {
+			.noPrint 
+			    {
+			        display:none;
+			    }
+	    }
+	</style>
+<% end %>
+</head>
+
+<body>
+<div id="page_container" style="background:white;position:relative;z-index:2">
+	<% if !flash[:notice].blank? %>
+		<div class="notice">
+			<%= flash[:notice] %>
+		</div><!-- end notice -->
+	<% end %>
+	<% if !alert.blank? %>
+	 <div class="error"><%= alert %></div>
+	<% end %> 
+
+	<% if @black_and_white == true %>
+	<% else %>
+	<div id="user_nav" style="margin-bottom:3px">
+	  <% if user_signed_in? %>
+	    Signed in as <%= current_user.email %> => 
+		<%= link_to('My Account', account_path) %>. Not you?
+	    <%= link_to "Sign out", destroy_user_session_path %> 
+	  <% else %>
+	    <%= link_to "Sign up", new_user_registration_path %> or
+	    <%= link_to "Sign in", new_user_session_path %>
+	  <% end %>
+	
+	| <%= link_to('View Cart', cart_path) %>
+	<% if @cart.line_items != nil %>
+		<% @quantity = 0 %>
+		<% @cart.line_items.each do |item| 
+		@quantity += item.quantity %>
+		<% end %>
+	(<%= @quantity %>)
+	<% else %>
+	<% end %>
+	</div>
+<% if @home %>
+<div class="header_img"><%= link_to image_tag("https://s3.amazonaws.com/saltandsea/banner.jpg"), root_path %><br />
+	<table style="font-family: courier;">
+		<tbody>
+			<tr>
+				<td style="background-color: #ffffff; width: 70px; text-align: top;">&nbsp;</td>
+				<td style="background-color: #ffffff; width: 75px; text-align: top;">
+				<h3><a href="http://marketplace.saltandsea.me"><img alt="Salt and Sea" height="23" src="http://saltandsea.me/images/joinbutton.jpg" width="122" /></a></h3>
+				</td>
+				<td style="background-color: #ffffff; width: 70px; text-align: top;">&nbsp;</td>
+				<td style="background-color: #ffffff; width: 75px; text-align: top;">
+				<h3><a href="http://saltandsea.me/delivery.htm"><img alt="Salt and Sea" height="25" src="http://saltandsea.me/images/homedelivery.jpg" width="130" /></a></h3>
+				</td>
+				<td style="background-color: #ffffff; width: 117px; text-align: top;">&nbsp;</td>
+				<td style="background-color: #ffffff; width: 75px; text-align: top;">
+				<h3><a href="http://saltandsea.me/faq.htm"><img alt="Salt and Sea" height="25" src="http://saltandsea.me/images/faqbutton.jpg" width="65" /></a></h3>
+				</td>
+				<td style="background-color: #ffffff; width: 117px; text-align: top;">&nbsp;</td>
+				<td style="background-color: #ffffff; width: 75px; text-align: top;">
+				<h3><a href="http://saltandsea.me/contact.htm"><img alt="Salt and Sea" height="23" src="http://saltandsea.me/images/contactbutton.jpg" width="71" /></a></h3>
+				</td>
+				<td style="background-color: #ffffff; width: 70px; text-align: top;">&nbsp;</td>
+			</tr>
+		</tbody>
+	</table>	
+</div>
+<% else %>
+<div class="header_banner_img"><%= link_to image_tag("http://s3.amazonaws.com/saltandsea/banner_marketplace.jpg"), root_path %>
+</div>
+<% end %>
+<% end %><!-- end header condition -->
+<%= yield %>
+</div><!-- end page container -->
+<% if @black_and_white == true %>
+<% else %>
+	<% if user_signed_in? && (current_user.admin == "admin") %>
+	<div style="position:fixed;background:white;top:25px;left:25px;z-index:1">
+	<%= render(:partial => 'layouts/partials/admin_links') %>
+	</div>
+	<% end %>
+<% end %><!-- end footer condition -->
+</body>
+</html>

@@ -1,0 +1,57 @@
+<%= form_for(@preference) do |f| %>
+  <% if @preference.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@preference.errors.count, "error") %> prohibited this preference from being saved:</h2>
+
+      <ul>
+      <% @preference.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :customer_id %><br />
+	<% if  @customer %>
+    <%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first", @preference.customer.id) %>
+	<% else %>
+	<%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first") %>
+	<% end %>
+  </div>
+  <div class="field">
+    <%= f.label :squid %><br />
+    <%= f.check_box :squid, :checked => @preference.squid %>
+  </div>
+  <div class="field">
+    <%= f.label :mackerel %><br />
+    <%= f.check_box :mackerel, :checked => @preference.mackerel %>
+  </div>
+  <div class="field">
+    <%= f.label :skate %><br />
+    <%= f.check_box :skate, :checked => @preference.skate %>
+  </div>
+  <div class="field">
+    <%= f.label :monkfish %><br />
+    <%= f.check_box :monkfish, :checked => @preference.monkfish %>
+  </div>
+  <div class="field">
+    <%= f.label :clams %><br />
+    <%= f.check_box :clams, :checked => @preference.clams %>
+  </div>
+  <div class="field">
+    <%= f.label :mussels %><br />
+    <%= f.check_box :mussels, :checked => @preference.mussels %>
+  </div>
+  <div class="field">
+    <%= f.label :oysters %><br />
+    <%= f.check_box :oysters, :checked => @preference.oysters %>
+  </div>
+  <div class="field">
+    <%= f.label :scallops %><br />
+    <%= f.check_box :scallops, :checked => @preference.scallops %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

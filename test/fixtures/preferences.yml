@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  customer_id: 1
+  squid: MyString
+  mackerel: MyString
+  skate: MyString
+  monkefish: MyString
+
+two:
+  customer_id: 1
+  squid: MyString
+  mackerel: MyString
+  skate: MyString
+  monkefish: MyString

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body style="font-family: courier, arial, helvetica, sans-serif">
+	<div style="width:800px">
+	<%= image_tag attachments['banner_marketplace.jpg'].url %>
+    <h1>Your Shares are running low!</h1>
+    <p>
+      It looks like you only have one week left of <%= @share_type %> shares. We value all of our customers and would love to keep you happy. Please consider visiting our <%= link_to 'marketplace', root_url %> and purchasing additional shares for your account.<br/>
+    </p>
+	<p>
+	 -Salt +  Sea Marketplace
+	</p>
+  </body>
+</html>

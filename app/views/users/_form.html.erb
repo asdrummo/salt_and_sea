@@ -1,0 +1,31 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+
+	<% f.hidden_field :encrypted_password, :value => "$2a$10$GE4uYxGHRfHH5FmURp.JY.cG82QlLDOmKCN5M/8l0BlFnRmGBbHmS" %>
+	  <div class="field">
+		<%= f.label :password %><br />
+		<%= f.text_field :password, :value => "Saltandsea2013" %>
+  </div>
+    <% f.hidden_field :created_at, :value =>"2013-05-15 20:11:45" %>
+ 
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

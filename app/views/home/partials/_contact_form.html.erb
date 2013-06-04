@@ -1,0 +1,176 @@
+Looks like you need to add some contact info:
+
+<%= form_for(@customer_new, :url => {:action => 'save_customer'}) do |f| %>
+  <% if @customer_new.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer_new.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+      <% @customer_new.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table>
+	<tr>
+		<td>
+  			<div class="field">
+			    <%= f.label :first_name %><br />
+			    <%= f.text_field :first_name %>
+			  </div>
+		</td>
+ 		<td>
+  			<div class="field">
+			    <%= f.label :last_name %><br />
+			    <%= f.text_field :last_name %>
+			  </div>
+		</td>
+		<td></td>
+	</tr>
+
+	<tr>
+		<td>
+  			<div class="field">
+			    <%= f.label :email %><br />
+			    <%= f.text_field :email, :value => @user.email %>
+			  </div>
+		</td>
+		<td>
+			<div class="field">
+		    <%= f.label :street %><br />
+		    <%= f.text_field :street %>
+		  	</div>
+		</td>
+		<td>
+			<div class="field">
+		    <%= f.label :city %><br />
+		    <%= f.text_field :city %>
+		  	</div>
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+		  <div class="field">
+		    <%= f.label :state %><br />
+		    <%= f.select :state, us_states, :selected => ['Maine', 'ME']%>	
+		  </div>
+ 		</td>
+ 		<td>
+  			<div class="field">
+			    <%= f.label :zip_code %><br />
+			    <%= f.text_field :zip_code %>
+			  </div>
+ 		</td>
+		<td>
+  				<div class="field">
+				    <%= f.label :phone_number %><br />
+				    <%= f.telephone_field :phone_number %>
+				  </div>
+		</td>
+	</tr>
+
+ 	<tr>
+		<td>
+			  <div class="field">
+			    <%= f.label :drop_location_id %><div id="popup">pop up<%= link_to '(information)', "http://google.com" %></div><br />
+				<%= f.select :drop_location_id, options_from_collection_for_select(@drop_locations, "id", :display_name) %>
+			  </div>
+		</td>
+		<td>
+			  <div class="field">
+			    <%= f.label :mailing_list %><br />
+			    <%= f.select :mailing_list,  options_for_select([["yes", "yes"], ["no", "no"]]) %>
+			  </div>
+		</td>
+		<td>
+			  <div class="field">
+			    <%= f.label :contact_method %><br />
+			    <%= f.select :contact_method,  options_for_select([["email", "email"], ["phone", "phone"]]) %>
+			  </div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Fish Preferences (<em>un-tick if dislike</em>):</b>
+			<div>
+
+			<div style="float:left; padding: 0 5px 0 5px;">
+			<%= f.check_box :squid, :checked => @preference.squid %>
+			<%= f.label :squid %>
+	        </div>
+			<div style="float:left; padding: 0 5px 0 5px;">
+			<%= f.check_box :mackerel, :checked => @preference.mackerel %>
+			<%= f.label :mackerel %>
+        	</div>
+			<div style="float:left; padding: 0 5px 0 5px;">
+	    	<%= f.check_box :skate, :checked => @preference.skate %>
+			<%= f.label "skate Wings" %>
+	        </div>
+			<div style="float:left; padding: 0 5px 0 5px;">
+	    	<%= f.check_box :monkfish, :checked => @preference.monkfish %>
+			<%= f.label :monkfish %>
+	        </div>
+			<div>
+			<%= f.hidden_field :order_count, :value => "0" %>
+		</td>
+		<td>
+			Shellfish Preferences (<em>un-tick if dislike</em>):</b>
+			<div>
+
+			<div style="float:left; padding: 0 5px 0 5px;">
+			<%= f.check_box :clams, :checked => @preference.clams %>
+			<%= f.label :clams %>
+	        </div>
+			<div style="float:left; padding: 0 5px 0 5px;">
+			<%= f.check_box :mussels, :checked => @preference.mussels %>
+			<%= f.label :mussels %>
+        	</div>
+			<div style="float:left; padding: 0 5px 0 5px;">
+	    	<%= f.check_box :oysters, :checked => @preference.oysters %>
+			<%= f.label :oysters %>
+	        </div>
+			<div style="float:left; padding: 0 5px 0 5px;">
+	    	<%= f.check_box :scallops, :checked => @preference.scallops %>
+			<%= f.label :scallops %>
+	        </div>
+			<div>
+			<%= f.hidden_field :order_count, :value => "0" %>
+		</td>
+		<td></td>
+	<tr>
+	<tr>
+		<td colspan="3">
+			<%= f.hidden_field :user_id, :value => current_user.id %>
+  			<div class="actions">
+    			<%= f.submit "Submit"%>
+  			</div>
+		</td>
+	</tr>
+
+</table>
+<% end %>
+<table>
+	<tr>
+<th><h2>Drop Location Information</h2></th>
+	</tr>
+<% DropLocation.all.each do |location| %>
+<tr class="<%= cycle("odd", "even", :name => "colors") %>"><td style="padding:10px">
+<h3><%= location.name %> <span style="font-size:12px">(<%= link_to location.address, "http://maps.google.com/?q="+location.address, :target => '_blank' %>)</span></h3>
+<p>This pick up time for this location is on <b><%= Date::DAYNAMES[location.day.to_i] %>s from <%= location.time %></b>.
+<% if location.info %>
+<%= location.info%>
+<% end %>
+<% if location.link != "" %>
+<%= link_to 'website', "http://" + location.link, :target => '_blank' %>
+<% end %>
+</td></tr>
+<% end %>
+
+
+
+
+
+
+

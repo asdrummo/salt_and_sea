@@ -1,0 +1,166 @@
+<%= link_to('', {}, {:name => 'totals'}) %>
+<table style="margin-top:10px">
+	<tr class="account_title">
+	<th colspan="2">Location</th>
+	<% (0..7).each do |i| %>
+	<th><%= (@week1_date + i.week).strftime('%m-%d') %></th>
+	<% end %>
+	</tr>
+<!-- start location -->
+<% @drop_locations.each do |location| %> 
+<% @location_next_date = (location.commercial_date + 1.week) %>
+<% @start_date = get_start_date(location.id) %>
+<% @week1, @week2, @week3, @week4, @week5, @week6, @week7, @week8 = [], [], [], [], [], [], [], [] %>
+<% @weeks_total_array = [] %>
+<% location_customers = Customer.where(:drop_location_id => location.id)%>
+
+<tr class="<%= cycle("odd", "even") %>">
+	<td>
+		<%= link_to location.name, ('#' + location.id.to_s) %>
+	</td>
+	<td>
+		Fish<br/>Shellfish
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+		<% @location = DropLocation.find(total.first)%>
+		<% @date = total.second %>
+		<% @fish = total.third %>
+		<% @shellfish = total.fourth %>
+				<% if (@location == location) && ((@date >= @week1_date) && (@date < (@week1_date + 1.week))) %>
+					<%= @fish %><br />
+					<%= @shellfish %>
+					<% @week1_sum += @fish %>
+					<% @week1_sum_s += @shellfish %>
+				<% end %>
+		<% end %>
+	</td>
+
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+					<% if (@location == location) && ((@date >= (@week1_date + 1.week)) && (@date < (@week1_date + 2.weeks))) %>
+						<%= @fish %><br />
+						<%= @shellfish%>
+						<% @week2_sum += @fish %>
+						<% @week2_sum_s += @shellfish %>
+					<% end %>
+
+		<% end %>	
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+			<% if (@location == location) && ((@date >= (@week1_date + 2.weeks)) && (@date < (@week1_date + 3.weeks))) %>
+				<%= @fish %><br />
+				<%= @shellfish%>
+				<% @week3_sum += @fish %>
+				<% @week3_sum_s += @shellfish %>
+			<% end %>
+
+		<% end %>
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+			<% if (@location == location) && ((@date >= (@week1_date + 3.weeks)) && (@date < (@week1_date + 4.weeks))) %>
+				<%= @fish %><br />
+				<%= @shellfish%>
+				<% @week4_sum += @fish %>
+				<% @week4_sum_s += @shellfish %>
+			<% end %>
+
+		<% end %>
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+			<% if (@location == location) && ((@date >= (@week1_date + 4.weeks)) && (@date < (@week1_date + 5.weeks))) %>
+				<%= @fish %><br />
+				<%= @shellfish%>
+				<% @week5_sum += @fish %>
+				<% @week5_sum_s += @shellfish %>
+			<% end %>
+
+		<% end %>
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+			<% if (@location == location) && ((@date >= (@week1_date + 5.weeks)) && (@date < (@week1_date + 6.weeks))) %>
+				<%= @fish %><br />
+				<%= @shellfish%>
+				<% @week6_sum += @fish %>
+				<% @week6_sum_s += @shellfish %>
+			<% end %>
+
+		<% end %>
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+			<% if (@location == location) && ((@date >= (@week1_date + 6.weeks)) && (@date < (@week1_date + 7.weeks))) %>
+				<%= @fish %><br />
+				<%= @shellfish%>
+				<% @week7_sum += @fish %>
+				<% @week7_sum_s += @shellfish %>
+			<% end %>
+
+		<% end %>
+	</td>
+	<td>
+		<% @totals.each do |total| %>
+			<% @location = DropLocation.find(total.first)%>
+			<% @date = total.second %>
+			<% @fish = total.third %>
+			<% @shellfish = total.fourth %>
+			<% if (@location == location) && ((@date >= (@week1_date + 7.weeks)) && (@date < (@week1_date + 8.weeks))) %>
+				<%= @fish %><br />
+				<%= @shellfish%>
+				<% @week8_sum += @fish %>
+				<% @week8_sum_s += @shellfish %>
+			<% end %>
+
+		<% end %>
+	</td>
+</tr>
+<% end %><!-- end location -->
+<tr><td colspan="2"><b>Totals:</b></td>
+<td>fish:<%= @week1_sum %><br/>
+shellfish:<%= @week1_sum_s %></td>
+<td>fish:<%= @week2_sum %><br/>
+shellfish:<%= @week2_sum_s %></td>
+<td>fish:<%= @week3_sum %><br/>
+shellfish:<%= @week3_sum_s %></td>
+<td>fish:<%= @week4_sum %><br/>
+shellfish:<%= @week4_sum_s %></td>
+<td>fish:<%= @week5_sum %><br/>
+shellfish:<%= @week5_sum_s %></td>
+<td>fish:<%= @week6_sum %><br/>
+shellfish:<%= @week6_sum_s %></td>
+<td>fish:<%= @week7_sum %><br/>
+shellfish:<%= @week7_sum_s %></td>
+<td>fish:<%= @week8_sum %><br/>
+shellfish:<%= @week8_sum_s %></td>
+</tr>
+
+	
+</table>

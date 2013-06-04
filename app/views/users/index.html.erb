@@ -1,0 +1,36 @@
+<h1>Listing Users</h1>
+<%= link_to 'New User', new_user_path %>
+<% if @paginate == true %>
+<%= will_paginate @page_users %>
+<%= link_to 'view all', :all => true %>
+<% else %>
+<%= link_to 'paginate', :action => 'index' %>
+<% end %> 
+<table class="admin_table">
+  <tr>
+    <th>Email</th>
+    <th>encrypted_password</th>
+    <th>sign_in_count</th>
+    <th>created_at</th>
+    <th>admin</th>
+	 <th>show</th>
+	 <th>edit</th>
+	 <th>destroy</th>
+  </tr>
+<% @page_users.each do |user| %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%= user.email %></td>
+    <td><%= user.encrypted_password %></td>
+    <td><%= user.sign_in_count %></td>
+    <td><%= user.created_at %></td>
+    <td><%= user.admin %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+<% if @paginate == true %>
+<%= will_paginate @page_users %>
+<% end %>
+<%= link_to 'New User', new_user_path %>

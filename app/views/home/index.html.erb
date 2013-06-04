@@ -1,0 +1,107 @@
+<a name="top"></a>
+<div style="text-align:justify">
+<%= TextEntry.find(1).entry.html_safe %>
+</div>
+<p> View our products: <%= link_to 'Fish', '#fish' %> | <%= link_to 'Shellfish', '#shellfish' %> | <%= link_to 'Seafood Baskets', '#baskets' %>| <%= link_to 'Accessories', '#accessories' %>
+<%= link_to('', {}, {:name => 'fish'}) %>
+<br /><h2>Fish Shares</h2><br />
+<table class="product">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+ 	<th></th>
+  </tr>
+
+<% @fish_products.each do |product| %>
+  <tr class="<%= cycle("odd", "even", :name => "colors") %>">
+	
+    <td class="product_name"><h3 style="font-size: 1.1em"><%= product.name %></h3>
+	<% if user_signed_in? && (current_user.admin == "admin") %>
+	<br /><%= link_to 'Edit', edit_product_path(product) %>
+	<% end %>
+	</td>
+    <td><%= product.description.html_safe %></td>
+    <td><%= number_to_currency(product.price) %></td>
+	<td style="text-align:center"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+<% reset_cycle("colors") %>
+<br />
+<br />
+<%= link_to('', {}, {:name => 'shellfish'}) %>
+<br /><h2>Shellfish Shares</h2><br />
+<table class="product">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+ 	<th></th>
+  </tr>
+
+
+<% @shellfish_products.each do |product| %>
+  <tr class="<%= cycle("odd", "even", :name => "colors") %>">
+    <td class="product_name"><h3 style="font-size: 1.1em"><%= product.name %></h3>
+	<% if user_signed_in? && (current_user.admin == "admin") %>
+		<br /><%= link_to 'Edit', edit_product_path(product) %>
+	<% end %>
+	</td>
+    <td><%= product.description.html_safe %></td>
+    <td><%= number_to_currency(product.price) %></td>
+	<td style="text-align:center"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :method => :post %></td>  </tr>
+<% end %>
+</table>
+<% reset_cycle("colors") %>
+<br />
+<br />
+<%= link_to('', {}, {:name => 'baskets'}) %>
+<br /><h2>Seafood Baskets</h2><br />
+<table class="product">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+ 	<th></th>
+
+  </tr>
+<% @basket_products.each do |product| %>
+  <tr class="<%= cycle("odd", "even", :name => "colors") %>">
+    <td class="product_name"><h3 style="font-size: 1.1em"><%= product.name %></h3>
+		<% if user_signed_in? && (current_user.admin == "admin") %>
+			<br /><%= link_to 'Edit', edit_product_path(product) %>
+		<% end %>
+	</td>
+    <td><%= product.description.html_safe %></td>
+    <td><%= number_to_currency(product.price) %></td>
+	<td style="text-align:center; width:100px"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :method => :post %></td>  </tr>
+<% end %>
+</table>
+<% reset_cycle("colors") %>
+<br />
+<br />
+<%= link_to('', {}, {:name => 'accessories'}) %>
+<br /><h2>Accessories</h2><br />
+<table class="product">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+ 	<th></th>
+  </tr>
+<% @accessory_products.each do |product| %>
+  <tr class="<%= cycle("odd", "even", :name => "colors") %>">
+    <td class="product_name"><h3 style="font-size: 1.1em"><%= product.name %></h3>
+		<% if user_signed_in? && (current_user.admin == "admin") %>
+			<br /><%= link_to 'Edit', edit_product_path(product) %>
+		<% end %>
+	</td>
+    <td style="min-width:400px"><%= product.description.html_safe %></td>
+    <td><%= number_to_currency(product.price) %></td>
+	<td style="text-align:center; width:100px"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :method => :post %></td>  
+	</tr>
+<% end %>
+</table>
+
+

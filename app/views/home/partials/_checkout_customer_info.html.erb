@@ -1,0 +1,11 @@
+<p>Hello <%= @customer.first_name %>!<br /></p>
+<p>Let's make sure we have your preferences right (if not <%= link_to 'you can change them', :action => 'edit_customer', :page => 'checkout' %>):</p>
+<strong>Contact Preference:</strong> 
+<span class="blue"><% if @customer.contact_method == "email"%> 
+<%= @customer.email %>
+<% else %>
+<%= @customer.phone_number %>
+<% end %></span><br />
+<b>Drop Location:</b> <span class="blue"><%= @customer_drop_location.name %> on <%= Date::DAYNAMES[@customer_drop_location.day.to_i] %> at <%= @customer_drop_location.time %></span>
+<p>Please login to your paypal account to complete the checkout:</p>
+<%= link_to image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), express_new_order_path %>
