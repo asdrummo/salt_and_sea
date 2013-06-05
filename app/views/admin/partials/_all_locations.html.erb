@@ -166,6 +166,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
       <th>Email</th>
       <th>Phone</th>
       <th>Share</th>
+	  <th>Order Count</th>
 	<th>Fish Credits</th>
 	<th>Shellfish Credits</th>
 	<th>Basket Credits</th>
@@ -215,6 +216,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		<td><%= customer.email %></td>
 		<td><%= customer.phone_number %></td>
 		<td><%= customer.share_type %></td>	
+		<th><%= link_to customer.order_count, edit_customer_path(customer) %></td>
 		<td><%= link_to @fish_credits, :controller => "customer_credits", :action => "index", :id => customer.id %></td>
 		<td><%= @shellfish_credits %></td>
 		<td><%= @basket_credits %></td>
