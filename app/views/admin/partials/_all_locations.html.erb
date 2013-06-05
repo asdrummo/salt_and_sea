@@ -24,12 +24,13 @@ No locations left, week start date pushed to <%= @week1_date + 1.week %>
 <% if c.total_credits > 0 %>
 <% @this_weeks_active_customers << c %>
 <% end %>
-<% end %>
-<p><strong>Active Customers:</strong> <%= @this_weeks_active_customers.count %>, <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= @customers_without_credits.count %></p>
+<% end %><br />
+
+<p><strong>Active Customers:</strong> <%= (@this_weeks_active_customers.count - @weekly_hold_customers.count - @admin_user_count) %>, <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= @customers_without_credits.count %></p>
 <p><strong>Low credit customers (<%= @low_credit_customers.count %>):</strong> 
 <%= @low_credit_customers.collect{|u| u.email}.join(', ')%></p>
 
-<p><b>New Customers: </b><%= Customer.scoped_new.collect{|u| u.email}.join(', ')%></p>
+<p><b>New Customers: </b><%= (Customer.scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %></p>
 <p>
 <%= link_to 'Customer Database Email List', '#email' %> | <%= link_to 'Active Customers', '#active' %> | <%= link_to 'Inactive Customers (1 month)', '#inactive' %></p></div>
 </div>
@@ -76,7 +77,7 @@ No locations left, week start date pushed to <%= @week1_date + 1.week %>
 <span class="middle">Email Lists:</span>	
 </div>
 <div style="padding: 10px">
-<p style="margin-top:0px"><b>All Customers:</b> <%= @drop_location_customers.collect{|u| u.email}.join(', ') %></p>
+<p style="margin-top:0px"><b>All Customers:</b> <%= (@drop_location_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
 
 
 <% @active_customers = [] %>
@@ -107,10 +108,10 @@ No locations left, week start date pushed to <%= @week1_date + 1.week %>
 <% @location_low_credit_customers << c%>
 <% end %>
 <% end %>
-<p><b>Active Customers:</b> <%= @active_customers.collect{|u| u.email}.join(', ') %></p>
-<p><b>New Customers:</b> <%= Customer.scoped_location(location).scoped_new.collect{|u| u.email}.join(', ') %></p>
-<p><b>Low Credit Customers:</b> <%= @location_low_credit_customers.collect{|u| u.email}.join(', ') %></p>
-<p style="margin-bottom:0px"><b>Inactive Customers:</b> <%= @inactive_customers.collect{|u| u.email}.join(', ') %></p>
+<p><b>Active Customers:</b> <%= (@active_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+<p><b>New Customers:</b> <%= (Customer.scoped_location(location).scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+<p><b>Low Credit Customers:</b> <%= (@location_low_credit_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+<p style="margin-bottom:0px"><b>Inactive Customers:</b> <%= (@inactive_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
 </div>
 </div>
 

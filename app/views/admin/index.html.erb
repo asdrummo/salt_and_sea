@@ -31,9 +31,9 @@ print page: <%= link_to 'all', :action => "index", :black_and_white => true %>,
 <br />
 <span style="font-size:12px"><%= link_to "back to top", '#top' %></span><br />
 <%= link_to('', {}, {:name => 'email'}) %>
-<b>Customer Email List (Entire Database): </b><%= Customer.all.collect{|u| u.email}.join(', ') %><br />
+<b>Customer Email List (Entire Database): </b><%= (Customer.all - @admin_customers).collect{|u| u.email}.join(', ') %><br />
 <%= link_to('', {}, {:name => 'active'}) %>
-<b>Customer Email List (Active): </b><%= @active_customer.collect{|u| u.email}.join(', ') %><br />
+<b>Customer Email List (Active): </b><%= (@active_customer - @admin_customers).collect{|u| u.email}.join(', ') %><br />
 
 <%= link_to('', {}, {:name => 'inactive'}) %>
 <% @month_inactive_customers = [] %>
@@ -46,6 +46,6 @@ print page: <%= link_to 'all', :action => "index", :black_and_white => true %>,
 	<% @month_inactive_customers << c %>
 	<% end %>
 <% end %>
-<b>Customer Email List (1 month inactive): </b><%= @month_inactive_customers.collect{|u| u.email}.join(', ') %><br />
+<b>Customer Email List (1 month inactive): </b><%= (@month_inactive_customers - @admin_customers).collect{|u| u.email}.join(', ') %><br />
 <span style="font-size:12px"><%= link_to "back to top", '#top' %></span>
 <% end %>

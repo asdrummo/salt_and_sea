@@ -41,7 +41,7 @@ SaltAndSea::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default :charset => "utf-8"
   config.active_support.deprecation = :log
-  
+  config.log_level = :info
   # Paypal
   config.after_initialize do
     ActiveMerchant::Billing::Base.mode = :test

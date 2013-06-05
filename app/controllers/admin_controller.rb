@@ -17,6 +17,17 @@ class AdminController < ApplicationController
     end
     
   ## DECLARE ALL ARRAYS
+  @admin_customers = []
+  @admin_users = User.admin
+  @admin_user_count = 0
+  @admin_users.each do |user|
+    customer = Customer.find_by_user_id(user.id)
+  if customer
+  @admin_user_count += 1
+  @admin_customers << customer
+  end
+  end
+  
   @all_inactive_customers = []
   @low_credit_customers = []
   @this_week_active_locations = []
@@ -31,6 +42,7 @@ class AdminController < ApplicationController
   ## DROP LOCATIONS & CUSTOMERS
   @drop_locations = DropLocation.all(:order => 'day ASC')
   @customers = Customer.all(:order => 'last_name ASC')
+  @customers = (@customers - @admin_customers)
   find_zero_credit_customers
   
   
