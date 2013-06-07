@@ -12,6 +12,8 @@ class Customer < ActiveRecord::Base
   #scope :scoped_location, :conditions => { :drop_location_id => self.drop_loacation_id }
   scope :scoped_location, lambda { |location| where(:drop_location_id => location.id) }
   scope :scoped_new, where( "created_at > ?", (DateTime.now - 7.days))
+  
+  
   def name
     "#{first_name} #{last_name}"
   end
@@ -85,8 +87,8 @@ class Customer < ActiveRecord::Base
   end
   end
 
-  def weekly_product(fish, shellfish, basket, s, d, location, date)
-    if location.processed == true
+  def weekly_product(fish, shellfish, basket, s, d, location, date, all_processed)
+    if (location.processed == true) && (all_processed == false)
       week = (date + 1.week).cweek
     else
       week = date.cweek
