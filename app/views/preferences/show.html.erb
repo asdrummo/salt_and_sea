@@ -25,6 +25,26 @@
   <%= yesno(@preference.monkfish) %>
 </p>
 
+<p>
+  <b>Squid:</b>
+  <%= yesno(@preference.clams) %>
+</p>
+
+<p>
+  <b>Mackerel:</b>
+  <%= yesno(@preference.mussels) %>
+</p>
+
+<p>
+  <b>Skate:</b>
+  <%= yesno(@preference.oysters) %>
+</p>
+
+<p>
+  <b>Monkfish:</b>
+  <%= yesno(@preference.scallops) %>
+</p>
+
 
 <%= link_to 'Edit', edit_preference_path(@preference) %> |
 <%= link_to 'Back', preferences_path %> | <%= link_to 'New Preference', new_preference_path %>

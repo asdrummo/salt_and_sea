@@ -1,4 +1,8 @@
-<h1>Listing preferences</h1>
+<p><%= link_to 'New Preference', new_preference_path %></p>
+
+<% DropLocation.all.each do |location| %>
+
+<h1><%= location.name %></h1>
 
 <table>
   <tr>
@@ -15,25 +19,24 @@
     <th></th>
     <th></th>
   </tr>
-
-<% @preferences.each do |preference| %>
-  <tr>
-    <td><%= Customer.find(preference.customer_id).name %></td>
-    <td><%= yesno(preference.squid) %></td>
-    <td><%= yesno(preference.mackerel) %></td>
-    <td><%= yesno(preference.skate) %></td>
-    <td><%= yesno(preference.monkfish) %></td>
-    <td><%= yesno(preference.clams) %></td>
-    <td><%= yesno(preference.mussels) %></td>
-    <td><%= yesno(preference.oysters) %></td>
-    <td><%= yesno(preference.scallops) %></td>
-    <td><%= link_to 'Show', preference %></td>
-    <td><%= link_to 'Edit', edit_preference_path(preference) %></td>
-    <td><%= link_to 'Destroy', preference, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+<% Customer.scoped_location(location).each do |customer| %>
+<% if customer.preference %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%= customer.name %></td>
+    <td><%= yesno(customer.preference.squid) %></td>
+    <td><%= yesno(customer.preference.mackerel) %></td>
+    <td><%= yesno(customer.preference.skate) %></td>
+    <td><%= yesno(customer.preference.monkfish) %></td>
+    <td><%= yesno(customer.preference.clams) %></td>
+    <td><%= yesno(customer.preference.mussels) %></td>
+    <td><%= yesno(customer.preference.oysters) %></td>
+    <td><%= yesno(customer.preference.scallops) %></td>
+    <td><%= link_to 'Show', customer.preference %></td>
+    <td><%= link_to 'Edit', edit_preference_path(customer.preference) %></td>
+    <td><%= link_to 'Destroy', customer.preference, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
+<% end %>
 </table>
-
-<br />
-
-<%= link_to 'New Preference', new_preference_path %>
+<% end %>
+<p><%= link_to 'New Preference', new_preference_path %></p>
