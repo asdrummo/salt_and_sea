@@ -7,8 +7,8 @@
 <b>Start Date:</b> <%= @week1_date.strftime('%a %d %b %Y') %><br />
 <b>Remaining Locations:</b> 
 <% if @this_week_active_locations == [] %>
-No locations left, week start date pushed to <%= @week1_date + 1.week %>
-<% @week1_date = (@week1_date + 1.week) %>
+No locations left, next week start date pushed to <%= @week1_date + 1.week %>
+<% @week1_date = (@week1_date + 0.week) %>
 <% else %>
 <%= @this_week_active_locations.collect{|u| u.name}.join(', ')%>
 <% end %>

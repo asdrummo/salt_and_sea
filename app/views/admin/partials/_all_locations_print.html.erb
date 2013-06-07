@@ -125,7 +125,7 @@ No locations left, week start date pushed to <%= @week1_date + 1.week %>
 <% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
 <% i += 1%>
 	<tr class="<%= cycle("odd", "even") %>">
-		<td colspan="2"><%= customer.name %></td>
+		<td colspan="2"><%= customer.last_name_first %></td>
 		<td><%= customer.email %></td>
 		<td><%= customer.phone_number %></td>
 		<td><%= customer.share_type %></td>	

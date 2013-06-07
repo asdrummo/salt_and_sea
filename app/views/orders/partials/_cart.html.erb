@@ -13,7 +13,7 @@
 			<p><%= line_item.product.name %></p>
 		</td>
 		<td>
-			<p><%= line_item.product.description %></p>
+			<p><%= line_item.product.description.html_safe %></p>
 		</td>
 		<td>
 			<p><%= line_item.quantity %> @ <%= number_to_currency(line_item.price) %></p>
