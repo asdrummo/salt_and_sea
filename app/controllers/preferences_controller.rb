@@ -6,7 +6,30 @@ class PreferencesController < ApplicationController
   # GET /preferences.json
   def index
     @preferences = Preference.all
-
+    @admin_customers = []
+    @admin_users = User.admin
+    @admin_user_count = 0
+    @admin_users.each do |user|
+    customer = Customer.find_by_user_id(user.id)
+    if customer
+    @admin_user_count += 1
+    @admin_customers << customer
+    end
+    end
+    
+    #Find customers on hold this week
+    @week1_date = Date.today.beginning_of_week #assign start of week
+    @weekly_hold_customers = []
+    @customers = Customer.all
+    @hold_dates = HoldDate.all  
+    @customers.each do |customer|
+      @hold_dates.each do |date|
+        if (date.customer_id == customer.id) && (date.date == @week1_date)
+          @weekly_hold_customers << customer
+        end
+      end
+    end
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @preferences }

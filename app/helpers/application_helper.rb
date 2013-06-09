@@ -162,6 +162,30 @@ module ApplicationHelper
     end
   end
   
+ def active_customers(customer_group)
+   @active_customers = []
+   @fish_credits = 0 
+	 @shellfish_credits = 0 
+	 @basket_credits = 0
+  customer_group.each do |c|
+  	c.credits.each do |credit|
+  		 if Product.find(credit.product_id).category == 'fish' 
+  		 @fish_credits += credit.credits_available 
+  		 elsif Product.find(credit.product_id).category == 'shellfish' 
+  		 @shellfish_credits += credit.credits_available 
+  		 elsif Product.find(credit.product_id).category == 'basket' 
+  		 @basket_credits += credit.credits_available 
+  		 end 
+  	 end 
+  	 if (@fish_credits + @shellfish_credits + @basket_credits > 0) 
+  	 @active_customers << c 
+  	 end 
+  	 @fish_credits = 0 
+  	 @shellfish_credits = 0 
+  	 @basket_credits = 0 
+   end
+   return @active_customers 
+  end
   def us_states
       [
         ['Alabama', 'AL'],

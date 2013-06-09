@@ -19,7 +19,10 @@
     <th></th>
     <th></th>
   </tr>
-<% Customer.scoped_location(location).each do |customer| %>
+<% active_customers(Customer.scoped_location(location)) %>
+<% @customers = [] %>
+<% @active_customers = (@active_customers - @admin_customers - @weekly_hold_customers) %>
+<% @active_customers.each do |customer| %>
 <% if customer.preference %>
   <tr class="<%= cycle("odd", "even") %>">
     <td><%= customer.name %></td>
