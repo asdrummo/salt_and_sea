@@ -7,12 +7,6 @@
 <%= link_to location.name, :action => "index", :black_and_white => true, :drop_location_id => location.id %>
 <% end %>
 </div>
-<% if @this_week_active_locations == [] %>
-<% @week1_date = (@week1_date + 1.week) %>
-<% @all_processed = true %>
-<% else %>
-<% @all_processed = false %>
-<% end %>
 
 <% if @selected_location %>
 <% @drop_locations = DropLocation.where(:id => @selected_location)%>

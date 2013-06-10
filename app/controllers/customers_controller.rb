@@ -15,6 +15,8 @@ class CustomersController < ApplicationController
   def show
     @show = true
     @customer = Customer.find(params[:id])
+    check_active(@customer)
+    check_date(DropLocation.find(@customer.drop_location_id))
     @credits = CustomerCredit.where(:customer_id => @customer.id)
     @orders = Order.where(:customer_id => @customer.id)
     @fish_count = 0

@@ -31,6 +31,18 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    def check_date(location)
+      @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, location.day.to_i)
+      time_to_merge = location.start_time 
+      date_to_merge = @next_date
+      @within_five_days = false
+      @merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
+      if DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@merged_datetime - 7.days)
+        @next_date = (@merged_datetime - 7.days)
+        @within_five_days = true
+      end
+    end
+    
     def current_cart
       if session[:paypal_params].nil?
       end
@@ -56,6 +68,14 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    def check_active(customer)
+      @active = false
+      customer.credits.each do |credit|
+        if credit.credits_available >= 1
+          @active = true
+        end
+      end
+    end
 #    unless Rails.application.config.consider_all_requests_local
 #        rescue_from Exception, with: lambda { |exception| render_error 500, exception }
 #        rescue_from ActionController::RoutingError, ActionController::UnknownController, ::AbstractController::ActionNotFound, ActiveRecord::RecordNotFound, with: lambda { |exception| render_error 404, exception }

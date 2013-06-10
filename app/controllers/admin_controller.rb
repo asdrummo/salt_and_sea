@@ -66,8 +66,11 @@ class AdminController < ApplicationController
   ## Shift start of week to next monday if all locations have been processed
   if @this_week_active_locations == []
     @date1 = Time.now.beginning_of_week + 7.days
+    @week1_date = (@week1_date + 1.week)
+    @all_processed = true
   else
     @date1 = Time.now.beginning_of_week
+    @all_processed = false
   end
   
   #Find customers on hold this week
