@@ -34,7 +34,8 @@ print page: <%= link_to 'all', :action => "index", :black_and_white => true %>,
 <b>Customer Email List (Entire Database): </b><%= (Customer.all - @admin_customers).collect{|u| u.email}.join(', ') %><br />
 <%= link_to('', {}, {:name => 'active'}) %>
 <b>Customer Email List (Active): </b><%= (@active_customer - @admin_customers).collect{|u| u.email}.join(', ') %><br />
-
+<% @secondary = Customer.where("email_2 LIKE '%@%'") %>
+<b>Secondary Email List (Active): </b><%= (@secondary & (@active_customer - @admin_customers)).collect{|u| u.email_2}.join(', ') %><br />
 <%= link_to('', {}, {:name => 'inactive'}) %>
 <% @month_inactive_customers = [] %>
 <% @all_inactive_customers.each do |c| %>

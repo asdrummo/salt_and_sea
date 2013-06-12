@@ -2,7 +2,7 @@
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
-
+<p><em>please note, by registering with salt + sea you are only creating a login and password for the marketplace and not purchasing any products.</em></p>
   <div><%= f.label :email %><br />
   <%= f.email_field :email, :autofocus => true %></div>
 

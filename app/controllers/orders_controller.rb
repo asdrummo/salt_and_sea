@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
   end
   
   def index
-    @orders = Order.all
+    @orders = Order.all(:order => 'id DESC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @orders }
