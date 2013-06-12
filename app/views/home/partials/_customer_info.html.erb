@@ -8,6 +8,10 @@
 <%= @customer.street %><br />
 <%= @customer.city %>, <%= @customer.state %> <%= @customer.zip_code %><br />
 <%= @customer.phone_number %> | <%= @customer.email %></p>
+<% if @customer.email_2 != "" && @customer.email_2 != nil %>
+<p style="padding:0 10px 0 10px">Secondary Email:<br/>
+<%= @customer.email_2 %></p>
+<% end 	%>
 <% if @show %>
 <% else %>
 <p style="padding:0 10px 0 10px"><%= link_to 'Edit Account', :action => 'edit_customer', :page => 'my_account' %> | <%= link_to 'Change Password', edit_user_registration_path %></p>

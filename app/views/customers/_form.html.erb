@@ -20,8 +20,12 @@
     <%= f.text_field :last_name %>
   </div>
   <div class="field">
-    <%= f.label :email %><br />
+    <%= f.label :email, "Email (Primary)" %><br />
     <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :email_2, "Email (Secondary)" %><br />
+    <%= f.text_field :email_2 %>
   </div>
   <div class="field">
     <%= f.label :street %><br />

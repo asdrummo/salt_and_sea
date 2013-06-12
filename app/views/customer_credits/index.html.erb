@@ -13,7 +13,7 @@
 
 <% @customer_credits.each do |customer_credit| %>
   <tr class="<%= cycle("odd", "even") %>">
-	<td><%= Customer.find(customer_credit.customer_id).name %></td>
+	    <td><%= link_to Customer.find(customer_credit.customer_id).name, customer_path(Customer.find(customer_credit.customer_id)) %></td>
 	<td><%= Product.find(customer_credit.product_id).category_name %></td>
     <td><%= customer_credit.credits_available %></td>
 	<td><%= customer_credit.created_at.strftime("%B %d, %Y") %></td>
