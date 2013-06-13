@@ -49,6 +49,10 @@ class HomeController < ApplicationController
   
   def hold_dates
     @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)
+    if params[:hold_dates] == nil
+      flash[:alert] = 'Please select a hold date before submitting'
+       redirect_to(:action => 'my_account')
+    else
     params[:hold_dates].each do |date|
       @exists = false
       @customer_hold_dates.each do |existing_date|
@@ -63,6 +67,7 @@ class HomeController < ApplicationController
     end
     flash[:notice] = 'Hold Dates Saved!'
      redirect_to(:action => 'my_account')
+    end
   end
   
   def get_next_date
