@@ -40,6 +40,24 @@ class CustomerCreditsController < ApplicationController
     flash[:notice] = 'Customers Processed'
     redirect_to(:back)
   end
+  
+  def add_credit_all
+    customers = Customer.where(:drop_location_id => params[:id])
+    @exists = false
+    customers.each do |customer|
+      customer.hold_dates.each do |existing_date|
+        if existing_date.date.strftime('%Y-%m-%d') == params[:date]
+          @exists = true
+        end
+      end
+      if @exists == false
+        unprocess_credit(customer.id)
+      end
+      @exists = false
+    end
+    flash[:notice] = 'Customers UnProcessed'
+    redirect_to(:back)
+  end
 
   
   def process_credit(customer_id)
@@ -139,9 +157,112 @@ class CustomerCreditsController < ApplicationController
         end 
     end
   end
+########UNPROCESS########
+  def unprocess_credit(customer_id)
+    customer_credits = CustomerCredit.where(:customer_id => customer_id)
+    customer = Customer.find_by_id(customer_id)
+    @single_fish_stop = false
+    @double_fish_stop = false
+    @single_shellfish_stop = false
+    @double_shellfish_stop = false
+    @double_basket_stop = false
+      customer_credits.each do |credit|
+        category = Product.find(credit.product_id).category
+        if credit.credits_available > 0
+          unless @single_fish_stop == true
+            if (customer.share_type == "single fish") && (category == "fish")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_fish_stop = true
+            elsif (customer.share_type == "single fish + single shellfish") && (category == "fish")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_fish_stop = true
+            elsif (customer.share_type == "single fish + single basket") && (category == "fish")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_fish_stop = true
+            end
+          end
+### 
+          unless @single_shelfish_stop == true
+            if (customer.share_type == "single shellfish") && (category == "shellfish")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_shelfish_stop = true
+            elsif (customer.share_type == "single fish + single shellfish") && (category == "shellfish")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_shelfish_stop = true
+            elsif (customer.share_type == "double fish + single shellfish") && (category == "shellfish")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_shelfish_stop = true    
+            end
+          end
 
+          unless @single_basket_stop == true      
+            if (customer.share_type == "single basket") && (category == "basket")
+              credit.credits_available += 1
+              remove_used_credit(credit, customer_id, 1)
+              @single_basket_stop = true
+              elsif (customer.share_type == "single fish + single basket") && (category == "basket")
+                credit.credits_available += 1
+                remove_used_credit(credit, customer_id, 1)
+                @single_basket_stop = true            
+            end
+          end
+          credit.save
+        end
+        
+        if credit.credits_available > 1
+          unless @double_fish_stop == true
+            if (customer.share_type == "double fish") && (category == "fish")
+              credit.credits_available += 2 
+              remove_used_credit(credit, customer_id, 2)
+              @double_fish_stop = true
+            elsif (customer.share_type == "double fish + double shellfish") && (category == "fish")
+              credit.credits_available += 2 
+              remove_used_credit(credit, customer_id, 2)
+              @double_fish_stop = true
+            elsif (customer.share_type == "double fish + single shellfish") && (category == "fish")
+              credit.credits_available += 2 
+              remove_used_credit(credit, customer_id, 2)
+              @double_fish_stop = true
+            end
+          end
+          
+          unless @double_shellfish_stop == true
+            if (customer.share_type == "double shellfish") && (category == "shellfish")
+              credit.credits_available += 2
+              remove_used_credit(credit, customer_id, 2) 
+              @double_shellfish_stop = true
+            elsif (customer.share_type == "double fish + double shellfish") && (category == "shellfish")
+              credit.credits_available += 2
+              remove_used_credit(credit, customer_id, 2) 
+              @double_shellfish_stop = true
+            end
+          end
+          
+          unless @double_basket_stop == true
+            if (customer.share_type == "double basket") && (category == "basket")
+              credit.credits_available += 2
+              remove_used_credit(credit, customer_id, 2) 
+              @double_basket_stop = true
+            end
+          end
+          credit.save
+        end 
+    end
+  end
+  
   def add_used_credit(credit, customer_id, value)
     @customer_credit_used = UsedCustomerCredit.new(:customer_id => customer_id, :product_id => credit.product_id, :credits_used => value).save
+  end
+  
+  def remove_used_credit(credit, customer_id, value)
+    @used_credit = UsedCustomerCredit.where(:customer_id => customer_id).order('created_at DESC').first
+    @used_credit.destroy
   end
     
   # GET /customer_credits/1
