@@ -8,6 +8,7 @@ class CustomerOrderMailer < ActionMailer::Base
       @customer = Customer.find(order.customer_id)
       @location = DropLocation.find(@customer.drop_location_id)
       @order = order
+      @account = (root_url + "home/my_account")
       get_next_date
       mail(:to => "#{@customer.first_name} <#{@customer.email}>", :subject => ("Salt + Sea Order #" + order.id.to_s))
   end

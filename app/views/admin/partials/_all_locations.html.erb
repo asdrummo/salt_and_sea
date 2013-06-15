@@ -341,7 +341,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 <tr style="background-color:#dbfedd">
 	<td></td>
 	<td>Total Customers: <%= @active_customers.count - @location_hold_customers.count %></td>
-	<td colspan="6"></td>
+	<td colspan="7"></td>
 	<td>
 		<% @totals << [location.id, @date, fish(@week1), shellfish(@week1)] %>
 		<%= @fish_lbs_text %><%= fish(@week1) %><br />
