@@ -183,12 +183,19 @@ class HomeController < ApplicationController
   end
 
   def show_invoice
-    if signed_in?
+    @customer = Customer.find_by_user_id(current_user.id)
     @order = Order.find_by_id(params[:id])
     @order_transaction = OrderTransaction.find_by_order_id(@order.id)
     @purchased_cart = Cart.find_by_id(@order.cart_id)
+    @success = false
+    if params[:success]
+      @success = true
+    end
+    if (signed_in? && (@customer.id == @order.customer_id)) || (user_signed_in? && (current_user.admin == "admin")) 
+
     else
-      redirect_to(:controller => 'home', :action => 'error_forbidden')
+      flash[:alert] = 'Permission Denied'
+      redirect_to(:controller => 'home')
     end
   end
   

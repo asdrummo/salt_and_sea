@@ -83,8 +83,7 @@ class OrdersController < ApplicationController
           @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
         end
         update_credits
-        render :action => "success"
-        #@purchased_items = line_items.where(:cart_id => @order.cart_id)
+        redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
       else
         render :action => "failure"
       end
@@ -129,10 +128,9 @@ class OrdersController < ApplicationController
             @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
           end
           update_credits
-                render :action => "success"
-                #@purchased_items = line_items.where(:cart_id => @order.cart_id)
+                redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
         else
-                render :action => "failure"
+                redirect_to(:controller => 'orders', :action => 'failure')
         end
   end
   

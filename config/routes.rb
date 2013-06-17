@@ -17,7 +17,7 @@ resources :processed_locations, :preferences, :customers, :hold_dates, :customer
   get "home/checkout"
   get "home/products"
   get "orders/pay_by_check"
-  match "/orders/success" => "orders#pay_by_check"
+  match "show_invoice" => "home#show_invoice"
   
   match "/admin/low_credit_notifications" => "admin#low_credit_notifications"
   get "admin/index"
