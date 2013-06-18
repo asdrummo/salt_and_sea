@@ -44,7 +44,7 @@ class AdminController < ApplicationController
   @customers = Customer.all(:order => 'last_name ASC')
   @customers = (@customers - @admin_customers)
   find_zero_credit_customers
-  
+  @secondary = Customer.where("email_2 LIKE '%@%'")
   
   @preference_search = Preference.new
 

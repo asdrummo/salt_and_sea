@@ -117,7 +117,7 @@ No locations left, next week start date pushed to <%= @week1_date%>
 <% end %>
 
 <% @location_hold_customers = (@active_customers & @weekly_hold_customers) %>
-<p><b>Active Customers:</b> <%= (@active_customers - @admin_customers - @location_hold_customers).collect{|u| u.email}.join(', ') %></p>
+<p><b>Active Customers:</b> <%= (@active_customers - @admin_customers - @location_hold_customers).collect{|u| u.email}.join(', ') %>, <%= (@secondary & (@active_customer - @admin_customers)).collect{|u| u.email_2}.join(', ') %></p>
 <p><b>New Customers:</b> <%= (Customer.scoped_location(location).scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %></p>
 <p><b>Low Credit Customers:</b> <%= (@location_low_credit_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
 <p><b>Hold Customers:</b> <%= @location_hold_customers.collect{|u| u.email}.join(', ') %></p>
