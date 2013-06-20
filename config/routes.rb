@@ -15,6 +15,7 @@ resources :processed_locations, :preferences, :customers, :hold_dates, :customer
   get "home/my_account"
   get "home/show_cart"
   get "home/checkout"
+  get "orders/test"
   get "home/products"
   get "orders/pay_by_check"
   match "show_invoice" => "home#show_invoice"

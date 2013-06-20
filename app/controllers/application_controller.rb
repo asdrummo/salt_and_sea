@@ -41,6 +41,9 @@ class ApplicationController < ActionController::Base
         @next_date = (@merged_datetime - 7.days)
         @within_five_days = true
       end
+      if DateTime.now.in_time_zone("Eastern Time (US & Canada)") > (@merged_datetime - 5.days)
+        @within_five_days = true
+      end
     end
     
     def current_cart

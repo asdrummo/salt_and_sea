@@ -1,0 +1,11 @@
+customer:<%= @customer.name %>
+drop location: <%= DropLocation.find(@customer.drop_location_id).name %><br />
+day of week: <%= DropLocation.find(@customer.drop_location_id).day %><br />
+active: <%= @active %><br />
+w/in 5 days: <%= @within_five_days %><br />
+merged_datetime.beginning_of_week: <%= @merged_datetime %><br />
+date: <%= @date %><br/>
+DateTime.now.in_time_zone("Eastern Time (US & Canada)"): <%= DateTime.now.in_time_zone("Eastern Time (US & Canada)")%> <br/>
+(@merged_datetime - 7.days): <%= (@merged_datetime - 7.days) %><br />
+DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@merged_datetime - 7.days)<br />
+next date: <%= @next_date %>

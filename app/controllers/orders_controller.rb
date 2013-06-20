@@ -83,6 +83,9 @@ class OrdersController < ApplicationController
         if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
           @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
         end
+        if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date)
+          @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
+        end
         update_credits
         redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
       else
@@ -118,8 +121,8 @@ class OrdersController < ApplicationController
              @order_transaction.order_id = @order.id
               @order_transaction.save
               current_cart.update_attribute(:purchased_at, Time.now)
-              CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
-              CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
+              #CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
+              #CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
           check_active
           check_date(DropLocation.find(@customer.drop_location_id))
           @date = Time.now.beginning_of_week
@@ -129,12 +132,23 @@ class OrdersController < ApplicationController
           if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
             @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
           end
+          if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date)
+            @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
+          end
           update_credits
                 redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
         else
                 redirect_to(:controller => 'orders', :action => 'failure')
         end
   end
+  
+  def test
+    @customer = Customer.find(170)
+    check_active
+    check_date(DropLocation.find(@customer.drop_location_id))
+    @date = Time.now.beginning_of_week
+  end
+  
   
   def check_active
     @active = false
