@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!
   before_filter :authenticate_admin
   def index
-    @users = User.where(:email != nil).order('email ASC')
+    @users = User.where(:email != nil).order('id DESC')
     @page_users = @users.paginate(:page => params[:page], :per_page => 15)
     @paginate = true
     if params[:all] == 'true'

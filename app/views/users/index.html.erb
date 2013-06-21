@@ -8,6 +8,7 @@
 <% end %> 
 <table class="admin_table">
   <tr>
+	<th>ID</th>
     <th>Email</th>
     <th>encrypted_password</th>
     <th>sign_in_count</th>
@@ -19,6 +20,7 @@
   </tr>
 <% @page_users.each do |user| %>
   <tr class="<%= cycle("odd", "even") %>">
+	<td><%= user.id %></td>
     <td><%= user.email %></td>
     <td><%= user.encrypted_password %></td>
     <td><%= user.sign_in_count %></td>
