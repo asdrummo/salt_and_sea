@@ -59,6 +59,8 @@ class OrdersController < ApplicationController
     @order.ip_address = request.remote_ip
     @order.customer_id = @customer.id
     if @order.save
+      get_next_date
+      @customer.first_drop = @date.beginning_of_week
       if @order.purchase
         CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
         CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
@@ -102,7 +104,6 @@ class OrdersController < ApplicationController
         @order.ip_address = request.remote_ip
         @order.customer_id = @customer.id
         @total_price = (current_cart.total_price * 100)
-
         @inc_count = false
         @purchased_cart = Cart.find_by_id(@order.cart_id)
         @purchased_cart.line_items.each do |line_item|
@@ -117,6 +118,8 @@ class OrdersController < ApplicationController
           end
         end
         if @order.save
+          get_next_date
+          @customer.first_drop = @date.beginning_of_week
           @order_transaction = OrderTransaction.new(:order_id => @order.id, :action => 'purchase', :amount => @total_price, :success => '1', :authorization => 'check' )
              @order_transaction.order_id = @order.id
               @order_transaction.save
@@ -142,6 +145,25 @@ class OrdersController < ApplicationController
         end
   end
   
+  def get_next_date
+     @location = DropLocation.find(@customer.drop_location_id)
+     @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+      time_to_merge = @location.start_time 
+      date_to_merge = @next_date
+      @merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
+      if @location.start_date < Date.today
+        if DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@merged_datetime - 7.days)
+          @date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
+        else
+          @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+        end
+      else
+       @date =  @location.start_date
+      end
+      if (Date.today + 5.days) > @date
+        @date = @date + 7.days
+      end
+  end
   def test
     @customer = Customer.find(170)
     check_active

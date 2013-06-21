@@ -22,6 +22,7 @@ class HomeController < ApplicationController
   	@date = Time.now.beginning_of_week
     @hold_date = HoldDate.new
     get_next_date
+    check_active(@customer)
     if @customer != nil
       @orders = Order.where(:customer_id => @customer.id)
       @credits = CustomerCredit.where(:customer_id => @customer.id)

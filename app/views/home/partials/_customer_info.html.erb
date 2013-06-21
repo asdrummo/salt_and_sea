@@ -22,6 +22,12 @@
 <span class="middle">Additional Preferences:</span>
 </div>
 <div class="account_border">
+<% if @customer.share_type %>
+<p style="padding:0 10px 0 10px">
+  <b>Share Type:</b>
+  <%= @customer.share_type.titleize %>
+</p>
+<% end %>
 <p style="padding:0 10px 0 10px">
 	  <b>Mailing list:</b>
 	  <%= @customer.mailing_list.titleize %>
@@ -50,7 +56,7 @@
 </div>
 <div style="float:right; margin-left:20px">
 	<div class="account_title">
-	<span class="middle">Drop Locations:</span>
+	<span class="middle">Drop Location:</span>
 	</div>
 <div class="account_border">
 <p style="padding:0 10px 0 10px"><span style="font-size:18px"><b><%= @customer_drop_location.name %></b></span><br />
@@ -60,9 +66,13 @@
 		<% if @location_merged_datetime < DateTime.now %>	
 		<% @location_merged_datetime = (@location_merged_datetime + 1.week) %>	
 		<% end %>
-		
+		<% if @active == true %>
 		<strong>Next pickup date is:</strong> <%= @location_merged_datetime.strftime('%a %d %b %Y') %>, from 
 		<%= @customer_drop_location.time %><br />
+		<% else %>
+		<strong>Pick up day:</strong> <%= @location_merged_datetime.strftime('%A') %>, from 
+		<%= @customer_drop_location.time %><br />
+		<% end %>
 		<% if @customer_drop_location.info %>
 		<b>Additional Information:</b> <%= @customer_drop_location.info %>  
 		<% end %>

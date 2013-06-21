@@ -6,7 +6,7 @@ class Customer < ActiveRecord::Base
   has_one :drop_location
   has_one :preference
   belongs_to :user
-  attr_accessible :admin, :order_count, :mussels, :oysters, :scallops, :clams, :squid, :skate, :monkfish, :mackerel, :account_status, :city, :contact_method, :country, :drop_location_id, :first_name, :hashed_password, :last_name, :mailing_list, :phone_number, :email, :email_2, :user_id, :state, :street, :zip_code, :hold_date, :notes, :share_type
+  attr_accessible :admin, :order_count, :mussels, :oysters, :scallops, :clams, :squid, :skate, :monkfish, :mackerel, :account_status, :city, :contact_method, :country, :drop_location_id, :first_name, :hashed_password, :last_name, :mailing_list, :phone_number, :email, :email_2, :user_id, :state, :street, :zip_code, :hold_date, :notes, :share_type, :first_drop
   attr_accessor :squid, :skate, :monkfish, :mackerel, :mussels, :oysters, :scallops, :clams
   validates_presence_of :email
   #scope :scoped_location, :conditions => { :drop_location_id => self.drop_loacation_id }

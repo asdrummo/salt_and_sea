@@ -74,7 +74,7 @@ Looks like you need to add some contact info:
  	<tr>
 		<td>
 			  <div class="field">
-			    <%= f.label :drop_location_id %><div id="popup">pop up<%= link_to '(information)', "http://google.com" %></div><br />
+			    <%= f.label :drop_location_id %><br />
 				<%= f.select :drop_location_id, options_from_collection_for_select(@drop_locations, "id", :display_name) %>
 			  </div>
 		</td>
