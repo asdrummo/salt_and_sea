@@ -9,9 +9,11 @@ class Customer < ActiveRecord::Base
   attr_accessible :admin, :order_count, :mussels, :oysters, :scallops, :clams, :squid, :skate, :monkfish, :mackerel, :account_status, :city, :contact_method, :country, :drop_location_id, :first_name, :hashed_password, :last_name, :mailing_list, :phone_number, :email, :email_2, :user_id, :state, :street, :zip_code, :hold_date, :notes, :share_type, :first_drop
   attr_accessor :squid, :skate, :monkfish, :mackerel, :mussels, :oysters, :scallops, :clams
   validates_presence_of :email
-  #scope :scoped_location, :conditions => { :drop_location_id => self.drop_loacation_id }
   scope :scoped_location, lambda { |location| where(:drop_location_id => location.id) }
   scope :scoped_new, where( "created_at > ?", (DateTime.now - 7.days))
+  #scope :first_drop, where("(first_drop > ?)", (Date.today - 1.year))
+  
+  
   
   
   def name
@@ -25,7 +27,17 @@ class Customer < ActiveRecord::Base
     end
     return credits
   end
+  
+  def total_used_credits
+    used_credits = 0
+    self.used_customer_credits.each do |credit|
+      used_credits += credit.credits_used
+    end
+    return used_credits
+  end
 
+
+  
   def last_name_first
       "#{last_name}, #{first_name}"
   end

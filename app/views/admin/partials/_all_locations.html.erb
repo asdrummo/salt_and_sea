@@ -89,6 +89,7 @@ No locations left, next week start date pushed to <%= @week1_date%>
 
 <% @active_customers = [] %>
 <% @inactive_customers = [] %>
+<% @first_drop_customers = [] %>
 <% @drop_location_customers.each do |c| %>
 	<% c.credits.each do |credit| %>
 		<% if Product.find(credit.product_id).category == 'fish' %>
@@ -109,6 +110,11 @@ No locations left, next week start date pushed to <%= @week1_date%>
 	<% @shellfish_credits = 0 %>
 	<% @basket_credits = 0 %>
 <% end %>
+<% @drop_location_customers.each do |c| %>
+<% if (c.total_used_credits == 0) && (c.order_count == 1) %>
+<% @first_drop_customers << c %>
+<% end %>
+<% end %>
 <% @location_low_credit_customers = [] %>
 <% @low_credit_customers.each do |c| %>
 <% if c.drop_location_id == location.id %>
@@ -118,7 +124,8 @@ No locations left, next week start date pushed to <%= @week1_date%>
 
 <% @location_hold_customers = (@active_customers & @weekly_hold_customers) %>
 <p><b>Active Customers:</b> <%= (@active_customers - @admin_customers - @location_hold_customers).collect{|u| u.email}.join(', ') %>, <%= (@secondary & @active_customers).collect{|u| u.email_2}.join(', ') %></p>
-<p><b>New Customers:</b> <%= (Customer.scoped_location(location).scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+<p><b>New Customers (joined this week):</b> <%= (Customer.scoped_location(location).scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+<p><b>New Customers (first drop):</b> <%= ((@first_drop_customers - @admin_customers - @weekly_hold_customers) & @active_customers).collect{|u| u.email}.join(', ') %></p>
 <p><b>Low Credit Customers:</b> <%= (@location_low_credit_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
 <p><b>Hold Customers:</b> <%= @location_hold_customers.collect{|u| u.email}.join(', ') %></p>
 
