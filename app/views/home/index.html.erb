@@ -23,7 +23,9 @@
 	</td>
     <td><%= product.description.html_safe %></td>
     <td><%= number_to_currency(product.price) %></td>
-	<td style="text-align:center"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :before=>"this.style.display='none'", :method => :post %></td>
+	<td style="text-align:center"><%= safe_image_tag(product.image_url, :border => 0) %>
+		<%= button_to 'add to cart', line_items_path(:product_id => product), :method => :post %>
+	</td>
   </tr>
 <% end %>
 </table>
@@ -49,8 +51,11 @@
 	<% end %>
 	</td>
     <td><%= product.description.html_safe %></td>
-    <td><%= number_to_currency(product.price) %></td>
-	<td style="text-align:center"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :before=>"this.style.display='none'", :method => :post %></td>  </tr>
+    <td><%= number_to_currency(product.price) %></td> 
+	<td style="text-align:center"><%= safe_image_tag(product.image_url, :border => 0) %>
+		<%= button_to 'add to cart', line_items_path(:product_id => product), :method => :post %>
+	</td>
+  </tr>
 <% end %>
 </table>
 <% reset_cycle("colors") %>
@@ -75,7 +80,10 @@
 	</td>
     <td><%= product.description.html_safe %></td>
     <td><%= number_to_currency(product.price) %></td>
-	<td style="text-align:center; width:100px"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :before=>"this.style.display='none'", :method => :post %></td>  </tr>
+	<td style="text-align:center"><%= safe_image_tag(product.image_url, :border => 0) %>
+		<%= button_to 'add to cart', line_items_path(:product_id => product), :method => :post %>
+	</td>  
+	</tr>
 <% end %>
 </table>
 <% reset_cycle("colors") %>
@@ -99,7 +107,9 @@
 	</td>
     <td style="min-width:400px"><%= product.description.html_safe %></td>
     <td><%= number_to_currency(product.price) %></td>
-	<td style="text-align:center; width:100px"><%= link_to safe_image_tag(product.image_url, :border => 0) + 'add to cart', line_items_path(:product_id => product), :before=>"this.style.display='none'", :method => :post %></td>  
+	<td style="text-align:center"><%= safe_image_tag(product.image_url, :border => 0) %>
+		<%= button_to 'add to cart', line_items_path(:product_id => product), :method => :post %>
+	</td>
 	</tr>
 <% end %>
 </table>
