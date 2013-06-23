@@ -19,9 +19,9 @@ class ApplicationController < ActionController::Base
       session[:user_return_to] || super
     end
 
-    def after_sign_in_path_for(resource)
-      if (URI(request.referer).path == '/users/sign_in')
-        root_path
+    def after_sign_in_path_for(resource) unless user_signed_in?
+      if (URI(request.referer).path == '/users/sign_in') 
+        root_path 
       elsif (URI(request.referer).path == '/users/sign_up')
         root_path
       elsif (URI(request.referer).path == '/users/password/edit')
@@ -29,6 +29,9 @@ class ApplicationController < ActionController::Base
       else
         request.referer
       end
+    end
+    root_path
+      
     end
     
     def check_date(location)
