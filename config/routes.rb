@@ -32,11 +32,6 @@ resources :processed_locations, :preferences, :customers, :hold_dates, :customer
   
   devise_for :users, controllers: { registrations: "registrations" }
   match 'devise/home/show_cart' => 'home#show_cart'
-
-  #page errors
-  unless Rails.application.config.consider_all_requests_local
- #     match '*not_found', to: 'errors#error_404'
-  end
     
   # Paypal
    resources :orders do
@@ -112,5 +107,10 @@ resources :processed_locations, :preferences, :customers, :hold_dates, :customer
   # Devise Root
   root :to => "home#index"
   #map.connect '/home/submit_item', :controller => 'home', :action => 'submit_item'
-
+  
+  #page errors
+  unless Rails.application.config.consider_all_requests_local
+    match '*not_found', to: 'errors#error_404'
+  end
+  
 end
