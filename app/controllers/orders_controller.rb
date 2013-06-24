@@ -64,18 +64,6 @@ class OrdersController < ApplicationController
       if @order.purchase
         CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
         CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
-        @purchased_cart = Cart.find_by_id(@order.cart_id)
-        @inc_count = false
-        @purchased_cart.line_items.each do |line_item|
-          @product = Product.find(line_item.product_id) 
-          if @product.category == ("fish" || "shellfish" || "basket")
-            @inc_count = true
-          end
-        end
-        if @inc_count == true
-          @customer.order_count += 1
-          @customer.save
-        end
         check_active
         check_date(DropLocation.find(@customer.drop_location_id))
         @date = Time.now.beginning_of_week
@@ -89,6 +77,7 @@ class OrdersController < ApplicationController
           @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
         end
         update_credits
+        order_count
         redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
       else
         render :action => "failure"
@@ -104,19 +93,6 @@ class OrdersController < ApplicationController
         @order.ip_address = request.remote_ip
         @order.customer_id = @customer.id
         @total_price = (current_cart.total_price * 100)
-        @inc_count = false
-        @purchased_cart = Cart.find_by_id(@order.cart_id)
-        @purchased_cart.line_items.each do |line_item|
-          @product = Product.find(line_item.product_id) 
-          if @product.category == ("fish" || "shellfish" || "basket")
-            @inc_count = true
-          end
-
-          if @inc_count == true
-            @customer.order_count += 1
-            @customer.save
-          end
-        end
         if @order.save
           get_next_date
           @customer.first_drop = @date.beginning_of_week
@@ -139,6 +115,7 @@ class OrdersController < ApplicationController
             @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
           end
           update_credits
+          order_count
                 redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
         else
                 redirect_to(:controller => 'orders', :action => 'failure')
@@ -171,6 +148,20 @@ class OrdersController < ApplicationController
     @date = Time.now.beginning_of_week
   end
   
+  def order_count
+    @purchased_cart = Cart.find_by_id(@order.cart_id)
+    @inc_count = false
+    @purchased_cart.line_items.each do |line_item|
+      @product = Product.find(line_item.product_id) 
+      if (@product.category == "fish") || (@product.category == "shellfish") || (@product.category == "basket")
+        @inc_count = true
+      end
+    end
+    if @inc_count == true
+      @customer.order_count += 1
+      @customer.save
+    end    
+  end
   
   def check_active
     @active = false
