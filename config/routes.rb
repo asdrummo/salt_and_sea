@@ -1,5 +1,8 @@
 SaltAndSea::Application.routes.draw do
 
+  resources :share_dates
+
+
   resources :text_entries
 
 

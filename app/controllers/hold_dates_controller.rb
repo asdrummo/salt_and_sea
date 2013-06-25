@@ -38,7 +38,6 @@ class HoldDatesController < ApplicationController
   def edit
     @hold_date = HoldDate.find(params[:id])
     @customer = Customer.find(@hold_date.customer_id)
-    
     @customer_names = Customer.all(:order => 'last_name ASC')
   end
 

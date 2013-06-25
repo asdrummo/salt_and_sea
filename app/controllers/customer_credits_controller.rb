@@ -26,13 +26,22 @@ class CustomerCreditsController < ApplicationController
   def use_credit_all
     customers = Customer.where(:drop_location_id => params[:id])
     @exists = false
+    @share_date_exists = false
     customers.each do |customer|
       customer.hold_dates.each do |existing_date|
         if existing_date.date.strftime('%Y-%m-%d') == params[:date]
           @exists = true
         end
       end
+      customer.share_dates.each do |existing_share_date|
+        if existing_share_date.date.strftime('%Y-%m-%d') == params[:date]
+          @share_date_exists = true
+        end
+      end
       if @exists == false
+        process_credit(customer.id)
+      end
+      if @share_date_exists == true
         process_credit(customer.id)
       end
       @exists = false
@@ -44,13 +53,22 @@ class CustomerCreditsController < ApplicationController
   def add_credit_all
     customers = Customer.where(:drop_location_id => params[:id])
     @exists = false
+    @share_date_exists = false
     customers.each do |customer|
       customer.hold_dates.each do |existing_date|
         if existing_date.date.strftime('%Y-%m-%d') == params[:date]
           @exists = true
         end
       end
+      customer.share_dates.each do |existing_share_date|
+        if existing_share_date.date.strftime('%Y-%m-%d') == params[:date]
+          @share_date_exists = true
+        end
+      end
       if @exists == false
+        unprocess_credit(customer.id)
+      end
+      if @share_date_exists == true
         unprocess_credit(customer.id)
       end
       @exists = false

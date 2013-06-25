@@ -81,7 +81,7 @@
 	
 	<% if @credits %><br />
 	<div class="account_title">
-	<span class="middle">Credits Available:</span>
+	<span class="middle">Shares Available:</span>
 	</div>
 	<div class="account_border">
 		<% if @fish_credits > 0 || @shellfish_credits > 0 || @basket_credits > 0%>
@@ -110,6 +110,8 @@
 		<strong>Basket Shares:</strong> <%= @basket_credits %> 
 	</p>
 	</div>
+	<br />
+	<%= render(:partial => 'home/partials/share_dates') %>
 	<br />
 	<% if @orders != nil %>
 	<%= render(:partial => 'home/partials/customer_orders') %>

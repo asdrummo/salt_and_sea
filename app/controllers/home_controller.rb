@@ -21,6 +21,7 @@ class HomeController < ApplicationController
     @eight_weeks = []
   	@date = Time.now.beginning_of_week
     @hold_date = HoldDate.new
+    @share_date = ShareDate.new
     get_next_date
     check_active(@customer)
     if @customer != nil
@@ -67,6 +68,29 @@ class HomeController < ApplicationController
       end
     end
     flash[:notice] = 'Hold Dates Saved!'
+     redirect_to(:action => 'my_account')
+    end
+  end
+  
+  def share_dates
+    @customer_share_dates = ShareDate.where(:customer_id => @customer.id)
+    if params[:share_dates] == nil
+      flash[:alert] = 'Please select a share date before submitting'
+       redirect_to(:action => 'my_account')
+    else
+    params[:share_dates].each do |date|
+      @exists = false
+      @customer_share_dates.each do |existing_date|
+        if date == existing_date.date.strftime('%a %d %b %Y')
+          @exists = true
+        end
+      end
+      if @exists == false
+        @customer_share_date = ShareDate.new(:customer_id => @customer.id, :date => date)
+        @customer_share_date.save
+      end
+    end
+    flash[:notice] = 'Share Dates Saved!'
      redirect_to(:action => 'my_account')
     end
   end
@@ -182,7 +206,13 @@ class HomeController < ApplicationController
     flash[:notice] = 'Hold Date Removed'
     redirect_to(:action => 'my_account')
   end
-
+  
+  def remove_share_date
+    ShareDate.find(params[:id]).destroy
+    flash[:notice] = 'Share Date Removed'
+    redirect_to(:action => 'my_account')
+  end
+  
   def show_invoice
     @customer = Customer.find_by_user_id(current_user.id)
     @order = Order.find_by_id(params[:id])

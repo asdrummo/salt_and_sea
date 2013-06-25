@@ -1,0 +1,35 @@
+<% @eight_weeks = [] %>
+<% @date = Time.now.beginning_of_week %>
+<% (0..8).each do |i| %>
+	<% @eight_weeks << (@date + i.week).strftime('%a %d %b %Y') %>
+<% end %>
+<%= form_for(@share_date) do |f| %>
+  <% if @share_date.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@share_date.errors.count, "error") %> prohibited this share_date from being saved:</h2>
+
+      <ul>
+      <% @share_date.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	<% if  @customer %>
+	<div class="field">
+    <%= f.label :customer_id %><br />
+	<% @customer_share_dates = ShareDate.where(:customer_id => @customer.id)%>
+    <%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first", @customer.id) %>
+	</div>
+	<%= select_tag 'share_dates[]', options_for_select(@eight_weeks, @customer_share_dates.map {|g| g.date.strftime('%a %d %b %Y')}),{ :multiple => true, :size => 8 } %>
+	<% else %>
+	<div class="field">
+    <%= f.label :customer_id %><br />
+    <%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first") %>
+	</div>
+		<%= select_tag 'share_dates[]', options_for_select(@eight_weeks),{ :multiple => true, :size => 8 } %>
+	<% end %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

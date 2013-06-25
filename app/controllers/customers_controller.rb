@@ -32,6 +32,7 @@ class CustomersController < ApplicationController
     @eight_weeks = []
     @date = Time.now.beginning_of_week
     @hold_date = HoldDate.new
+    @share_date = ShareDate.new
       if @customer.preference != nil
       @preference = @customer.preference
       else
@@ -53,6 +54,7 @@ class CustomersController < ApplicationController
   def hold_dates
     @customer = Customer.find(params[:hold_date][:customer_id])
     @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)
+    @customer_share_dates = ShareDate.where(:customer_id => @customer.id)
     params[:hold_dates].each do |date|
       @exists = false
       @customer_hold_dates.each do |existing_date|
@@ -60,12 +62,44 @@ class CustomersController < ApplicationController
           @exists = true
         end
       end
+      @customer_share_dates.each do |existing_date|
+        if date == existing_date.date.strftime('%a %d %b %Y')
+          @exists = true
+          flash[:alert] = 'Hold Date Not Saved - Cannot Be Same Week as a Double Share Date!'
+        end
+      end
       if @exists == false
         @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => date)
         @customer_hold_date.save
+        flash[:notice] = 'Hold Dates Saved!'
       end
     end
-    flash[:notice] = 'Hold Dates Saved!'
+     redirect_to(:back)
+  end
+  
+  def share_dates
+    @customer = Customer.find(params[:share_date][:customer_id])
+    @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)
+    @customer_share_dates = ShareDate.where(:customer_id => @customer.id)
+    params[:share_dates].each do |date|
+      @exists = false
+      @customer_share_dates.each do |existing_date|
+        if date == existing_date.date.strftime('%a %d %b %Y')
+          @exists = true
+        end
+      end
+      @customer_hold_dates.each do |existing_date|
+        if date == existing_date.date.strftime('%a %d %b %Y')
+          @exists = true
+          flash[:alert] = 'Share Date Not Saved - Cannot Be Same Week as a Hold Date!'
+        end
+      end
+      if @exists == false
+        @customer_share_date = ShareDate.new(:customer_id => @customer.id, :date => date)
+        @customer_share_date.save
+      end
+    end
+    flash[:notice] = 'Share Dates Saved!'
      redirect_to(:back)
   end
   
@@ -74,7 +108,11 @@ class CustomersController < ApplicationController
     flash[:notice] = 'Hold Date Removed'
     redirect_to(:back)
   end
-  
+  def remove_share_date
+    ShareDate.find(params[:id]).destroy
+    flash[:notice] = 'Share Date Removed'
+    redirect_to(:action => 'my_account')
+  end
   # GET /customers/new
   # GET /customers/new.json
   def new

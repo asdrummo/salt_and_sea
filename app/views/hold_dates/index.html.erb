@@ -1,3 +1,5 @@
+<%= link_to 'New Hold date', new_hold_date_path %>
+
 <h1>Listing hold_dates</h1>
 
 <table>
@@ -11,7 +13,7 @@
 
 <% @hold_dates.each do |hold_date| %>
   <tr>
-	<td><%= Customer.find(hold_date.customer_id).name %></td>
+	<td><%= link_to Customer.find(hold_date.customer_id).name, customer_path(hold_date.customer_id) %></td>
 	<td><%= hold_date.date %></td>
     <td><%= link_to 'Show', hold_date %></td>
     <td><%= link_to 'Edit', edit_hold_date_path(hold_date) %></td>

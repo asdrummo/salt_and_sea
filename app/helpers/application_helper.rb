@@ -123,6 +123,12 @@ module ApplicationHelper
      		@fish_lbs += 2
      	elsif (lbs == "XX + S") || ( lbs == "XX + SS")
      		@fish_lbs += 2
+     	elsif  lbs == "XXSS"
+     		@fish_lbs += 2 
+     	elsif lbs == "XXXX" 
+     		@fish_lbs += 4
+     	elsif (lbs == "XXXX + SS") || ( lbs == "XXXX + SSSS")
+     		@fish_lbs += 4
      	end
      end
      return @fish_lbs
@@ -141,6 +147,14 @@ module ApplicationHelper
      	  @shellfish_lbs += 1
      	elsif (lbs == "XX + SS")
      		@shellfish_lbs += 2
+   		elsif  lbs == "XXSS"
+     		@shellfish_lbs += 2 
+     	elsif lbs == "SSSS" 
+     		@shellfish_lbs += 4
+     	elsif (lbs == "XXXX + SS") 
+     	  @shellfish_lbs += 2
+     	elsif (lbs == "XXXX + SSSS")
+     		@shellfish_lbs += 4
      	end
      end
      return @shellfish_lbs

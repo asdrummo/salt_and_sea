@@ -1,0 +1,53 @@
+<div class="account_border">
+	<div class="account_title">
+		<span class="middle">Double Share Dates:</span>
+	</div>
+	
+	<table style="padding:5px">
+		<tr><td colspan="2"><p>Double your shares on selected weeks.</p><em>*Dates are for the week of the pick up</em></td></tr>
+		<tr>
+			<% if (@date + day(@customer)) >= (Date.today + 5.days)%>
+			<% @ints = 0..7 %>
+			<% else %>
+			<% @ints = 1..8 %>
+			<% end %>
+			<td><% @ints.each do |i| %>
+				<% if DropLocation.find(@customer.drop_location_id)%>
+				<% end %>
+				<% @eight_weeks << (@date + i.week).strftime('%a %d %b %Y') %>
+			<% end %>
+			<% @customer_share_dates = ShareDate.where(:customer_id => @customer.id)%>
+			<%= form_for(@share_date, :url => {:action => 'share_dates'}) do |f| %>
+				<%= select_tag 'share_dates[]', options_for_select(@eight_weeks, @customer_share_dates.map {|g| g.date.strftime('%a %d %b %Y')}),{ :multiple => true, :size => 8 } %>
+				<%= f.hidden_field :customer_id, :value => @customer.id %>
+			<div class="actions">
+			  <%= f.submit %>
+			</div>
+			<% end %>
+			</td>
+			<td style="vertical-align:top; width:100%">
+				<% if @customer_share_dates.count > 0 %>
+				<table style="padding-left:20px">
+					<tr>
+						<th colspan="2">Share Dates</th>
+					</tr>
+					<% @customer_share_dates.each do |date| %>
+					<% if date.date >= Date.today.beginning_of_week %>
+					<tr style="align:left">
+						<td><%= date.date %></td>
+						<% if (date.date + day(@customer)) > (Date.today + 5.days) %>
+					    <td><%= link_to 'remove', :action => 'remove_share_date', :id => date.id %>
+						</td>
+						<% else %>
+						 <td></td>
+						<% end %>
+					</tr>
+					<% end %>
+				<% end %>
+			</table>
+			<% else %>
+			<span class="center"><b>No active share dates</b></span>
+			<% end %>
+	</td></tr>
+	</table>
+</div>

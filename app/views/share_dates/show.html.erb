@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Customer:</b>
+  <%= Customer.find(@share_date.customer_id).name %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%= @share_date.date %>
+</p>
+
+
+<%= link_to 'Edit', edit_share_date_path(@share_date) %> |
+<%= link_to 'Back', share_dates_path %>
