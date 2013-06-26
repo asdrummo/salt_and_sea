@@ -45,6 +45,7 @@ class CustomerCreditsController < ApplicationController
         process_credit(customer.id)
       end
       @exists = false
+      @share_date_exists = false
     end
     flash[:notice] = 'Customers Processed'
     redirect_to(:back)
@@ -85,6 +86,7 @@ class CustomerCreditsController < ApplicationController
     @double_fish_stop = false
     @single_shellfish_stop = false
     @double_shellfish_stop = false
+    @single_basket_stop = false
     @double_basket_stop = false
       customer_credits.each do |credit|
         category = Product.find(credit.product_id).category

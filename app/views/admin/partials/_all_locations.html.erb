@@ -231,9 +231,9 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 <% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
 	<tr class="<%= cycle("odd", "even") %>">
 		<td><%= link_to 'process', :controller => "customer_credits", :action => "use_credit", :id => customer.id %></td>
-		<td><%= link_to customer.name, edit_customer_path(customer) %></td>
+		<td><%= link_to customer.name, customer_path(customer) %></td>
 		<td><%= customer.email %></td>
-		<td><%= customer.phone_number %></td>
+		<td><%= clean_number(customer.phone_number.parameterize) %></td>
 		<td><%= customer.share_type %></td>	
 		<th><%= link_to customer.order_count, edit_customer_path(customer) %></td>
 		<td><%= link_to @fish_credits, :controller => "customer_credits", :action => "index", :id => customer.id %></td>

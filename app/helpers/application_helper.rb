@@ -133,6 +133,10 @@ module ApplicationHelper
      end
      return @fish_lbs
    end
+   def clean_number(number)
+         fn = number.gsub(/[.\/,&()-]/, '') #replace these characters with nothing
+         fnn=fn.strip.gsub(/[\s]/,'')   #replace the spaces between the words with hyphens
+   end
    
    def shellfish(array)
      @shellfish_lbs = 0
