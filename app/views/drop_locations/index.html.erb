@@ -25,7 +25,7 @@
     <td><%= drop_location.state %></td>
     <td><%= drop_location.zip_code %></td>
     <td><%= drop_location.link %></td>
-    <td><%= Date::DAYNAMES[drop_location.day.to_i]  %></td>
+    <td><%= Date::DAYNAMES[drop_location.day.to_i] %></td>
 	<% if (drop_location.info != nil) && (drop_location.info != "")  %>
     <td style="width:300px"><%= drop_location.info.split[0..15].join(" ").html_safe %>...</td>
 	<% else %>

@@ -260,6 +260,14 @@ module ApplicationHelper
         ['Wyoming', 'WY']
       ]
   end
+  
+  def day_to_int(day)
+    if day == "0"
+      return 7
+    else
+      return day.to_i
+    end
+  end
 
 end
 

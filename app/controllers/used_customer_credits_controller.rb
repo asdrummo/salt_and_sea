@@ -1,7 +1,7 @@
 class UsedCustomerCreditsController < ApplicationController
     before_filter :authenticate_admin
   def index
-    @used_credits = UsedCustomerCredit.all
+    @used_credits = UsedCustomerCredit.all(:order => 'created_at DESC') 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @used_credits }

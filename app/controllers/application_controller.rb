@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
     end
     
     def check_date(location)
-      @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, location.day.to_i)
+      @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, day_to_int(location.day))
       time_to_merge = location.start_time 
       date_to_merge = @next_date
       @within_five_days = false
@@ -88,6 +88,14 @@ class ApplicationController < ActionController::Base
       rescue_from ActionController::RoutingError, ActionController::UnknownController, ::AbstractController::ActionNotFound, ActiveRecord::RecordNotFound, with: lambda { |exception| render_error 404, exception }
     end
     
+    def day_to_int(day)
+      if day == "0"
+        return 7
+      else
+        return day.to_i
+      end
+    end
+    
     private
     
     def render_error(status, exception)
@@ -102,4 +110,5 @@ class ApplicationController < ActionController::Base
           redirect_to(:controller => 'home', :action => 'index')
         end
     end
+  
 end

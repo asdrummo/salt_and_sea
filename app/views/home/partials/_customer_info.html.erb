@@ -60,9 +60,10 @@
 	</div>
 <div class="account_border">
 <p style="padding:0 10px 0 10px"><span style="font-size:18px"><b><%= @customer_drop_location.name %></b></span><br />
-		<% check_start_date(@customer_drop_location) %>	
+		<% check_start_date(@customer_drop_location) %>			
 		<% check_next_date(@next_date)%>
 		<% check_hold_date(@customer, @location_merged_datetime)%>
+		
 		<% if @location_merged_datetime < DateTime.now %>	
 		<% @location_merged_datetime = (@location_merged_datetime + 1.week) %>	
 		<% end %>

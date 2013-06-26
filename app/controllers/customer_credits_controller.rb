@@ -5,10 +5,10 @@ class CustomerCreditsController < ApplicationController
   def index
     if params[:id]
       @customer_names = Customer.find_by_id(params[:id])
-      @customer_credits = CustomerCredit.where(:customer_id => params[:id])
+      @customer_credits = CustomerCredit.where(:customer_id => params[:id]).order('created_at DESC') 
     else  
       @customer_names = Customer.all
-      @customer_credits = CustomerCredit.all
+      @customer_credits = CustomerCredit.all(:order => 'created_at DESC') 
     end
     
     respond_to do |format|
