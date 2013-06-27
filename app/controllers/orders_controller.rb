@@ -100,8 +100,8 @@ class OrdersController < ApplicationController
              @order_transaction.order_id = @order.id
               @order_transaction.save
               current_cart.update_attribute(:purchased_at, Time.now)
-             # CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
-             # CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
+              CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
+              CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
           check_active
           check_date(DropLocation.find(@customer.drop_location_id))
           @date = Time.now.beginning_of_week
