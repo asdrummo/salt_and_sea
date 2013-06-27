@@ -113,7 +113,7 @@ resources :processed_locations, :preferences, :customers, :hold_dates, :customer
   
   #page errors
   unless Rails.application.config.consider_all_requests_local
-    match '*not_found', to: 'errors#error_404'
+   # match '*not_found', to: 'errors#error_404'
   end
   
 end

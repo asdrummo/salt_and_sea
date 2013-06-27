@@ -19,6 +19,10 @@ class CustomersController < ApplicationController
     check_date(DropLocation.find(@customer.drop_location_id))
     @credits = CustomerCredit.where(:customer_id => @customer.id)
     @orders = Order.where(:customer_id => @customer.id)
+    @page_orders = @orders.paginate(:page => params[:page], :per_page => 5).order('created_at DESC') 
+    @used_customer_credits = UsedCustomerCredit.where(:customer_id => @customer.id)
+    @page_used_credits = @used_customer_credits.paginate(:page => params[:page], :per_page => 5).order('created_at DESC') 
+    
     @fish_count = 0
     @fish_credits = 0
     @shellfish_count = 0
@@ -27,7 +31,6 @@ class CustomersController < ApplicationController
     @basket_credits = 0
     @used_customer_credits = UsedCustomerCredit.where(:customer_id => @customer.id)
     @customer_drop_location = DropLocation.find(@customer.drop_location_id)
-    @used_customer_credits = UsedCustomerCredit.where(:customer_id => @customer.id)
     @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)
     @eight_weeks = []
     @date = Time.now.beginning_of_week

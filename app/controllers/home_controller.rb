@@ -25,9 +25,11 @@ class HomeController < ApplicationController
     get_next_date
     check_active(@customer)
     if @customer != nil
-      @orders = Order.where(:customer_id => @customer.id)
       @credits = CustomerCredit.where(:customer_id => @customer.id)
+      @orders = Order.where(:customer_id => @customer.id)
+      @page_orders = @orders.paginate(:page => params[:page], :per_page => 5).order('created_at DESC') 
       @used_customer_credits = UsedCustomerCredit.where(:customer_id => @customer.id)
+      @page_used_credits = @used_customer_credits.paginate(:page => params[:page], :per_page => 5).order('created_at DESC')
       @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)
       if @customer.preference != nil
         @preference = @customer.preference

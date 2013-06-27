@@ -50,6 +50,7 @@
 		Oysters: <%= yesno(@preference.oysters) %>, 
 		Scallops: <%= yesno(@preference.scallops) %> 
 	</p>
+<p style="padding:0 10px 0 10px"><%= link_to 'Edit Additional Preferences', :action => 'edit_customer', :page => 'my_account' %></p>
 </div>
 <br />
 <%= render(:partial => 'home/partials/hold_dates') %>
@@ -77,6 +78,8 @@
 		<% if @customer_drop_location.info %>
 		<b>Additional Information:</b> <%= @customer_drop_location.info %>  
 		<% end %>
+		<br />
+		<em>*if you would like to change your drop location please email justine.</em>
 	</p>
 	</div>
 	

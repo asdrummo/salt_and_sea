@@ -14,7 +14,7 @@
 		<th>Order #</th>
 		<th>Price</th>
 	</tr>
-	<% @orders.each do |order| %>
+	<% @page_orders.each do |order| %>
 	<% total = 0 %>
 	<% order_no = order.id %>
 	<tr class="<%= cycle('odd', 'even') %>">
@@ -25,6 +25,7 @@
 	</tr>
 	<% end %>
 </table>
+<%= will_paginate @page_orders %>
 <% else %>
 <b>You have no orders on record.</b>
 <% end %>
@@ -37,7 +38,7 @@
 	<th>Product</th>
 	<th>Shares Used</th>
 	</tr>
-<% @used_customer_credits.each do |credit| %>
+<% @page_used_credits.each do |credit| %>
 	<tr class="<%= cycle('even', 'odd') %>">
 	<td><%= credit.created_at.strftime("%B %d, %Y") %></td>
 	<td><%= Product.find_by_id(credit.product_id).name %></td>
@@ -45,6 +46,7 @@
 	</tr>
 <% end %>	
 </table>
+<%= will_paginate @page_used_credits %>
 <% else %>
 <b>You have no recent share activity.</b>
 <% end %>
