@@ -76,12 +76,10 @@ class ApplicationController < ActionController::Base
     
     def check_active(customer)
       @active = false
-      if customer.credits
       customer.credits.each do |credit|
         if credit.credits_available >= 1
           @active = true
         end
-      end
       end
     end
 

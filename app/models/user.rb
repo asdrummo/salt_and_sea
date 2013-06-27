@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
   after_create :send_welcome_mail
   def send_welcome_mail
-     UserMailer.new_user_notification(self).deliver
-     UserMailer.welcome_email(self).deliver
+     #UserMailer.new_user_notification(self).deliver
+     #UserMailer.welcome_email(self).deliver
   end
 end

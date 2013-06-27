@@ -23,8 +23,8 @@ class HomeController < ApplicationController
     @hold_date = HoldDate.new
     @share_date = ShareDate.new
     get_next_date
-    check_active(@customer)
     if @customer != nil
+      check_active(@customer)
       @credits = CustomerCredit.where(:customer_id => @customer.id)
       @orders = Order.where(:customer_id => @customer.id)
       @page_orders = @orders.paginate(:page => params[:page], :per_page => 5).order('created_at DESC') 
