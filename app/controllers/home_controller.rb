@@ -15,7 +15,7 @@ class HomeController < ApplicationController
     @order = Order.new
     @customers = Customer.all(:order => 'last_name ASC')
   end
-  
+
   def my_account
     @user = current_user
     @eight_weeks = []

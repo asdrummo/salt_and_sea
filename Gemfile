@@ -19,9 +19,8 @@ gem 'paypal-express'
 gem 'will_paginate'
 gem "mail"
 gem "heroku_s3_backup"
-gem "exception_notification",
-    :git => "git://github.com/rails/exception_notification.git",
-    :require => "exception_notifier"
+gem "exception_notification", '3.0.1'
+
 
 
 # Gems used only for assets and not required
