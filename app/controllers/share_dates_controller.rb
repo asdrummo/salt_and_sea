@@ -1,4 +1,5 @@
 class ShareDatesController < ApplicationController
+  before_filter :authenticate_admin
   # GET /share_dates
   # GET /share_dates.json
   def index
