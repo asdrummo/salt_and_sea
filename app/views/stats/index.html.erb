@@ -1,0 +1,47 @@
+
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'customers_chart' },
+    title: { text: 'customers by Day' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'Customers'}
+    },
+	series: [{
+	  name: 'Customers per Day',
+	  pointInterval: <%= 1.day * 1000 %>,
+	  pointStart: <%= 3.weeks.ago.at_midnight.to_i * 1000 %>,
+	  data: <%= (3.weeks.ago.to_date..Date.today).map { |date| Customer.total_on(date).to_f}.inspect %>
+	 }]
+  });
+});
+$(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'orders_chart' },
+    title: { text: 'Orders by Day' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'Dollars'}
+    },
+	series: [{
+	  name: '$ per Day',
+	  pointInterval: <%= 1.day * 1000 %>,
+	  pointStart: <%= 4.weeks.ago.at_midnight.to_i * 1000 %>,
+	  data: <%= (4.weeks.ago.to_date..Date.today).map { |date| Order.total_on(date).to_f}.inspect %>
+	 }]
+  });
+});
+</script>
+<div id="orders_chart" style="width: 700px; height: 300px;"></div>
+
+<table class="pretty">
+  <!-- customers table code here -->
+</table>
+
+<div id="customers_chart" style="width: 700px; height: 300px;"></div>
+
+<table class="pretty">
+  <!-- customers table code here -->
+</table>

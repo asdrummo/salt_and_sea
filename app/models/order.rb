@@ -1,11 +1,20 @@
 class Order < ActiveRecord::Base
-  belongs_to :cart
+  has_one :cart
   has_many :transactions, :class_name => "OrderTransaction"
   has_many :line_items
   attr_accessor :card_number, :card_verification
   attr_accessible :express_token, :action, :amount, :response, :customer_id, :express_token, :express_payer_id, :first_name, :last_name, :cart_id
   
   #validate_on_create :validate_card
+  def self.total_on(date)
+    total = 0
+    Order.all.each do |order|
+      if order.created_at.to_date == date
+        total += Cart.find_by_id(order.cart_id).total_price
+      end
+    end
+    return total
+  end
   
   def purchase
     response = process_purchase

@@ -42,10 +42,7 @@ SaltAndSea::Application.configure do
   config.action_mailer.default :charset => "utf-8"
   config.active_support.deprecation = :log
   config.log_level = :info
-  config.middleware.use ExceptionNotifier,
-      :email_prefix => "[ERROR_LOG] ",
-      :sender_address => %{"notifier" <notifier@saltandsea.me>},
-      :exception_recipients => %w{asdrummo@gmail.com}
+  
   # Paypal
   config.after_initialize do
     ActiveMerchant::Billing::Base.mode = :test

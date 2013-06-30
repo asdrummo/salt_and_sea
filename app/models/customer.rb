@@ -14,7 +14,15 @@ class Customer < ActiveRecord::Base
   scope :scoped_new, where( "created_at > ?", (DateTime.now - 7.days))
   #scope :first_drop, where("(first_drop > ?)", (Date.today - 1.year))
   
-  
+  def self.total_on(date)
+    total = 0
+    Customer.all.each do |customer|
+      if customer.created_at.to_date == date
+        total += 1
+      end
+    end
+    return total
+  end
   
   
   def name
