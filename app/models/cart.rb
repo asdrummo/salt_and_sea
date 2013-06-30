@@ -1,7 +1,7 @@
 class Cart < ActiveRecord::Base
   #attr_reader :products, :total_price, :line_items
   has_many :line_items
-  belongs_to :order
+  has_one :order
   
   #def initialize
   #  empty_all_items

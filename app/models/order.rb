@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  has_one :cart
+  belongs_to :cart
   has_many :transactions, :class_name => "OrderTransaction"
   has_many :line_items
   attr_accessor :card_number, :card_verification
