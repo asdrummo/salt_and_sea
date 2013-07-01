@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   before_filter :current_cart, :find_customer
-  before_filter :authenticate_user!, :only => [:my_account]
+  before_filter :authenticate_user!, :only => [:my_account, :show_invoice]
   
   def index
     @home = true

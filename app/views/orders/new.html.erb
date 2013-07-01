@@ -8,5 +8,6 @@
 	<strong>Total amount to be charged via PayPal:</strong> <%= number_to_currency(@cart.total_price) %> </p>
     <p><%= render(:partial => 'orders/partials/cart') %></p>
   <% end %>
-  <p><%= f.submit "Complete Order" %></p>
+  <p><%= f.submit "Complete Order", id: "button_id", class: "button", data: {disable_with: "Submitting..."} %></p>
+
 <% end %>

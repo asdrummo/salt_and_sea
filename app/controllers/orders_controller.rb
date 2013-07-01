@@ -62,8 +62,10 @@ class OrdersController < ApplicationController
       get_next_date
       @customer.first_drop = @date.beginning_of_week
       if @order.purchase
+        unless Rails.application.config.consider_all_requests_local
         CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
         CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
+        end
         check_active
         check_date(DropLocation.find(@customer.drop_location_id))
         @date = Time.now.beginning_of_week
