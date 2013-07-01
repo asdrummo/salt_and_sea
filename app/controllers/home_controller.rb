@@ -113,10 +113,10 @@ class HomeController < ApplicationController
       check_date(@drop_location)
     if @customer.save
       @preference = Preference.new(:customer_id => @customer.id, :skate => params[:customer][:skate], :squid => params[:customer][:squid], :monkfish => params[:customer][:monkfish], :mackerel => params[:customer][:mackerel], :mussels => params[:customer][:mussels], :clams => params[:customer][:clams], :scallops => params[:customer][:scallops], :oysters => params[:customer][:oysters]).save
-      if @within_five_days == true
-         @date = Time.now.beginning_of_week
-         @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
-      end
+      #if @within_five_days == true
+         #@date = Time.now.beginning_of_week
+         #@customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
+      #end
       
        flash[:notice] = 'Contact Info Saved!'
        redirect_to(:back)

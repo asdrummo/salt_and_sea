@@ -75,7 +75,7 @@ class OrdersController < ApplicationController
         if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
           @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
         end
-        if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date)
+        if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.beginning_of_week > @date)
           @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
         end
         update_credits
