@@ -68,16 +68,7 @@ class OrdersController < ApplicationController
         end
         check_active
         check_date(DropLocation.find(@customer.drop_location_id))
-        @date = Time.now.beginning_of_week
-        if (@within_five_days == true) && (@active == false)
-           @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
-        end
-        if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
-          @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
-        end
-        if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.beginning_of_week > @date)
-          @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
-        end
+        hold_dates
         update_credits
         order_count
         redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
@@ -107,21 +98,26 @@ class OrdersController < ApplicationController
           check_active
           check_date(DropLocation.find(@customer.drop_location_id))
           @date = Time.now.beginning_of_week
-          if (@within_five_days == true) && (@active == false)
-             @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
-          end
-          if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
-            @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
-          end
-          if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date)
-            @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
-          end
+          hold_dates
           update_credits
           order_count
                 redirect_to(:controller => 'home', :action => 'show_invoice', :id => @order.id, :success => true)
         else
                 redirect_to(:controller => 'orders', :action => 'failure')
         end
+  end
+  
+  def hold_dates
+    @date = Time.now.beginning_of_week
+    if (@within_five_days == true) && (@active == false)
+       @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
+    end
+    if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
+      @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
+    end
+    if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.beginning_of_week > @date)
+      @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
+    end
   end
   
   def get_next_date
