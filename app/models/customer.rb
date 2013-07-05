@@ -26,7 +26,7 @@ class Customer < ActiveRecord::Base
   
   
   def name
-    "#{first_name} #{last_name}"
+    "#{first_name.humanize} #{last_name.humanize}"
   end
   
   def total_credits
@@ -48,7 +48,7 @@ class Customer < ActiveRecord::Base
 
   
   def last_name_first
-      "#{last_name}, #{first_name}"
+      "#{last_name.humanize}, #{first_name.humanize}"
   end
   
   def credits

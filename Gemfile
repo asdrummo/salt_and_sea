@@ -1,16 +1,13 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'ruby', '2.0.0-p0'
 
 group :development do
   gem 'mysql2'
 end
 
 gem 'pg', '0.12.2'
-#gem 'sqlite3'
 gem 'taps'
 gem 'thin'
 gem 'activemerchant'
@@ -33,8 +30,6 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
-  gem 'jquery-datatables-rails'
- # gem 'jquery-ui-rails'
 end
 
 gem 'jquery-rails'

@@ -142,7 +142,8 @@ class CustomersController < ApplicationController
   # POST /customers.json
   def create
     @customer = Customer.new(params[:customer])
-
+    @customer.first_name = @customer.first_name.humanize
+    @customer.last_name = @customer.last_name.humanize
     respond_to do |format|
       if @customer.save
         format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
@@ -160,6 +161,9 @@ class CustomersController < ApplicationController
     @customer = Customer.find(params[:id])
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
+        @customer.first_name = @customer.first_name.humanize
+        @customer.last_name = @customer.last_name.humanize
+        @customer.save
         format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
         format.json { head :no_content }
       else

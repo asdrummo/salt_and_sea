@@ -109,6 +109,9 @@ class HomeController < ApplicationController
   
   def save_customer
       @customer = Customer.new(params[:customer])
+      @customer.first_name = @customer.first_name.humanize
+      @customer.last_name = @customer.last_name.humanize
+      @customer.save
       @drop_location = DropLocation.find(params[:customer][:drop_location_id])
       check_date(@drop_location)
     if @customer.save
@@ -159,6 +162,9 @@ class HomeController < ApplicationController
       
   def update_customer
     if @customer.update_attributes(params[:customer])
+      @customer.first_name = @customer.first_name.humanize
+      @customer.last_name = @customer.last_name.humanize
+      @customer.save
       if @customer.preference != nil
         @preference = @customer.preference
        else

@@ -20,14 +20,18 @@ resources :text_entries, :share_dates, :stats, :processed_locations, :preference
   match "/admin/low_credit_notifications" => "admin#low_credit_notifications"
   get "admin/index"
   
-  devise_for :users do get '/users/new' => 'users#new', :as => :new_user end
-  devise_for :users do get '/users/show' => 'users#show', :as => :user end
-  devise_for :users do get '/users/edit' => 'users#edit', :as => :edit_user end
-  devise_for :users do get '/users/sign_out' => 'devise/sessions#destroy' end  
-  devise_for :users do match 'sign_up' => 'devise/sessions#new' end  
-     
+  devise_for :users, :path => "auth", :path_names => { :sign_in => 'login', :sign_out => 'logout', :password => 'secret', :confirmation => 'verification', :unlock => 'unblock', :registration => 'register', :sign_up => 'cmon_let_me_in' }
   
-  devise_for :users, controllers: { registrations: "registrations" }
+  devise_scope :user do 
+      get '/users/new' => 'users#new', :as => :new_user 
+      get '/users/show' => 'users#show', :as => :user 
+      get '/users/edit' => 'users#edit', :as => :edit_user 
+      match '/users/sign_out' => 'devise/sessions#destroy'   
+      match '/users/sign_up' => 'devise/registrations#new', :as => :new_user_registration
+      end  
+  
+
+  devise_for :users, controllers: { registrations: 'registrations' }
   match 'devise/home/show_cart' => 'home#show_cart'
     
   # Paypal

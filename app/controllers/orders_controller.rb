@@ -97,7 +97,6 @@ class OrdersController < ApplicationController
               CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
           check_active
           check_date(DropLocation.find(@customer.drop_location_id))
-          @date = Time.now.beginning_of_week
           hold_dates
           update_credits
           order_count

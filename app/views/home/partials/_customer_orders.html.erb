@@ -41,7 +41,7 @@
 <% @page_used_credits.each do |credit| %>
 	<tr class="<%= cycle('even', 'odd') %>">
 	<td><%= credit.created_at.strftime("%B %d, %Y") %></td>
-	<td><%= Product.find_by_id(credit.product_id).name %></td>
+	<td><%= Product.find_by_id(credit.product_id).name %>: <%= Product.find_by_id(credit.product_id).category %> </td>
 	<td style="text-align:center"><%= credit.credits_used %></td>
 	</tr>
 <% end %>	
