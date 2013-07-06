@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_filter :find_customer
-  before_filter :authenticate_admin, :only => [:pay_by_check]
+  before_filter :authenticate_admin, :only => [:pay_by_check, :index, :show]
   
   def express
     response = EXPRESS_GATEWAY.setup_purchase(current_cart.build_order.price_in_cents,
@@ -63,8 +63,8 @@ class OrdersController < ApplicationController
       @customer.first_drop = @date.beginning_of_week
       if @order.purchase
         unless Rails.application.config.consider_all_requests_local
-        CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
-        CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
+        #CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
+        #CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
         end
         check_active
         check_date(DropLocation.find(@customer.drop_location_id))
@@ -94,7 +94,7 @@ class OrdersController < ApplicationController
               @order_transaction.save
               current_cart.update_attribute(:purchased_at, Time.now)
               CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
-              CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
+             CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
           check_active
           check_date(DropLocation.find(@customer.drop_location_id))
           hold_dates
@@ -114,7 +114,7 @@ class OrdersController < ApplicationController
     if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
       @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
     end
-    if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.beginning_of_week > @date)
+    if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.beginning_of_week > @date.to_date)
       @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
     end
   end

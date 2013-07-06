@@ -15,7 +15,8 @@ class CustomerOrderMailer < ActionMailer::Base
   
   def order_notification(order)
       @purchased_cart = Cart.find_by_id(order.cart_id)
-  	  @accessory, @share = false, false
+  	  @accessory = false
+  	  @share = false
       @customer = Customer.find(order.customer_id)
       @location = DropLocation.find(@customer.drop_location_id)
       @order = order

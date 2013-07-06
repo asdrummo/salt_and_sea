@@ -7,12 +7,13 @@
 	<div style="width:800px">
 	<%= image_tag attachments['banner_marketplace.jpg'].url %>
     <h1>Thank you for your recent order!</h1>
-
+	<% @accessory = false %>
+	<% @share = false %>
 	<% @purchased_cart.line_items.each do |line_item| %>
 	<% if line_item.product.category == "accessory" %>
 		<% @accessory = true %>
 	<% elsif %>
-		<% @share = true%>
+		<% @share = true %>
 	<% end %>
 	<% end %>
 	

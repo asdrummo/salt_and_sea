@@ -9,7 +9,7 @@
 	<% @purchased_cart.line_items.each do |line_item| %>
 	<% if line_item.product.category == "accessory" %>
 		<% @accessory = true %>
-	<% elsif %>
+	<% else %>
 		<% @share = true%>
 	<% end %>
 	<% end %>
