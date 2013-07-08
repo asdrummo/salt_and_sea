@@ -9,12 +9,22 @@
 <% end %>
 <h2>Receipt</h2>
 <div id="invoice">
-PayPal Transaction #: <%= @order_transaction.authorization %><br /><br />	
+	<% if @order_transaction.authorization == nil %>
+	Transaction #: <strong><span style="color:red">FAIL</span></strong>
+	<% else %><br /><br />	
+	Transaction #: <%= @order_transaction.authorization %>
+	<% end %><br /><br />	
 Date: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %><br />
 <br />
-Customer: <%= @order.first_name %> <%= @order.last_name %><br />
+Customer Name: <%= @customer.name %>
 <br />
+Name on Payment Method: <%= @order.first_name %> <%= @order.last_name %><br />
+<br />
+<% if @order_transaction.authorization == nil %>
+<span style="color:red">Has Unsuccessfully Attempted to Purchased:</span>
+<% else %>
 Has Successfully Purchased:<br />
+<% end %>
 <br />
 <% total_price = 0 %>
 <table class="invoice_table">
@@ -42,10 +52,12 @@ Has Successfully Purchased:<br />
 	</td>
 </tr>
 <% end %>
+<% if @order_transaction.authorization != nil %>
 <tr>
 	<td colspan="7"><h2>Total Amount Charged: <%= number_to_currency(Cart.find_by_id(@order.cart_id).total_price) %></h2></td>
 </tr>
+<% end %>
 </table>
-
+<br />
 </div><!-- end invoice -->
 <%= link_to("Return to your account", home_my_account_url) %>

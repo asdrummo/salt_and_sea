@@ -3,13 +3,23 @@
 <% @comp_count = 0 %>
 <h2>Receipt</h2>
 <div id="invoice">
-PayPal Transaction #: <%= @order_transaction.authorization %><br /><br />	
+<% if @order_transaction.authorization == nil %>
+Transaction #: <strong><span style="color:red">FAIL</span></strong>
+<% else %><br /><br />	
+Transaction #: <%= @order_transaction.authorization %>
+<% end %><br /><br />	
 Date: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %><br />
 <br />
 <% @customer = Customer.find(@order.customer_id)%>
-Customer: <%= @customer.name  %><br />
+Customer Name: <%= @customer.name %>
 <br />
-Has Successfully Purchased:<br />
+Name on Payment Method: <%= @order.first_name %> <%= @order.last_name %><br />
+<br />
+<% if @order_transaction.authorization == nil %>
+<span style="color:red">Has Unsuccessfully Purchased:</span>
+<% else %>
+Has Successfully Purchased:
+<% end %>
 <br />
 <% total_price = 0 %>
 <table class="invoice_table">
@@ -37,9 +47,11 @@ Has Successfully Purchased:<br />
 	</td>
 </tr>
 <% end %>
+<% if @order_transaction.authorization != nil %>
 <tr>
 	<td colspan="7"><h2>Total Amount Charged: <%= number_to_currency(Cart.find_by_id(@order.cart_id).total_price) %></h2></td>
 </tr>
+<% end %>
 </table>
 
 </div><!-- end invoice -->

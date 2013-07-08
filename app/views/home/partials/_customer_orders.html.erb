@@ -17,7 +17,11 @@
 	<% @page_orders.each do |order| %>
 	<% total = 0 %>
 	<% order_no = order.id %>
+	<% if OrderTransaction.find_by_order_id(order.id).authorization != nil %>
 	<tr class="<%= cycle('odd', 'even') %>">
+	<% else %>
+	<tr class="<%= cycle('odd', 'even') %>" style="color:red">
+	<% end %>
 		<td><%= order.created_at.strftime("%m/%d/%y") %></td>
 		<td style="text-align:center"><%= link_to(order.id, :controller => 'home', :action => 'show_invoice', :id => order.id) %></td>
 		<td><%= number_to_currency(Cart.find_by_id(order.cart_id).total_price) %></td>

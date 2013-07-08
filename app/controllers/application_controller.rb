@@ -26,12 +26,19 @@ class ApplicationController < ActionController::Base
         root_path
       elsif (URI(request.referer).path == '/users/password/edit')
         root_path
-      else
+      elsif (URI(request.referer).path == '/checkout')
         request.referer
       end
     end
     root_path
-      
+    end
+    
+    def after_sign_up_path_for(resource)
+      if (URI(request.referer).path == '/users/sign_up')
+        root_path
+      else (URI(request.referer).path == '/checkout')
+        request.referer
+      end
     end
     
     def check_date(location)

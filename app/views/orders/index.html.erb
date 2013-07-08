@@ -15,7 +15,11 @@
   </tr>
 
 <% @orders.each do |order| %>
+  <% if OrderTransaction.find_by_order_id(order.id).authorization != nil %>
   <tr class="<%= cycle("odd", "even") %>">
+  <% else %>
+<tr class="<%= cycle('odd', 'even') %>" style="color:red">
+  <% end %>
     <td><%= order.id %></td>
     <td><%= link_to Customer.find(order.customer_id).name, customer_path(Customer.find(order.customer_id)) %></td>
     <td><%= number_to_currency(Cart.find_by_id(order.cart_id).total_price) %> </td>
