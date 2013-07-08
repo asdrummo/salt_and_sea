@@ -16,7 +16,7 @@
 
 <% @orders.each do |order| %>
   <% if OrderTransaction.find_by_order_id(order.id).authorization != nil %>
-  <tr class="<%= cycle("odd", "even") %>">
+  <tr class="<%= cycle("odd", "even") %>">  
   <% else %>
 <tr class="<%= cycle('odd', 'even') %>" style="color:red">
   <% end %>

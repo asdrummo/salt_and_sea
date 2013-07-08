@@ -16,7 +16,7 @@
 	<% end %><br /><br />	
 Date: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %><br />
 <br />
-Customer Name: <%= @customer.name %>
+Customer Name: <%= Customer.find(@order.customer_id).name %>
 <br />
 Name on Payment Method: <%= @order.first_name %> <%= @order.last_name %><br />
 <br />
