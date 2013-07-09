@@ -93,8 +93,8 @@ class OrdersController < ApplicationController
              @order_transaction.order_id = @order.id
               @order_transaction.save
               current_cart.update_attribute(:purchased_at, Time.now)
-              CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
-             CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
+             # CustomerOrderMailer.order_confirmation(@order).deliver unless @order.invalid?
+           #CustomerOrderMailer.order_notification(@order).deliver unless @order.invalid?
           check_active
           check_date(DropLocation.find(@customer.drop_location_id))
           hold_dates
@@ -107,42 +107,54 @@ class OrdersController < ApplicationController
   end
   
   def hold_dates
-    @date = Time.now.beginning_of_week
-    if (@within_five_days == true) && (@active == false)
-       @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
+    @date = DateTime.now.beginning_of_week
+    if ((@within_five_days == true) && (@active == false))
+       unless HoldDate.where(:customer_id => @customer.id, :date => @date).exists?
+        @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
+        end
     end
-    if (@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date)
+    if ((@active == false) && (@within_five_days == false) && (@merged_datetime.beginning_of_week > @date))
+      unless HoldDate.where(:customer_id => @customer.id, :date => @date).exists?
       @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
+      end
+   end
+   if ((@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.to_date.beginning_of_week != Date.today.beginning_of_week)) 
+     unless HoldDate.where(:customer_id => @customer.id, :date => (@date + 1.week)).exists?
+     @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
     end
-   # if (@active == false) && (@within_five_days == true) && (@merged_datetime.beginning_of_week > @date) && (@next_date.beginning_of_week > @date.to_date.beginning_of_week)
-     # @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => (@date + 1.week)).save
-   # end
+   end
   end
   
   def get_next_date
      @location = DropLocation.find(@customer.drop_location_id)
-     @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+     @next_date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
       time_to_merge = @location.start_time 
       date_to_merge = @next_date
+      @date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
       @merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
       if @location.start_date < Date.today
-        if DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@merged_datetime - 7.days)
-          @date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
-        else
+        if DateTime.now.in_time_zone("Eastern Time (US & Canada)") > (@merged_datetime) #if drop has already occurred this week, adjust date to next week.
           @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+          @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+        else
+          #@new_date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
+          #@next_date = @next_date + 1.week
+         # @merged_datetime = @merged_datetime + 1.week
         end
       else
-       @date =  @location.start_date
+       #@date =  @location.start_date
       end
       if (Date.today + 5.days) > @date
-        @date = @date + 7.days
+        #@date = @date + 7.days
       end
   end
   def test
-    @customer = Customer.find(170)
+    @customer = Customer.find(158)
+    @location = DropLocation.find(@customer.drop_location_id)
     check_active
     check_date(DropLocation.find(@customer.drop_location_id))
-    @date = Time.now.beginning_of_week
+    get_next_date
+    #@date = Time.now.beginning_of_week
   end
   
   def order_count

@@ -4,7 +4,7 @@ class HoldDatesController < ApplicationController
   # GET /hold_dates
   # GET /hold_dates.json
   def index
-    @hold_dates = HoldDate.all
+    @hold_dates = HoldDate.all(:order => 'created_at DESC') 
 
     respond_to do |format|
       format.html # index.html.erb

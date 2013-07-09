@@ -1,11 +1,18 @@
 customer:<%= @customer.name %>
-drop location: <%= DropLocation.find(@customer.drop_location_id).name %><br />
-day of week: <%= DropLocation.find(@customer.drop_location_id).day %><br />
-active: <%= @active %><br />
-w/in 5 days: <%= @within_five_days %><br />
-merged_datetime.beginning_of_week: <%= @merged_datetime %><br />
-date: <%= @date %><br/>
-DateTime.now.in_time_zone("Eastern Time (US & Canada)"): <%= DateTime.now.in_time_zone("Eastern Time (US & Canada)")%> <br/>
-(@merged_datetime - 7.days): <%= (@merged_datetime - 7.days) %><br />
-DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@merged_datetime - 7.days)<br />
-next date: <%= @next_date %>
+drop location: <%= DropLocation.find(@customer.drop_location_id).name %><br /><br />
+day of week: <%= DropLocation.find(@customer.drop_location_id).day %><br /><br />
+active: <%= @active %><br /><br />
+w/in 5 days: <%= @within_five_days %><br /><br />
+<b>merged_datetime: </b><%= @merged_datetime %><br />
+<b>date:</b> <%= @date %><br /><br />
+<b>DateTime.now.in_time_zone:</b> <%= DateTime.now.in_time_zone("Eastern Time (US & Canada)")%> <br/><br/>
+<b>(@merged_datetime - 7.days):</b> <%= (@merged_datetime - 7.days) %><br /><br/>
+<br/><br/><br/>
+<strong>date: </strong><%= @date %><br/><br/>
+<strong>date.to_date.beginning_of_week: </strong><%= @date.to_date.beginning_of_week %><br/><br/>
+
+<strong>next date: <%= @next_date %></storng><br/><br/>
+<strong>next date.beginning_of_week: <%= @next_date.to_date.beginning_of_week %></storng><br/><br/>
+<b>Date.today.beginning_of_week:</b><%= Date.today.beginning_of_week %>
+<br />	merged datetime<%= @merged_datetime %>
+<br />	merged datetime - 7<%= @merged_datetime - 7.days %>
