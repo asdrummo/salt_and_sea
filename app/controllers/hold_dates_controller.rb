@@ -4,7 +4,7 @@ class HoldDatesController < ApplicationController
   # GET /hold_dates
   # GET /hold_dates.json
   def index
-    @hold_dates = HoldDate.all(:order => 'created_at DESC') 
+    @hold_dates = HoldDate.all(:order => 'created_at DESC').uniq
 
     respond_to do |format|
       format.html # index.html.erb
@@ -46,10 +46,19 @@ class HoldDatesController < ApplicationController
   def create
     @customer = Customer.find(params[:hold_date][:customer_id])
     @customer_hold_dates = HoldDate.where(:customer_id => @customer.id)
+    @exists = false
     params[:hold_dates].each do |date|
-          @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => date).save
+      @customer_hold_dates.each do |existing_date|
+        if existing_date.date == date.to_date
+          @exists = true
+        end
+      end
+      if @exists == false
+        @customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => date).save
+      end
+      @exists = false
     end
-    flash[:notice] = 'Hold Dates Saved!'
+  
     respond_to do |format|
         format.html { redirect_to hold_dates_path, notice: 'Hold date was successfully created.' }
         format.json { render json: hold_dates_path, status: :created, location: hold_dates_path }
