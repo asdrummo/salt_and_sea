@@ -323,7 +323,8 @@
 <% @location_hold_customers = (@active_customers & @weekly_hold_customers) %>
 <% @date = (@location_merged_datetime + location.day.to_i.days)%>
 <tr>
-	<td colspan="2">Total Customers: <%= @active_customers.count - @location_hold_customers.count %></td>
+	<td colspan="2">Total Customers: <%= @active_customers.count - @location_hold_customers.count %>
+		</td>
 	<td colspan="6"></td>
 	<td>
 		<% @totals << [location.id, @date, fish(@week1), shellfish(@week1)] %>
