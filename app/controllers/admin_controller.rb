@@ -13,7 +13,16 @@ class AdminController < ApplicationController
         @all = false
       end
       @black_and_white = true
-      @print = true
+      @print = 'all'
+    if params[:black_and_white2]
+      if params[:drop_location_id]
+        @selected_location = params[:drop_location_id]
+        @all = false
+      end
+      @black_and_white = true
+       @print = 'page'
+    end
+    
     end
     
   ## DECLARE ALL ARRAYS
