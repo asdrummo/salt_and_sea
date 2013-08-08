@@ -182,7 +182,11 @@ class Customer < ActiveRecord::Base
     elsif (fish > d) && (self.share_type == "double fish")
       return "XX"
     elsif (shellfish > s) && (self.share_type == "single shellfish")
-      return "S"
+      if week.even? == true
+      return("S")
+      else
+        return("")
+      end
     elsif (shellfish > d) && (self.share_type == "double shellfish")
      return "SS"
     elsif (basket > s) && (self.share_type == "single basket")
@@ -192,11 +196,23 @@ class Customer < ActiveRecord::Base
     elsif (fish > s) && (basket > s) && (self.share_type == "single fish + single basket")
       return ("X" + @basket)
     elsif (fish > s) && (shellfish > s) && (self.share_type == "single fish + single shellfish")
+      if week.even? == true
       return("XS")
+      else
+        return("X")
+      end
     elsif (fish > d) && (shellfish > s) && (self.share_type == "double fish + single shellfish")
+        if week.even? == true
         return("XX + S")
+        else
+          return("XX")
+        end
     elsif (fish > d) && (shellfish > d) && (self.share_type == "double fish + double shellfish")
+        if week.even? == true
         return("XX + SS")
+        else
+          return("XX")
+        end
     end
   end
 
