@@ -241,7 +241,8 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		<td><%= @basket_credits %></td>
 		<!-- week 1 -->
 		<% @date = (@week1_date + 0.week) %>
-		<td><% if customer.hold_check(@location_next_date) == false %>
+		<td>
+		<% if customer.hold_check(@location_next_date) == false %>
 				<% if customer.share_check(@location_next_date) == false %>
 				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 0, 1, location, @date, @all_processed) %>
 				<% else %>

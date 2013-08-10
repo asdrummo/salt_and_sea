@@ -171,9 +171,11 @@ class Customer < ActiveRecord::Base
       if week.even? == true
         @basket = "X"
         @double_basket = "XX"
+        
       else
         @basket = "S"
         @double_basket = "SS"
+        
       end
 
     
@@ -197,9 +199,9 @@ class Customer < ActiveRecord::Base
       return ("X" + @basket)
     elsif (fish > s) && (shellfish > s) && (self.share_type == "single fish + single shellfish")
       if week.even? == true
-      return("XS")
+      return("X")
       else
-        return("X")
+        return("XS")
       end
     elsif (fish > d) && (shellfish > s) && (self.share_type == "double fish + single shellfish")
         if week.even? == true
