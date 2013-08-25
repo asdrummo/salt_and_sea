@@ -16,7 +16,7 @@ resources :text_entries, :share_dates, :stats, :processed_locations, :preference
   get "home/products"
   get "orders/pay_by_check"
   match "show_invoice" => "home#show_invoice"
-  
+  match "membership" => "admin#membership"
   match "/admin/low_credit_notifications" => "admin#low_credit_notifications"
   get "admin/index"
   

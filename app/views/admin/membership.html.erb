@@ -1,0 +1,41 @@
+
+<table class="admin_table">
+	<tr>
+		<th>
+			Name
+		</th>
+		<th>
+			Order Date
+		</th>
+		<th>
+			Membership End Date
+		</th>
+		<th>
+			$$$
+		</th>
+	</tr>
+	<% @orders.each do |order|%>
+	<% if order.order_transaction.success == true %>
+	<tr class="<%= cycle("odd", "even") %>">
+	<td>
+		<%= order.customer.name %>
+	</td>
+	<td>
+		<%= order.created_at.strftime('%d %b %Y') %>
+	</td>
+	<td>
+		<%= (order.created_at + 2.months).strftime('%d %b %Y') %>
+	</td>
+	<td>
+		<%= order.cart.total_price %>
+	</td>
+
+	</tr>
+	<% @member_emails << order.customer.email %>
+	<% end %>
+<% end %>
+<% @member_emails = @member_emails.uniq %>
+<tr><td>total members: <%= @orders.count %></td></tr></table>
+<br/>send email membership blast to: <br /><br />
+<%= @member_emails.count %> - unique
+<%= @member_emails.collect{|u| u}.join(', ') %>

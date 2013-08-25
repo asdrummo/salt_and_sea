@@ -1,7 +1,9 @@
 class Order < ActiveRecord::Base
   belongs_to :cart
+  belongs_to :customer
   has_many :transactions, :class_name => "OrderTransaction"
   has_many :line_items
+  has_one :order_transaction
   attr_accessor :card_number, :card_verification
   attr_accessible :express_token, :action, :amount, :response, :customer_id, :express_token, :express_payer_id, :first_name, :last_name, :cart_id
   

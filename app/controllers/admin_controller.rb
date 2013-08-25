@@ -263,4 +263,11 @@ class AdminController < ApplicationController
   end
   end
   
+  
+  def membership
+    @start_date = (Date.today - 2.months)
+    @orders = Order.where("created_at >= :time", {:time => @start_date})
+    @member_emails = []
+  end
+  
 end
