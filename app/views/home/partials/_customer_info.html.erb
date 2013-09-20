@@ -41,7 +41,8 @@
 		Squid: <%= yesno(@preference.squid) %>, 
 		Mackerel: <%= yesno(@preference.mackerel) %>, 
 		Skate Wings: <%= yesno(@preference.skate) %>, 
-		Monkfish: <%= yesno(@preference.monkfish) %>
+		Monkfish: <%= yesno(@preference.monkfish) %>,
+		Whiting: <%= yesno(@preference.whiting) %>
 	</p>
 	<p style="padding:0 10px 0 10px">
 		<b>Shellfish preferences:</b>
@@ -50,7 +51,7 @@
 		Oysters: <%= yesno(@preference.oysters) %>, 
 		Scallops: <%= yesno(@preference.scallops) %> 
 	</p>
-<p style="padding:0 10px 0 10px"><%= link_to 'Edit Additional Preferences', :action => 'edit_customer', :page => 'my_account' %></p>
+<p style="padding:0 10px 0 10px"><%= link_to 'Edit Additional Preferences', :controller => 'home', :action => 'edit_customer', :page => 'my_account' %></p>
 </div>
 <br />
 <%= render(:partial => 'home/partials/hold_dates') %>

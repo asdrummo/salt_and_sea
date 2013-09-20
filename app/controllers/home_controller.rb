@@ -115,7 +115,7 @@ class HomeController < ApplicationController
       @drop_location = DropLocation.find(params[:customer][:drop_location_id])
       check_date(@drop_location)
     if @customer.save
-      @preference = Preference.new(:customer_id => @customer.id, :skate => params[:customer][:skate], :squid => params[:customer][:squid], :monkfish => params[:customer][:monkfish], :mackerel => params[:customer][:mackerel], :mussels => params[:customer][:mussels], :clams => params[:customer][:clams], :scallops => params[:customer][:scallops], :oysters => params[:customer][:oysters]).save
+      @preference = Preference.new(:customer_id => @customer.id, :skate => params[:customer][:skate], :squid => params[:customer][:squid], :monkfish => params[:customer][:monkfish], :whiting => params[:customer][:whiting], :mackerel => params[:customer][:mackerel], :mussels => params[:customer][:mussels], :clams => params[:customer][:clams], :scallops => params[:customer][:scallops], :oysters => params[:customer][:oysters]).save
       #if @within_five_days == true
          #@date = Time.now.beginning_of_week
          #@customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
@@ -149,7 +149,7 @@ class HomeController < ApplicationController
        if @customer.preference != nil
          @preference = @customer.preference
         else
-         @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :clams => true, :mussels => true, :scallops => true, :oysters => true)
+         @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :clams => true, :mussels => true, :whiting => true, :scallops => true, :oysters => true)
         end
       if current_user.id == @customer.user_id
           @edit_user = true
@@ -170,7 +170,7 @@ class HomeController < ApplicationController
        else
         @preference = Preference.new
        end
-       @preference.update_attributes(:customer_id => @customer.id, :skate => params[:customer][:skate], :squid => params[:customer][:squid], :monkfish => params[:customer][:monkfish], :mackerel => params[:customer][:mackerel], :mussels => params[:customer][:mussels], :clams => params[:customer][:clams], :scallops => params[:customer][:scallops], :oysters => params[:customer][:oysters])
+       @preference.update_attributes(:customer_id => @customer.id, :skate => params[:customer][:skate], :squid => params[:customer][:squid], :monkfish => params[:customer][:monkfish], :whiting => params[:customer][:whiting], :mackerel => params[:customer][:mackerel], :mussels => params[:customer][:mussels], :clams => params[:customer][:clams], :scallops => params[:customer][:scallops], :oysters => params[:customer][:oysters])
       flash[:notice] = 'Contact Info Saved!'
       if params[:page]
         redirect_to(:action => params[:page])

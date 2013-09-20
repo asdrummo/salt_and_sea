@@ -63,6 +63,9 @@ class PreferencesController < ApplicationController
     @preference = Preference.find(params[:id])
     @customer_names = Customer.all(:order => 'last_name ASC')
     @customer = Customer.find(@preference.customer_id)
+    if params[:id]
+      @customer_id = params[:id]
+    end
     
   end
 

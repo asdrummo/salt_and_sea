@@ -15,6 +15,8 @@
     <%= f.label :customer_id %><br />
 	<% if  @customer %>
     <%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first", @preference.customer.id) %>
+	<% elsif @customer_id %>
+	    <%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first", @customer_id) %>
 	<% else %>
 	<%= f.select :customer_id, options_from_collection_for_select(@customer_names, "id", "last_name_first") %>
 	<% end %>
@@ -34,6 +36,10 @@
   <div class="field">
     <%= f.label :monkfish %><br />
     <%= f.check_box :monkfish, :checked => @preference.monkfish %>
+  </div>
+  <div class="field">
+    <%= f.label :whiting %><br />
+    <%= f.check_box :whiting, :checked => @preference.whiting %>
   </div>
   <div class="field">
     <%= f.label :clams %><br />

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130624201938) do
+ActiveRecord::Schema.define(:version => 20130920001440) do
 
   create_table "carts", :force => true do |t|
     t.datetime "purchased_at"
@@ -164,6 +164,7 @@ ActiveRecord::Schema.define(:version => 20130624201938) do
     t.boolean  "mussels"
     t.boolean  "oysters"
     t.boolean  "scallops"
+    t.boolean  "whiting"
   end
 
   create_table "processed_locations", :force => true do |t|

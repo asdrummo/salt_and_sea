@@ -111,6 +111,9 @@ Looks like you need to add some contact info:
 			<div style="float:left; padding: 0 5px 0 5px;">
 	    	<%= f.check_box :monkfish, :checked => @preference.monkfish %>
 			<%= f.label :monkfish %>
+			<div style="float:left; padding: 0 5px 0 5px;">
+	    	<%= f.check_box :whiting, :checked => @preference.whiting %>
+			<%= f.label :whiting %>
 	        </div>
 			<div>
 			<%= f.hidden_field :order_count, :value => "0" %>
