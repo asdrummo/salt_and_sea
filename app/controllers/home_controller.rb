@@ -34,13 +34,13 @@ class HomeController < ApplicationController
       if @customer.preference != nil
         @preference = @customer.preference
       else
-        @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :clams => true, :mussels => true, :scallops => true, :oysters => true)
+        @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :whiting => true, :mackerel => true, :clams => true, :mussels => true, :scallops => true, :oysters => true)
       end
     end
     if @customer == nil
       @customer_new = Customer.new
       @drop_locations = DropLocation.all
-      @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :clams => true, :mussels => true, :scallops => true, :oysters => true)
+      @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :whiting => true, :clams => true, :mussels => true, :scallops => true, :oysters => true)
     end
     
     @fish_count = 0
@@ -166,7 +166,7 @@ class HomeController < ApplicationController
       @customer.last_name = @customer.last_name.humanize
       @customer.save
       if @customer.preference != nil
-        @preference = @customer.preference
+        @preference = @customer.preference  
        else
         @preference = Preference.new
        end
@@ -193,7 +193,7 @@ class HomeController < ApplicationController
     if @customer == nil
       @customer_new = Customer.new
       @drop_locations = DropLocation.all
-      @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :clams => true, :mussels => true, :scallops => true, :oysters => true )
+      @preference = Preference.new(:skate => true, :squid => true, :monkfish => true, :mackerel => true, :whiting => true, :clams => true, :mussels => true, :scallops => true, :oysters => true )
     end
     if params[:customer]
       if @new_customer.save
