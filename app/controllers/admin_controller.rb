@@ -275,11 +275,14 @@ class AdminController < ApplicationController
     sessions.each do |session|
       session.destroy
     end
-      flash[:notice] = 'Sessions Cleared!'
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.json { head :no_content }
+    carts = Cart.all
+    carts.each do |cart|
+      if cart.purchased_at == nil
+        cart.destroy
       end
+    end
+      flash[:notice] = 'Sessions Cleared!'
+      redirect_to(:back)
   end
   
 end
