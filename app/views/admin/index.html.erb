@@ -2,6 +2,7 @@
 <%= render(:partial => 'admin/partials/all_locations_print') %>
 <%= render(:partial => 'admin/partials/totals_print') %>
 <% else %>
+
 print page: <%= link_to 'all', :action => "index", :black_and_white => true %>, 
 <% DropLocation.all.each do |location| %>
 <%= link_to location.name, :action => "index", :black_and_white => true, :drop_location_id => location.id %>

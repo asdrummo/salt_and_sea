@@ -270,4 +270,16 @@ class AdminController < ApplicationController
     @member_emails = []
   end
   
+  def empty_sessions_table
+    sessions = Session.all
+    sessions.each do |session|
+      session.destroy
+    end
+      flash[:notice] = 'Sessions Cleared!'
+      respond_to do |format|
+        format.html { redirect_to :back }
+        format.json { head :no_content }
+      end
+  end
+  
 end
