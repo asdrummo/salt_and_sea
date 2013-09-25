@@ -15,14 +15,18 @@
   </tr>
 
 <% @orders.each do |order| %>
-  <% if OrderTransaction.find_by_order_id(order.id).authorization != nil %>
+  <% if OrderTransaction.find_by_order_id(order.id) %>
   <tr class="<%= cycle("odd", "even") %>">  
   <% else %>
 <tr class="<%= cycle('odd', 'even') %>" style="color:red">
   <% end %>
     <td><%= order.id %></td>
     <td><%= link_to Customer.find(order.customer_id).name, customer_path(Customer.find(order.customer_id)) %></td>
+	<% if Cart.find_by_id(order.cart_id) %>
     <td><%= number_to_currency(Cart.find_by_id(order.cart_id).total_price) %> </td>
+	<% else %>
+	<td>NULL</td>
+	<% end %>
     <td><%= order.created_at.strftime("%B %d, %Y at %I:%M %p %Z") %></td>
     <td><%= link_to 'Show', order %></td>
     <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
