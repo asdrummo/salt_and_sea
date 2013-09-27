@@ -3,6 +3,11 @@ class CustomersController < ApplicationController
 
   def index
     @customers = Customer.all(:order => 'last_name ASC')
+    @sort = 'name'
+    if params[:sort] == 'date'
+      @customers = Customer.all(:order => 'created_at DESC')
+      @sort = 'date'
+    end
     @drop_locations = DropLocation.all
     respond_to do |format|
       format.html # index.html.erb
@@ -10,14 +15,6 @@ class CustomersController < ApplicationController
     end
   end
   
-  def index2
-    @customers = Customer.all(:order => 'created_at DESC')
-    @drop_locations = DropLocation.all
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @customers }
-    end
-  end
   # GET /customers/1
   # GET /customers/1.json
   def show

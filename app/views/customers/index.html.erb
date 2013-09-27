@@ -1,5 +1,11 @@
 <h1>Listing customers</h1>
 <%= link_to 'New Customer', new_customer_path %>
+<% if @sort == 'name' %>
+<%= link_to 'Customer By Date', :action => 'index', :sort => 'date' %>
+<% else %>
+<%= link_to 'Customer By Name', :action => 'index', :sort => 'name' %>
+<% end %>
+
 <table class="admin_table">
   <tr>
 	<th>Last name</th>
