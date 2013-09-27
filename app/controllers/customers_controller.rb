@@ -9,7 +9,15 @@ class CustomersController < ApplicationController
       format.json { render json: @customers }
     end
   end
-
+  
+  def index2
+    @customers = Customer.all(:order => 'created_at DESC')
+    @drop_locations = DropLocation.all
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @customers }
+    end
+  end
   # GET /customers/1
   # GET /customers/1.json
   def show
