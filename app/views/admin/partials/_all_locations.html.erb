@@ -222,6 +222,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 
 <% @week1, @week2, @week3, @week4, @week5, @week6, @week7, @week8 = [], [], [], [], [], [], [], [] %>
 <% @drop_location_customers.each do |customer| %>
+<% @cust_id = customer.id %>
 <% customer.credits.each do |credit| %>
 <% if Product.find(credit.product_id).category == 'fish' %>
 <% @fish_credits += credit.credits_available %>
