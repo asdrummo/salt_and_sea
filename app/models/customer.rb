@@ -132,7 +132,8 @@ class Customer < ActiveRecord::Base
    end
    end
 
-   def subtract_shellfish_credits(shellfish)
+   def subtract_shellfish_credits(shellfish, date)
+     if week(date) == "even"
      if self.share_type == "single shellfish"
        if shellfish > 0
          return shellfish -= 1
@@ -144,6 +145,7 @@ class Customer < ActiveRecord::Base
      else
        return shellfish
      end
+   end
 
    end
 
@@ -160,7 +162,8 @@ class Customer < ActiveRecord::Base
      return basket
    end
    end
-
+   
+    
   def weekly_product(fish, shellfish, basket, s, d, location, date, all_processed)
     if (location.processed == true) && (all_processed == false)
       week = (date + 1.week).cweek
@@ -171,10 +174,11 @@ class Customer < ActiveRecord::Base
       if week.even? == true
         @basket = "X"
         @double_basket = "XX"
-        
+        @single_shellfish = ""
       else
         @basket = "S"
         @double_basket = "SS"
+        @single_shellfish = "S"
         
       end
 
@@ -183,12 +187,8 @@ class Customer < ActiveRecord::Base
       return "X"
     elsif (fish > d) && (self.share_type == "double fish")
       return "XX"
-    elsif (shellfish > s) && (self.share_type == "single shellfish")
-      if week.even? == true
-      return("S")
-      else
-        return("")
-      end
+    elsif ((shellfish + shellfish) > s) && (self.share_type == "single shellfish")
+      return(@single_shellfish)
     elsif (shellfish > d) && (self.share_type == "double shellfish")
      return "SS"
     elsif (basket > s) && (self.share_type == "single basket")
