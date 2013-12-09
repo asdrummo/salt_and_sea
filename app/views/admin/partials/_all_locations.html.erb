@@ -272,7 +272,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% else %>
 				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3, location, @date, @all_processed) %>
 				<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 				<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
 				<% end %>
 				<% @week2 << @weekly_product %>
