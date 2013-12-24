@@ -134,8 +134,13 @@ class OrdersController < ApplicationController
       @merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
       if @location.start_date < Date.today
         if DateTime.now.in_time_zone("Eastern Time (US & Canada)") > (@merged_datetime) #if drop has already occurred this week, adjust date to next week.
-          @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
-          @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+          if (Date.today.cweek+1) > 52
+            @date = Date.commercial(Date.today.year+1, Date.today.cweek, @location.day.to_i)
+             @next_date = Date.commercial(Date.today.year+1, Date.today.cweek, @location.day.to_i)
+          else
+            @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+             @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+          end
         else
           #@new_date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
           #@next_date = @next_date + 1.week
