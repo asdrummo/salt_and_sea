@@ -141,13 +141,7 @@ class OrdersController < ApplicationController
             @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
              @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
           end
-        else
-          #@new_date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
-          #@next_date = @next_date + 1.week
-         # @merged_datetime = @merged_datetime + 1.week
         end
-      else
-       #@date =  @location.start_date
       end
       if (Date.today + 5.days) > @date
         #@date = @date + 7.days
