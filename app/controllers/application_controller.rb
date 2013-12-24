@@ -42,7 +42,12 @@ class ApplicationController < ActionController::Base
     end
     
     def check_date(location)
-      @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, day_to_int(location.day))
+      year_end = Date.new(2013, 12, 31)
+      if (Date.today.cweek+1) > 52
+         @next_date = Date.commercial(Date.today.year+1, Date.today.cweek, day_to_int(location.day))
+      else
+         @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, day_to_int(location.day))
+      end
       time_to_merge = location.start_time 
       date_to_merge = @next_date
       @within_five_days = false
