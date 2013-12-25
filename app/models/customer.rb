@@ -135,6 +135,9 @@ class Customer < ActiveRecord::Base
    def subtract_shellfish_credits(shellfish, date, location, all_processed)
      if (location.processed == true) && (all_processed == false)
        week = (date + 1.week).cweek
+       if week == 53
+         week = 1
+       end
      else
        week = date.cweek
      end
@@ -172,6 +175,9 @@ class Customer < ActiveRecord::Base
   def weekly_product(fish, shellfish, basket, s, d, location, date, all_processed)
     if (location.processed == true) && (all_processed == false)
       week = (date + 1.week).cweek
+      if week == 53
+        week = 1
+      end
     else
       week = date.cweek
     end
@@ -227,6 +233,9 @@ class Customer < ActiveRecord::Base
   def double_weekly_product(fish, shellfish, basket, s, d, location, date, all_processed)
     if (location.processed == true) && (all_processed == false)
       week = (date + 1.week).cweek
+      if week == 53
+        week = 1
+      end
     else
       week = date.cweek
     end
