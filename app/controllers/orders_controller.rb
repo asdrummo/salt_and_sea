@@ -50,10 +50,6 @@ class OrdersController < ApplicationController
     end
   end
   
-  #def success
-   # render "success"
-  #end
-  
   def create
     @order = current_cart.build_order(params[:order])
     @order.ip_address = request.remote_ip
