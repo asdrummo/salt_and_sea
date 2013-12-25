@@ -76,7 +76,7 @@ class Customer < ActiveRecord::Base
   end
   
   def add_fish_credits(fish)
-    if self.share_type == "single fish"
+    if (self.share_type == "single fish") || (self.share_type == "single fish + single shellfish")
     if fish > 0
     return fish += 1
     end
@@ -90,7 +90,7 @@ class Customer < ActiveRecord::Base
   end
   
   def add_shellfish_credits(shellfish)
-    if self.share_type == "single shellfish"
+    if (self.share_type == "single shellfish") || (self.share_type == "single fish + single shellfish")
       if shellfish > 0
         return shellfish += 1
       end
@@ -214,6 +214,12 @@ class Customer < ActiveRecord::Base
       return("X")
       else
         return("XS")
+      end
+    elsif (fish > s) && (self.share_type == "single fish + single shellfish")
+      return("X")
+    elsif (shellfish > s) && (self.share_type == "single fish + single shellfish")
+      if week.even? == true
+        return("S")
       end
     elsif (fish > d) && (shellfish > s) && (self.share_type == "double fish + single shellfish")
         if week.even? == true
