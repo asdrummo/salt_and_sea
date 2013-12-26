@@ -21,7 +21,7 @@ gem "mail"
 gem "heroku_s3_backup"
 gem "exception_notification", '3.0.1'
 
-
+gem 'rails_12factor', group: :production
 
 # Gems used only for assets and not required
 # in production environments by default.

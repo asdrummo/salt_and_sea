@@ -124,32 +124,18 @@ class OrdersController < ApplicationController
   def get_next_date
      @location = DropLocation.find(@customer.drop_location_id)
      @next_date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
+     
       time_to_merge = @location.start_time 
       date_to_merge = @next_date
       @date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
       @merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
       if @location.start_date < Date.today
         if DateTime.now.in_time_zone("Eastern Time (US & Canada)") > (@merged_datetime) #if drop has already occurred this week, adjust date to next week.
-          if Date.today.cweek == 52
-            @date = Date.commercial(Date.today.year+1, 1, @location.day.to_i)
-             @next_date = Date.commercial(Date.today.year+1, 1, @location.day.to_i)
-          else
-            @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
-             @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
-          end
+           adjusted_date = (Date.today + 1.week)
+            @next_date = Date.commercial(adjusted_date.year, adjusted_date.cweek, @location.day.to_i)
+            @date = Date.commercial(adjusted_date.year, adjusted_date.cweek, @location.day.to_i)
         end
       end
-      if (Date.today + 5.days) > @date
-        #@date = @date + 7.days
-      end
-  end
-  def test
-    @customer = Customer.find(158)
-    @location = DropLocation.find(@customer.drop_location_id)
-    check_active
-    check_date(DropLocation.find(@customer.drop_location_id))
-    get_next_date
-    #@date = Time.now.beginning_of_week
   end
   
   def order_count
