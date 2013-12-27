@@ -11,7 +11,7 @@
     <th></th>
   </tr>
 
-<%  @used_credits.each do |used_credit| %>
+<%  @page_used_credits.each do |used_credit| %>
   <tr class="<%= cycle("odd", "even") %>">
     <td><%= Customer.find_by_id(used_credit.customer_id).name %></td>
     <td><%= Product.find_by_id(used_credit.product_id).name %></td>
@@ -21,4 +21,5 @@
   </tr>
 <% end %>
 </table>
+<%= will_paginate @page_used_credits %>
 <br />

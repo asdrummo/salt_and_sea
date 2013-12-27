@@ -12,7 +12,10 @@ class OrdersController < ApplicationController
   end
   
   def index
-    @orders = Order.all(:order => 'id DESC')
+   # @orders = Order.all(:order => 'id DESC')
+    
+     @orders = Order.where(:id != nil).order('id DESC').uniq
+      @page_orders = @orders.paginate(:page => params[:page], :per_page => 30)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @orders }

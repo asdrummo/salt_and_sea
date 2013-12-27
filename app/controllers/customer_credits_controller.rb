@@ -6,9 +6,14 @@ class CustomerCreditsController < ApplicationController
     if params[:id]
       @customer_names = Customer.find_by_id(params[:id])
       @customer_credits = CustomerCredit.where(:customer_id => params[:id]).order('created_at DESC') 
-    else  
+    else
+        
       @customer_names = Customer.all
-      @customer_credits = CustomerCredit.all(:order => 'created_at DESC') 
+      
+      @page_customer_credits = CustomerCredit.where(:id != nil).order('id DESC').paginate(:page => params[:page], :per_page => 30)
+     # @page_customer_credits = @customer_Credits.paginate(:page => params[:page], :per_page => 30)
+      
+     # @customer_credits = CustomerCredit.all(:order => 'created_at DESC') 
     end
     
     respond_to do |format|

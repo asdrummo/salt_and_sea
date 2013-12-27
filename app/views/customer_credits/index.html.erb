@@ -11,7 +11,7 @@
     <th></th>
   </tr>
 
-<% @customer_credits.each do |customer_credit| %>
+<% @page_customer_credits.each do |customer_credit| %>
   <tr class="<%= cycle("odd", "even") %>">
 	    <td><%= link_to Customer.find(customer_credit.customer_id).name, customer_path(Customer.find(customer_credit.customer_id)) %></td>
 	<td><%= Product.find(customer_credit.product_id).category_name %></td>
@@ -23,6 +23,7 @@
   </tr>
 <% end %>
 </table>
+<%= will_paginate @page_customer_credits %>
 
 <br />
 

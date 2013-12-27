@@ -1,7 +1,9 @@
 class UsedCustomerCreditsController < ApplicationController
     before_filter :authenticate_admin
   def index
-    @used_credits = UsedCustomerCredit.all(:order => 'created_at DESC') 
+    
+    @used_credits = UsedCustomerCredit.where(:id != nil).order('id DESC')
+    @page_used_credits = @used_credits.paginate(:page => params[:page], :per_page => 30)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @used_credits }

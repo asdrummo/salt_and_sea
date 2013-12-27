@@ -11,7 +11,7 @@
     <th></th>
   </tr>
 
-<% @hold_dates.each do |hold_date| %>
+<% @page_hold_dates.each do |hold_date| %>
   <tr>
 	<td><%= link_to Customer.find(hold_date.customer_id).name, customer_path(hold_date.customer_id) %></td>
 	<td><%= hold_date.date %></td>
@@ -21,6 +21,7 @@
   </tr>
 <% end %>
 </table>
+<%= will_paginate @page_hold_dates %>
 
 <br />
 

@@ -14,7 +14,7 @@
     <th></th>
   </tr>
 
-<% @orders.each do |order| %>
+<% @page_orders.each do |order| %>
   <% if OrderTransaction.find_by_order_id(order.id) %>
   <tr class="<%= cycle("odd", "even") %>">  
   <% else %>
@@ -33,6 +33,7 @@
   </tr>
 <% end %>
 </table>
+<%= will_paginate @page_orders %>
 <%= link_to 'New Order', new_order_path %>
 
 
