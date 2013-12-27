@@ -84,8 +84,14 @@ No locations left, next week start date pushed to <%= @week1_date%>
 <span class="middle">Email Lists:</span>	
 </div>
 <div style="padding: 10px">
-<p style="margin-top:0px"><b>All Customers:</b> <%= (@drop_location_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+	<div class="slide_container">
+	    <div class="slide_header"><span>All Customers: (<%= (@drop_location_customers - @admin_customers).count %>)</span>
 
+	    </div>
+	    <div class="slide_content">
+<%= (@drop_location_customers - @admin_customers).collect{|u| u.email}.join(', ') %>
+	    </div>
+	</div>
 
 <% @active_customers = [] %>
 <% @inactive_customers = [] %>
@@ -123,13 +129,58 @@ No locations left, next week start date pushed to <%= @week1_date%>
 <% end %>
 
 <% @location_hold_customers = (@active_customers & @weekly_hold_customers) %>
-<p><b>Active Customers:</b> <%= (@active_customers - @admin_customers - @location_hold_customers).collect{|u| u.email}.join(', ') %>, <%= (@secondary & @active_customers).collect{|u| u.email_2}.join(', ') %></p>
-<p><b>New Customers (joined this week):</b> <%= (Customer.scoped_location(location).scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %></p>
-<p><b>New Customers (first drop):</b> <%= ((@first_drop_customers - @admin_customers - @weekly_hold_customers) & @active_customers).collect{|u| u.email}.join(', ') %></p>
-<p><b>Low Credit Customers:</b> <%= (@location_low_credit_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
-<p><b>Hold Customers:</b> <%= @location_hold_customers.collect{|u| u.email}.join(', ') %></p>
+	
+	<div class="slide_container">
+	    <div class="slide_header"><span>Active Customers: (<%= ((@active_customers - @admin_customers - @location_hold_customers).count + ((@secondary & @active_customers).count)) %>)</span>
 
-<p style="margin-bottom:0px"><b>Inactive Customers:</b> <%= (@inactive_customers - @admin_customers).collect{|u| u.email}.join(', ') %></p>
+	    </div>
+	    <div class="slide_content">
+<%= (@active_customers - @admin_customers - @location_hold_customers).collect{|u| u.email}.join(', ') %>, <%= (@secondary & @active_customers).collect{|u| u.email_2}.join(', ') %>
+	    </div>
+	</div>
+	
+		<div class="slide_container">
+		    <div class="slide_header"><span>New Customers (joined this week): (<%= (Customer.scoped_location(location).scoped_new - @admin_customers).count %>)</span>
+
+		    </div>
+		    <div class="slide_content">
+	<%= (Customer.scoped_location(location).scoped_new - @admin_customers).collect{|u| u.email}.join(', ') %>
+		    </div>
+		</div>
+
+
+			<div class="slide_container">
+			    <div class="slide_header"><span>New Customers (first drop): (<%= ((@first_drop_customers - @admin_customers - @weekly_hold_customers) & @active_customers).count %>)</span>
+
+			    </div>
+			    <div class="slide_content">
+		<%= ((@first_drop_customers - @admin_customers - @weekly_hold_customers) & @active_customers).collect{|u| u.email}.join(', ') %>
+			    </div>
+			</div>
+			
+				<div class="slide_container">
+				    <div class="slide_header"><span>Low Credit Customers: (<%= (@location_low_credit_customers - @admin_customers).count %>)</span>
+				    </div>
+				    <div class="slide_content">
+		<%= (@location_low_credit_customers - @admin_customers).collect{|u| u.email}.join(', ') %>
+				    </div>
+				</div>
+				
+						<div class="slide_container">
+						    <div class="slide_header"><span>Hold Customers: (<%= @location_hold_customers.count %>)</span>
+						    </div>
+						    <div class="slide_content">
+				<%= @location_hold_customers.collect{|u| u.email}.join(', ') %>
+						    </div>
+						</div>
+
+								<div class="slide_container">
+								    <div class="slide_header"><span>Inactive Customers: (<%= (@inactive_customers - @admin_customers).count %>)</span>
+								    </div>
+								    <div class="slide_content">
+					<%= (@inactive_customers - @admin_customers).collect{|u| u.email}.join(', ') %>
+								    </div>
+								</div>
 </div>
 </div>
 

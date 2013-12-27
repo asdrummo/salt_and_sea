@@ -3,8 +3,9 @@
 
 <head>
 	<title>Salt &#43; Sea Marketplace</title>
-    <%= stylesheet_link_tag    "application", :media => "all" %>
+    
   <%= javascript_include_tag 'jquery', 'jquery_ujs',  'application' %>
+<%= stylesheet_link_tag    "application", :media => "all" %>
   <%= csrf_meta_tags %>
  <%= yield(:head) %>
 <% if @black_and_white == true %>

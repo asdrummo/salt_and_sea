@@ -142,3 +142,23 @@ background-color:#ffcccc;
 
   }
 }
+
+.slide_container {
+    width:100%;
+    border:1px solid #d3d3d3;
+}
+.slide_container div {
+    width:100%;
+}
+.slide_container .slide_header {
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.slide_container .slide_content {
+    display: none;
+    padding : 5px;
+}
+
+
