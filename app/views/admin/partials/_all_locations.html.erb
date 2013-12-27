@@ -28,14 +28,13 @@ No locations left, next week start date pushed to <%= @week1_date%>
 <b>Processed Locations:</b>
 <%= @this_week_inactive_locations.collect{|u| u.name}.join(', ')%>
 <% end %>
-<% @this_weeks_active_customers = [] %>
-<% Customer.all.each do |c| %>
-<% if c.total_credits > 0 %>
-<% @this_weeks_active_customers << c %>
-<% end %>
-<% end %><br />
+<br />
 <% @low_credit_customers = @low_credit_customers - @weekly_hold_customers %>
-<p><strong>Active Customers:</strong> <%= (@this_weeks_active_customers.count - @weekly_hold_customers.count - @admin_user_count) %>, <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= @customers_without_credits.count %></p>
+
+
+
+<% @this_week_active_customers = (@active_customers - @weekly_hold_customers)%>
+<p><strong>Active Customers:</strong> (<%= @this_week_active_customers.count %>), <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= @customers_without_credits.count %></p>
 <p><strong>Low credit customers (<%= @low_credit_customers.count %>):</strong> 
 <%= @low_credit_customers.collect{|u| u.email}.join(', ')%></p>
 
@@ -43,6 +42,7 @@ No locations left, next week start date pushed to <%= @week1_date%>
 <p>
 <%= link_to 'Customer Database Email List', '#email' %> | <%= link_to 'Active Customers', '#active' %> | <%= link_to 'Inactive Customers (1 month)', '#inactive' %></p></div>
 </div>
+
 
 <!-- drop locations -->
 <% @drop_locations.each do |location| %>
@@ -499,6 +499,54 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 
 </tr>
 </table>
-
-
 <% end %>
+
+<!-- TOTALS -->
+<br/>
+<%= render(:partial => 'admin/partials/totals_2') %>
+<br />
+
+
+<!-- Email lists -->
+<span style="font-size:12px"><%= link_to "back to top", '#top' %></span><br />
+<%= link_to('', {}, {:name => 'email'}) %>
+
+<div class="slide_container">
+    <div class="slide_header"><span>Customer Email List (Entire Database): (<%= (Customer.all - @admin_customers).count %>)</span>
+    </div>
+    <div class="slide_content">
+		<%= (Customer.all - @admin_customers).collect{|u| u.email}.join(', ') %><br />
+    </div>
+</div>
+
+<%= link_to('', {}, {:name => 'active'}) %>
+<div class="slide_container">
+    <div class="slide_header"><span>Customer Email List (Active): (<%= @this_week_active_customers.count %>)</span>
+    </div>
+    <div class="slide_content">
+		<%= @this_week_active_customers.collect{|u| u.email}.join(', ') %><br />
+
+    </div>
+</div>
+
+<%= link_to('', {}, {:name => 'inactive'}) %>
+<% @month_inactive_customers = [] %>
+<% @all_inactive_customers.each do |c| %>
+	<% if c.used_customer_credits.count > 0 %>
+	<% if (c.used_customer_credits.last.created_at + 1.month) < DateTime.now %>
+		<% @month_inactive_customers << c %>
+	<% end %>
+	<% else %>
+	<% @month_inactive_customers << c %>
+	<% end %>
+<% end %>
+
+
+<div class="slide_container">
+    <div class="slide_header"><span>Customer Email List (1 month inactive): (<%= (@month_inactive_customers - @admin_customers).count %>)</span>
+    </div>
+    <div class="slide_content">
+		<%= (@month_inactive_customers - @admin_customers).collect{|u| u.email}.join(', ') %><br />
+    </div>
+</div>
+<span style="font-size:12px"><%= link_to "back to top", '#top' %></span>

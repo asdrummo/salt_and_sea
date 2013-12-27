@@ -40,16 +40,17 @@ class AdminController < ApplicationController
   @all_inactive_customers = []
   @low_credit_customers = []
   @this_week_active_locations = []
+  @this_week_active_customers = []
   @this_week_inactive_locations = []
   @weekly_hold_customers = []
   @totals = []
   @customers_active = []
-  @active_customer = []
+  @active_customers = []
   @week1_sum, @week2_sum, @week3_sum, @week4_sum, @week5_sum, @week6_sum, @week7_sum, @week8_sum = 0, 0, 0, 0, 0, 0, 0, 0
   @week1_sum_s, @week2_sum_s, @week3_sum_s, @week4_sum_s, @week5_sum_s, @week6_sum_s, @week7_sum_s, @week8_sum_s = 0, 0, 0, 0, 0, 0, 0, 0
   
   ## DROP LOCATIONS & CUSTOMERS
-  @drop_locations = DropLocation.all(:order => 'day ASC')
+  @drop_locations = DropLocation.all
   @customers = Customer.all(:order => 'last_name ASC')
   @customers = (@customers - @admin_customers)
   find_zero_credit_customers
@@ -81,31 +82,33 @@ class AdminController < ApplicationController
     @date1 = Time.now.beginning_of_week
     @all_processed = false
   end
-  
-  #Find customers on hold this week
-  @hold_dates = HoldDate.all  
+       
+  #Find active customers
   @customers.each do |customer|
+    if (DropLocation.find_by_id(customer.drop_location_id).start_date < Date.today)
+      customer.credits.each do |credit| unless credit.credits_available == 0
+      if (credit.credits_available >= 1) && ((customer.share_type == ('single fish')) || (customer.share_type == ('single basket')) || (customer.share_type == ('single shellfish')) || (customer.share_type == ('single fish + single shellfish')))
+        #(customer.share_type == ('single fish' || 'single shellfish' || 'single basket' || 'single fish + single shellfish'))
+        @active_customers << customer
+      end
+      if (credit.credits_available >= 2) && ((customer.share_type == ('double fish')) || (customer.share_type == ('double basket')) || (customer.share_type == ('double fish + single shellfish')))
+        @active_customers << customer 
+      end
+      end
+      end
+    end
+  end
+  @active_customers = @active_customers.uniq
+  #Find customers on hold this week
+  @hold_dates = HoldDate.where(:date => @week1_date)  
+  @active_customers.each do |customer|
     @hold_dates.each do |date|
-      if (date.customer_id == customer.id) && (date.date == @week1_date)
+      if (date.customer_id == customer.id)
         @weekly_hold_customers << customer
       end
     end
   end
-     
-
-  @customers.each do |customer|
-    if (DropLocation.find_by_id(customer.drop_location_id).start_date < Date.today)
-      customer.credits.each do |credit| unless credit.credits_available == 0
-      if (credit.credits_available >= 1) && (customer.share_type == ('single fish' || 'single shellfish' || 'single basket'))
-        @active_customer << customer
-      end
-      if (credit.credits_available >= 2) && (customer.share_type == ('double fish' || 'double shellfish' || 'double basket'))
-        @active_customer << customer 
-      end
-      end
-      end
-    end
-  end
+    @weekly_hold_customers = @weekly_hold_customers.uniq
    
    ## MISC VERIABLES
    @fish_lbs_text = 'fish #s: '

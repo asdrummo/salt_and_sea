@@ -10,8 +10,22 @@
     <th></th>
     <th></th>
   </tr>
-
+<% if @customer_credits %>
+<% @customer_credits.each do |customer_credit| %>
+  <tr class="<%= cycle("odd", "even") %>">
+	    <td><%= link_to Customer.find(customer_credit.customer_id).name, customer_path(Customer.find(customer_credit.customer_id)) %></td>
+	<td><%= Product.find(customer_credit.product_id).category_name %></td>
+    <td><%= customer_credit.credits_available %></td>
+	<td><%= customer_credit.created_at.strftime("%B %d, %Y") %></td>
+    <td><%= link_to 'Show', customer_credit %></td>
+    <td><%= link_to 'Edit', edit_customer_credit_path(customer_credit) %></td>
+    <td><%= link_to 'Destroy', customer_credit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+<% else %>
 <% @page_customer_credits.each do |customer_credit| %>
+
   <tr class="<%= cycle("odd", "even") %>">
 	    <td><%= link_to Customer.find(customer_credit.customer_id).name, customer_path(Customer.find(customer_credit.customer_id)) %></td>
 	<td><%= Product.find(customer_credit.product_id).category_name %></td>
@@ -24,6 +38,7 @@
 <% end %>
 </table>
 <%= will_paginate @page_customer_credits %>
+<% end %>
 
 <br />
 

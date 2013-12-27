@@ -1,12 +1,12 @@
 <% if @print %>
-<%= render(:partial => 'admin/partials/all_locations_print') %>
-<%= render(:partial => 'admin/partials/totals_print') %>
+	<%= render(:partial => 'admin/partials/all_locations_print') %>
+	<%= render(:partial => 'admin/partials/totals_print') %>
 <% else %>
 
-print page: <%= link_to 'all', :action => "index", :black_and_white => true %>, 
-<% DropLocation.all.each do |location| %>
-<%= link_to location.name, :action => "index", :black_and_white => true, :drop_location_id => location.id %>
+	print page: <%= link_to 'all', :action => "index", :black_and_white => true %>, <% DropLocation.all.each do |location| %>
+		<%= link_to location.name, :action => "index", :black_and_white => true, :drop_location_id => location.id %>
 <% end %>
+
 <table id="admin-locations" class="account_title" style="border-top:solid 2px white; padding 5px;">
 	<tr>
 		<% i = 0 %>
@@ -27,26 +27,4 @@ print page: <%= link_to 'all', :action => "index", :black_and_white => true %>,
 
 <br />
 <%= render(:partial => 'admin/partials/all_locations') %>
-<br />
-<%= render(:partial => 'admin/partials/totals_2') %>
-<br />
-<span style="font-size:12px"><%= link_to "back to top", '#top' %></span><br />
-<%= link_to('', {}, {:name => 'email'}) %>
-<b>Customer Email List (Entire Database): </b><%= (Customer.all - @admin_customers).collect{|u| u.email}.join(', ') %><br />
-<%= link_to('', {}, {:name => 'active'}) %>
-<b>Customer Email List (Active): </b><%= (@active_customer - @admin_customers).collect{|u| u.email}.join(', ') %>, <%= (@secondary & (@active_customer - @admin_customers)).collect{|u| u.email_2}.join(', ') %><br />
-
-<%= link_to('', {}, {:name => 'inactive'}) %>
-<% @month_inactive_customers = [] %>
-<% @all_inactive_customers.each do |c| %>
-	<% if c.used_customer_credits.count > 0 %>
-	<% if (c.used_customer_credits.last.created_at + 1.month) < DateTime.now %>
-		<% @month_inactive_customers << c %>
-	<% end %>
-	<% else %>
-	<% @month_inactive_customers << c %>
-	<% end %>
-<% end %>
-<b>Customer Email List (1 month inactive): </b><%= (@month_inactive_customers - @admin_customers).collect{|u| u.email}.join(', ') %><br />
-<span style="font-size:12px"><%= link_to "back to top", '#top' %></span>
 <% end %>

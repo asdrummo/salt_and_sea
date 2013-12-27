@@ -11,9 +11,7 @@ class CustomerCreditsController < ApplicationController
       @customer_names = Customer.all
       
       @page_customer_credits = CustomerCredit.where(:id != nil).order('id DESC').paginate(:page => params[:page], :per_page => 30)
-     # @page_customer_credits = @customer_Credits.paginate(:page => params[:page], :per_page => 30)
-      
-     # @customer_credits = CustomerCredit.all(:order => 'created_at DESC') 
+
     end
     
     respond_to do |format|
