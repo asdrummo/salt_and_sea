@@ -34,7 +34,7 @@ No locations left, next week start date pushed to <%= @week1_date%>
 
 
 <% @this_week_active_customers = (@active_customers - @weekly_hold_customers)%>
-<p><strong>Active Customers:</strong> (<%= @this_week_active_customers.count %>), <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= @customers_without_credits.count %></p>
+<p><strong>Active Customers:</strong> (<%= (@this_week_active_customers -  @admin_customers).count %>), <strong>Customers on hold:</strong> <%= @weekly_hold_customers.count %>, <b>Customers w/o credits:</b> <%= (@customers_without_credits -  @admin_customers).count %></p>
 <p><strong>Low credit customers (<%= @low_credit_customers.count %>):</strong> 
 <%= @low_credit_customers.collect{|u| u.email}.join(', ')%></p>
 
