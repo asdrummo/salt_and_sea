@@ -5,7 +5,7 @@ class HoldDatesController < ApplicationController
   # GET /hold_dates.json
   def index
    # @hold_dates = HoldDate.all(:order => 'created_at DESC').uniq
-    @hold_dates = HoldDate.where(:id != nil).order('id DESC').uniq
+    @hold_dates = HoldDate.where(:id == true).order('id DESC').uniq
     @page_hold_dates = @hold_dates.paginate(:page => params[:page], :per_page => 30)
     respond_to do |format|
       format.html # index.html.erb
