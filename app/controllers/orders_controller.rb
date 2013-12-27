@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
   def index
    # @orders = Order.all(:order => 'id DESC')
     
-     @orders = Order.where(:id != nil).order('id DESC').uniq
+     @orders = Order.where(:date != nil).order('id DESC')
       @page_orders = @orders.paginate(:page => params[:page], :per_page => 30)
     respond_to do |format|
       format.html # index.html.erb
