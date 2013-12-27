@@ -10,7 +10,8 @@
 	</tr>
 <!-- start location -->
 <% @drop_locations.each do |location| %> 
-<% @location_next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, location.day.to_i) %>
+<% adjusted_date = (Date.today + 1.week) %>
+<% @location_next_date = Date.commercial(adjusted_date.year, location.day.to_i) %>
 <% @start_date = get_start_date(location) %>
 <% @week1, @week2, @week3, @week4, @week5, @week6, @week7, @week8 = [], [], [], [], [], [], [], [] %>
 <% @weeks_total_array = [] %>

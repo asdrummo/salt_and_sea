@@ -32,7 +32,8 @@ class CustomerOrderMailer < ActionMailer::Base
   end
 
   def get_next_date
-     @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+    adjusted_date = (Date.today + 1.week)
+    @next_date = Date.commercial(adjusted_date.year, adjusted_date.cweek, @location.day.to_i)
       time_to_merge = @location.start_time 
       date_to_merge = @next_date
       @merged_datetime = DateTime.new(date_to_merge.year, date_to_merge.month, date_to_merge.day, time_to_merge.hour, time_to_merge.min, time_to_merge.sec, Rational(-4, 24))
@@ -40,7 +41,8 @@ class CustomerOrderMailer < ActionMailer::Base
         if DateTime.now.in_time_zone("Eastern Time (US & Canada)") < (@merged_datetime - 7.days)
           @date = Date.commercial(Date.today.year, Date.today.cweek, @location.day.to_i)
         else
-          @date = Date.commercial(Date.today.year, 1+Date.today.cweek, @location.day.to_i)
+          adjusted_date = (Date.today + 1.week)
+          @date = Date.commercial(adjusted_date.year, adjusted_date.cweek, @location.day.to_i)
         end
       else
        @date =  @location.start_date

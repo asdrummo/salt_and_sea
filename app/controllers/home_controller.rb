@@ -130,11 +130,8 @@ class HomeController < ApplicationController
   end
   
   def check_date(location)
-    if Date.today.cweek == 52
-       @next_date = Date.commercial(Date.today.year+1, 1, day_to_int(location.day))
-    else
-       @next_date = Date.commercial(Date.today.year, 1+Date.today.cweek, day_to_int(location.day))
-    end
+    adjusted_date = (Date.today + 1.week)
+    @next_date = Date.commercial(adjusted_date.year, adjusted_date.cweek,day_to_int(location.day))
     time_to_merge = @customer_drop_location.start_time 
     date_to_merge = @next_date
     @within_five_days = false
