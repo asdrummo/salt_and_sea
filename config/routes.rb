@@ -26,6 +26,7 @@ resources :text_entries, :share_dates, :stats, :processed_locations, :preference
       get '/users/new' => 'users#new', :as => :new_user 
       get '/users/show' => 'users#show', :as => :user 
       get '/users/edit' => 'users#edit', :as => :edit_user 
+      delete '/users/destroy' => 'users#destroy', :as => :destroy_user 
       match '/users/sign_out' => 'devise/sessions#destroy'   
       match '/users/sign_up' => 'devise/registrations#new', :as => :new_user_registration
       end  

@@ -56,28 +56,21 @@ class UsersController < ApplicationController
   
   def destroy
     @user = User.find(params[:id])
-    @customer = Customer.find(:user_id => @user.id)
+  #  @customer = Customer.find(@user.id)
     
-    if @customer != nil
-      @customer = Customer.find(:user_id => @user.id)
-      @lineitems = LineItems.where(:customer_id => @customer.id)
-      @lineitems.each do |item|
-      item.destroy
-      end
-      @cart = Cart.where(:customer_id => @customer.id)
-      @cart.each do |cart|
-        cart.destroy
-      end
+   # if @customer != nil
+     @customer = Customer.find(@user.id)
+
+      HoldDate.destroy_all(:customer_id => @customer.id)
+      Order.destroy_all(:customer_id => @customer.id)
       @orders = Order.where(:customer_id => @customer.id)
-      @orders.each do |order|
-        order.destroy
-      end
       @customer.destroy
-    end
+    #end
     @user.destroy
     
     respond_to do |format|
-      format.html { redirect_to customers_url }
+      flash[:notice] = 'User Destroyed'
+      format.html { redirect_to :back }
       format.json { head :no_content }
     end
   end

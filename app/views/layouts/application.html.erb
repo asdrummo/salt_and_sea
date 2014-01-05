@@ -5,7 +5,14 @@
 	<title>Salt &#43; Sea Marketplace</title>
     
   <%= javascript_include_tag 'jquery', 'jquery_ujs',  'application' %>
+<script type="text/javascript">
+  // this allows jquery to be called along with scriptaculous and YUI without any conflicts
+  // the only difference is all jquery functions should be called with $j instead of $
+  // e.g. $jQ('#div_id').stuff instead of $('#div_id').stuff
+  var $jQ = jQuery.noConflict();
+</script>
 <%= stylesheet_link_tag    "application", :media => "all" %>
+
   <%= csrf_meta_tags %>
  <%= yield(:head) %>
 <% if @black_and_white == true %>

@@ -50,7 +50,7 @@ class AdminController < ApplicationController
   @week1_sum_s, @week2_sum_s, @week3_sum_s, @week4_sum_s, @week5_sum_s, @week6_sum_s, @week7_sum_s, @week8_sum_s = 0, 0, 0, 0, 0, 0, 0, 0
   
   ## DROP LOCATIONS & CUSTOMERS
-  @drop_locations = DropLocation.all
+  @drop_locations = DropLocation.all(:order => 'day ASC')
   @customers = Customer.all(:order => 'last_name ASC')
   @customers = (@customers - @admin_customers)
   find_zero_credit_customers
@@ -274,6 +274,7 @@ class AdminController < ApplicationController
   end
   
   def empty_sessions_table
+    HoldDate.destroy_all("date < 2013-12-30")
     sessions = Session.all
     sessions.each do |session|
       session.destroy
@@ -284,6 +285,9 @@ class AdminController < ApplicationController
         cart.destroy
       end
     end
+
+   
+     
       flash[:notice] = 'Sessions Cleared!'
       redirect_to(:back)
   end
