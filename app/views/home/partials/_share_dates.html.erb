@@ -16,9 +16,9 @@
 				<% end %>
 				<% @eight_weeks << (@date + i.week).strftime('%a %d %b %Y') %>
 			<% end %>
-			<% @customer_share_dates = ShareDate.where(:customer_id => @customer.id)%>
+			<% @customer_share_dates = ShareDate.where(:customer_id => @customer.id).order('date ASC')%>
 			<%= form_for(@share_date, :url => {:action => 'share_dates'}) do |f| %>
-				<%= select_tag 'share_dates[]', options_for_select(@eight_weeks, @customer_share_dates.map {|g| g.date.strftime('%a %d %b %Y')}),{ :multiple => true, :size => 8 } %>
+				<%= select_tag 'share_dates[]', options_for_select(@eight_weeks.uniq, @customer_share_dates.map {|g| g.date.strftime('%a %d %b %Y')}),{ :multiple => true, :size => 8 } %>
 				<%= f.hidden_field :customer_id, :value => @customer.id %>
 			<div class="actions">
 			  <%= f.submit %>

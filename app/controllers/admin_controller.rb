@@ -274,7 +274,10 @@ class AdminController < ApplicationController
   end
   
   def empty_sessions_table
-    HoldDate.destroy_all("date < 2013-12-30")
+    holds = HoldDate.where("date < :time", {:time => Date.today})
+    holds.each do |h|
+        h.destroy
+    end
     sessions = Session.all
     sessions.each do |session|
       session.destroy

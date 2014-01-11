@@ -119,7 +119,7 @@ class CustomersController < ApplicationController
   def remove_share_date
     ShareDate.find(params[:id]).destroy
     flash[:notice] = 'Share Date Removed'
-    redirect_to(:action => 'my_account')
+    redirect_to(:back)
   end
   # GET /customers/new
   # GET /customers/new.json

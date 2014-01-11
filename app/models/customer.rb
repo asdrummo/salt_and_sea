@@ -127,33 +127,45 @@ class Customer < ActiveRecord::Base
      if fish > 1
      return fish -= 2
      end
+   elsif  self.share_type == "single fish + single shellfish"
+     if fish > 0
+     return fish -= 1
+     end
    else
      return fish
    end
    end
 
+
+
    def subtract_shellfish_credits(shellfish, date, location, all_processed)
-     if (location.processed == true) && (all_processed == false)
-       week = (date + 1.week).cweek
-       if week == 53
-         week = 1
-       end
-     else
-       week = date.cweek
-     end
-     if week.even? == true
-     if self.share_type == "single shellfish"
-       if shellfish > 0
-         return shellfish -= 1
-       end
-     elsif self.share_type == "double shellfish"
-       if shellfish > 1
-         return shellfish -= 2
-       end
-     else
-       return shellfish
-     end
-   end
+         if (location.processed == true) && (all_processed == false)
+                   week = (date + 1.week).cweek
+                   if week == 53
+                     week = 1
+                   end
+          else
+                   week = date.cweek
+          end
+         # if week.even? == false
+                 if (self.share_type == "single shellfish")
+                   if shellfish > 0
+                     return shellfish -= 1
+                   end
+                 elsif self.share_type == "single fish + single shellfish"
+                   if shellfish > 0
+                     return shellfish -= 1
+                   end
+                 elsif self.share_type == "double shellfish"
+                   if shellfish > 1
+                     return shellfish -= 2
+                   end
+                 else
+                   return shellfish
+                 end
+        #  else
+        #    return shellfish
+        #  end
 
    end
 
@@ -250,13 +262,14 @@ class Customer < ActiveRecord::Base
         @basket = "XX"
         @double_basket = "XXXX"
         @double_shellfish = ""
+        @single_single = "XX"
       else
         @basket = "SS"
         @double_basket = "SSSS"
         @double_shellfish = "SSSS"
+        @single_single = "XXSS"
       end
 
-    
     if (fish > s) && (self.share_type == "single fish")
       return "XX"
     elsif (fish > d) && (self.share_type == "double fish")
@@ -272,7 +285,7 @@ class Customer < ActiveRecord::Base
     elsif (fish > s) && (basket > s) && (self.share_type == "single fish + single basket")
       return ("XX" + @basket)
     elsif (fish > s) && (shellfish > s) && (self.share_type == "single fish + single shellfish")
-      return("XXSS")
+      return @single_single
     elsif (fish > d) && (shellfish > s) && (self.share_type == "double fish + single shellfish")
         return("XXXX + SS")
     elsif (fish > d) && (shellfish > d) && (self.share_type == "double fish + double shellfish")

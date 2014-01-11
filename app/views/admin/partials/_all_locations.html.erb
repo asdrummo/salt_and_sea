@@ -237,6 +237,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
     <tr class="account_title" style="">
 	<th class="date_links"><%= link_to 'Process All', {:controller => "customer_credits", :action => "use_credit_all", :id => location.id, :date => @week1_date}, data: { confirm: 'Are you sure?' } %> | <%= link_to 'UnProcess All', {:controller => "customer_credits", :action => "add_credit_all", :id => location.id, :date => @week1_date}, data: { confirm: 'Are you sure?' } %></th>
       <th>Customer</th>
+	  <th>Recent History</th>
       <th>Email</th>
       <th>Phone</th>
       <th>Share</th>
@@ -288,6 +289,12 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 	<tr class="<%= cycle("odd", "even") %>">
 		<td><%= link_to 'process', :controller => "customer_credits", :action => "use_credit", :id => customer.id %></td>
 		<td><%= link_to customer.name, customer_path(customer) %></td>
+		<td><% credit = customer.used_customer_credits.order("created_at").last %>
+			<% if credit != nil %>
+			<%= credit.created_at.strftime("%m/%d/%y") %>
+			<% else %>
+			none
+			<% end %></td>
 		<td><%= customer.email %></td>
 		<td><%= clean_number(customer.phone_number.parameterize) %></td>
 		<td><%= customer.share_type %></td>	
@@ -302,9 +309,9 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% if customer.share_check(@location_next_date) == false %>
 				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 0, 1, location, @date, @all_processed) %>
 				<% else %>
-				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 0, 1, location, @date, @all_processed) %>
+				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3, location, @date, @all_processed) %>
 				<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 				<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
 				<% end %> 
 				<% @week1 << @weekly_product %>
@@ -321,7 +328,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% if customer.share_check(@location_next_date + 1.week) == false %>
 				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3, location, @date, @all_processed) %>
 				<% else %>
-				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 1, 3, location, @date, @all_processed) %>
+				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 2, 5, location, @date, @all_processed) %>
 				<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
 				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 				<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
@@ -339,11 +346,12 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		<td><% if customer.hold_check((@location_next_date + 2.weeks)) == false %>
 				<% if customer.share_check(@location_next_date + 2.week) == false %>
 					<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 2, 5, location, @date, @all_processed) %>
-				<% else %>
-					<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 2, 5, location, @date, @all_processed) %>
+				<% elsif  %>
+					<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 3, 7, location, @date, @all_processed) %>
 				<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 				<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
+
 				<% end %>				
 				<% @week3 << @weekly_product %>
 			<% else %>
@@ -359,10 +367,14 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% if customer.share_check(@location_next_date + 3.week) == false %>
 					<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 3, 7, location, @date, @all_processed) %>
 				<% else %>
-					<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 3, 7, location, @date, @all_processed) %> 
-				<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
-				<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
+					<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 4, 9, location, @date, @all_processed) %> 
+					<% if @dubcredcheck == true %>
+					<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
+					<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
+					<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
+					<% else %>
+					<%= "insufficient credits"%>
+					<% end %>
 				<% end %>
 				<% @week4 << @weekly_product %>
 			<% else %>
@@ -378,9 +390,10 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% if customer.share_check(@location_next_date + 4.week) == false %>
 				<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 4, 9, location, @date, @all_processed) %> 
 				<% else %>
-				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 4, 9, location, @date, @all_processed) %> 
+				<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 5, 11, location, @date, @all_processed) %> 
 				<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+				<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
+				
 				<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
 				<% end %>
 				<% @week5 << @weekly_product %>
@@ -398,9 +411,9 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		<% if customer.share_check(@location_next_date + 5.week) == false %>
 		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 5, 11, location, @date, @all_processed) %> 
 		<% else %>
-		<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 5, 11, location, @date, @all_processed) %> 
-		<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-		<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+		<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13, location, @date, @all_processed) %> 
+		<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>	
+		<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 		<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
 		<% end %>
 			<% @week6 << @weekly_product %>
@@ -417,9 +430,9 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		<% if customer.share_check(@location_next_date + 6.week) == false %>
 		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13, location, @date, @all_processed) %> 
 		<% else %>
-		<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 6, 13, location, @date, @all_processed) %> 
+		<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15, location, @date, @all_processed) %> 
 		<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-		<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+		<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 		<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
 		<% end %>
 			<% @week7 << @weekly_product %>
@@ -436,9 +449,9 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 		<% if customer.share_check(@location_next_date + 7.week) == false %>
 		<%= @weekly_product = customer.weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15, location, @date, @all_processed) %> 
 		<% else %>
-		<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 7, 15, location, @date, @all_processed) %> 
+		<%= @weekly_product = customer.double_weekly_product(@fish_credits, @shellfish_credits, @basket_credits, 8, 17, location, @date, @all_processed) %> 
 		<% @fish_credits = customer.subtract_fish_credits(@fish_credits) %>
-		<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits) %>
+		<% @shellfish_credits = customer.subtract_shellfish_credits(@shellfish_credits, @date, location, @all_processed) %>
 		<% @basket_credits = customer.subtract_basket_credits(@basket_credits) %>
 		<% end %>
 			<% @week8 << @weekly_product %>
