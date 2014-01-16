@@ -196,8 +196,12 @@ class AdminController < ApplicationController
         @customers_without_credits << customer
       elsif  ((@credit_sum > 0) && (@credit_sum < 2)) && ((customer.share_type == 'single fish') || (customer.share_type == 'single shellfish') || (customer.share_type == 'single basket'))
            @low_credit_customers << customer
-      elsif ((@credit_sum > 0) && (@credit_sum < 4)) && (customer.share_type == ('double fish' || 'double shellfish' || 'double basket' || 'single fish + single shellfish' || 'single fish + double shellfish' || 'single fish + single basket' || 'single fish + double basket' || 'double fish + single shellfish'))
+      elsif ((@credit_sum > 0) && (@credit_sum < 3)) && (customer.share_type == ('double fish' || 'double shellfish' || 'double basket' || 'single fish + single shellfish' || 'single fish + double shellfish' || 'single fish + single basket' || 'single fish + double basket' || 'double fish + single shellfish'))
               @low_credit_customers << customer
+      elsif(@credit_sum < 2) && (customer.share_type == ('single fish + single shellfish'))
+        @low_credit_customers << customer
+      elsif(@credit_sum == 1) && (customer.share_type == ('single fish + single shellfish'))
+        @low_credit_customers << customer
       end
        @fish_credits = 0
        @shellfish_credits = 0
