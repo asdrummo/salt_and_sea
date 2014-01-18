@@ -121,7 +121,7 @@ class HomeController < ApplicationController
          #@customer_hold_date = HoldDate.new(:customer_id => @customer.id, :date => @date).save
       #end
       
-       flash[:notice] = 'Contact Info Saved!'
+       flash[:notice] = 'Contact Info Saved!!'
        redirect_to(:back)
       else
         flash[:alert] = 'Something Went Wong' 

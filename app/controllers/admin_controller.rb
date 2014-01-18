@@ -194,18 +194,40 @@ class AdminController < ApplicationController
       @credit_sum = (@fish_credits + @shellfish_credits + @basket_credits)
       if @credit_sum == 0
         @customers_without_credits << customer
-      elsif  ((@credit_sum > 0) && (@credit_sum < 2)) && ((customer.share_type == 'single fish') || (customer.share_type == 'single shellfish') || (customer.share_type == 'single basket'))
-           @low_credit_customers << customer
-      elsif ((@credit_sum > 0) && (@credit_sum < 3)) && (customer.share_type == ('double fish' || 'double shellfish' || 'double basket' || 'single fish + single shellfish' || 'single fish + double shellfish' || 'single fish + single basket' || 'single fish + double basket' || 'double fish + single shellfish'))
-              @low_credit_customers << customer
-      elsif(@credit_sum < 2) && (customer.share_type == ('single fish + single shellfish'))
+      elsif (customer.share_type == 'single fish') && ((@fish_credits > 0) && (@fish_credits < 2))
         @low_credit_customers << customer
-      elsif(@credit_sum == 1) && (customer.share_type == ('single fish + single shellfish'))
+      elsif (customer.share_type == 'single shellfish') && ((@shellfish_credits > 0) && (@shellfish_credits < 3))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single basket') && ((@basket_credits > 0) && (@basket_credits < 2))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'double fish') && ((@fish_credits > 0) && (@fish_credits < 3))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'double basket') && ((@basket_credits > 0) && (@basket_credits < 3))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single fish + single shellfish') && ((@fish_credits > 0) && (@fish_credits < 2))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single fish + single shellfish') && ((@shellfish_credits > 0) && (@shellfish_credits < 2))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single fish + double shellfish') && ((@fish_credits > 0) && (@fish_credits < 2))
+        @low_credit_customers << customer 
+      elsif (customer.share_type == 'single fish + double shellfish') && ((@shellfish_credits > 0) && (@shellfish_credits < 3))
+        @low_credit_customers << customer               
+      elsif (customer.share_type == 'single fish + single basket') && ((@fish_credits > 0) && (@fish_credits < 2))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single fish + single basket') && ((@basket_credits > 0) && (@basket_credits < 2))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single fish + double basket') && ((@fish_credits > 0) && (@fish_credits < 2))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'single fish + double basket') && ((@basket_credits > 0) && (@basket_credits < 3))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'double fish + single shellfish') && ((@fish_credits > 0) && (@fish_credits < 3))
+        @low_credit_customers << customer
+      elsif (customer.share_type == 'double fish + single shellfish') && ((@shellfish_credits > 0) && (@shellfish_credits < 2))
         @low_credit_customers << customer
       end
        @fish_credits = 0
        @shellfish_credits = 0
-      @basket_credits = 0
+       @basket_credits = 0
     end
     
   end
