@@ -1,5 +1,8 @@
 SaltAndSea::Application.routes.draw do
 
+  resources :add_shares
+
+
 resources :text_entries, :share_dates, :stats, :processed_locations, :preferences, :customers, :hold_dates, :customer_credits, :used_customer_credits, :products, :line_items, :current_cart, :drop_locations, :payment_notifications
   #map.current_cart 'cart', :controller => 'carts', :action => 'show', :id => 'current'
 

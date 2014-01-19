@@ -145,6 +145,16 @@
 					<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 					<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 				<% end %>
+					<% @add_shares = customer.add_share_check(@location_next_date) %>
+					<% if @add_shares.any? %>
+					<br />Added share:
+						<% @add_shares.each do |share| %>
+							<% customer.return_share(share).each do |credit| %>
+							<% @week1 << credit %>
+							<%= credit %>,
+							<% end %>
+						<% end %>
+					<% end %>
 			</td>
 		</tr>
 		<% @fish_credits = 0 %>

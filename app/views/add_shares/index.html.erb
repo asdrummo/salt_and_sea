@@ -1,0 +1,29 @@
+<h1>Listing add_shares</h1>
+
+<table>
+  <tr>
+    <th>Customer</th>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Date</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @add_shares.each do |add_share| %>
+  <tr>
+    <td><%= Customer.find(add_share.customer_id).name %></td>
+    <td><%= Product.find(add_share.product_id).category_name %></td>
+    <td><%= add_share.quantity %></td>
+    <td><%= add_share.date %></td>
+    <td><%= link_to 'Show', add_share %></td>
+    <td><%= link_to 'Edit', edit_add_share_path(add_share) %></td>
+    <td><%= link_to 'Destroy', add_share, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Add share', new_add_share_path %>

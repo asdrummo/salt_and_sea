@@ -4,6 +4,7 @@ class Customer < ActiveRecord::Base
   has_many :used_customer_credits
   has_many :hold_dates
   has_many :share_dates
+  has_many :add_shares
   has_one :drop_location
   has_one :preference
   belongs_to :user
@@ -63,6 +64,33 @@ class Customer < ActiveRecord::Base
       end
     end
      return @hold
+  end
+  
+  def add_share_check(date)
+    @add = []
+    self.add_shares.each do |customer_add_share|
+      if (customer_add_share.date <= date) && ((customer_add_share.date + 1.week) > date)
+        @add << customer_add_share.id
+      end
+    end
+     return @add
+  end
+  
+  def return_share(id)
+    @share = AddShare.find(id)
+    @shares = []
+    @product = Product.find(@share.product_id)
+    if @product.category == "fish"
+      (1..@share.quantity).each do |share|
+        @shares << "X"
+      end
+      return @shares
+    else
+      (1..@share.quantity).each do |share|
+        @shares << "S"
+      end
+      return @shares
+    end
   end
   
   def share_check(date)

@@ -322,7 +322,18 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 			<% end %>
+			<% @add_shares = customer.add_share_check(@location_next_date) %>
+			<% if @add_shares.any? %>
+			<br />Added share:
+				<% @add_shares.each do |share| %>
+					<% customer.return_share(share).each do |credit| %>
+					<% @week1 << credit %>
+					<%= credit %>,
+					<% end %>
+				<% end %>
+			<% end %>
 		</td>
+		
 		<!-- week 2 -->
 		<% @date = (@week1_date + 1.week) %>
 		<td><% if customer.hold_check((@location_next_date + 1.week)) == false %>
@@ -341,6 +352,16 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 			<% end %>
+				<% @add_shares = customer.add_share_check(@location_next_date + 1.week) %>
+				<% if @add_shares.any? %>
+				<br />Added share:
+					<% @add_shares.each do |share| %>
+						<% customer.return_share(share).each do |credit| %>
+						<% @week1 << credit %>
+						<%= credit %>,
+						<% end %>
+					<% end %>
+				<% end %>
 		</td>
 		<!-- week 3 -->
 		<% @date = (@week1_date + 2.weeks) %>
@@ -361,6 +382,16 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 			<% end %>
+				<% @add_shares = customer.add_share_check(@location_next_date + 2.weeks) %>
+				<% if @add_shares.any? %>
+				<br />Added share:
+					<% @add_shares.each do |share| %>
+						<% customer.return_share(share).each do |credit| %>
+						<% @week1 << credit %>
+						<%= credit %>,
+						<% end %>
+					<% end %>
+				<% end %>
 		</td>
 		<!-- week 4 -->
 		<% @date = (@week1_date + 3.weeks) %>
@@ -384,6 +415,16 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 			<% end %>
+				<% @add_shares = customer.add_share_check(@location_next_date + 3.weeks) %>
+				<% if @add_shares.any? %>
+				<br />Added share:
+					<% @add_shares.each do |share| %>
+						<% customer.return_share(share).each do |credit| %>
+						<% @week1 << credit %>
+						<%= credit %>,
+						<% end %>
+					<% end %>
+				<% end %>
 		</td>
 		<!-- week 5 -->
 		<% @date = (@week1_date + 4.weeks) %>
@@ -404,7 +445,16 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 			<% end %>
-			
+				<% @add_shares = customer.add_share_check(@location_next_date + 4.weeks) %>
+				<% if @add_shares.any? %>
+				<br />Added share:
+					<% @add_shares.each do |share| %>
+						<% customer.return_share(share).each do |credit| %>
+						<% @week1 << credit %>
+						<%= credit %>,
+						<% end %>
+					<% end %>
+				<% end %>
 		</td>
 		<!-- week 6 -->
 		<% @date = (@week1_date + 5.weeks) %>
@@ -424,6 +474,16 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
 			<% end %>			
+			<% @add_shares = customer.add_share_check(@location_next_date + 5.weeks) %>
+			<% if @add_shares.any? %>
+			<br />Added share:
+				<% @add_shares.each do |share| %>
+					<% customer.return_share(share).each do |credit| %>
+					<% @week1 << credit %>
+					<%= credit %>,
+					<% end %>
+				<% end %>
+			<% end %>
 		</td>
 		<!-- week 7 -->
 		<% @date = (@week1_date + 6.weeks) %>
@@ -442,7 +502,17 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
-			<% end %>			
+			<% end %>
+				<% @add_shares = customer.add_share_check(@location_next_date + 6.weeks) %>
+				<% if @add_shares.any? %>
+				<br />Added share:
+					<% @add_shares.each do |share| %>
+						<% customer.return_share(share).each do |credit| %>
+						<% @week1 << credit %>
+						<%= credit %>,
+						<% end %>
+					<% end %>
+				<% end %>			
 		</td>
 		<!-- week 8 -->
 		<% @date = (@week1_date + 7.weeks) %>
@@ -461,7 +531,17 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 				<% @fish_credits = customer.add_fish_credits(@fish_credits) %>
 				<% @shellfish_credits = customer.add_shellfish_credits(@shellfish_credits) %>
 				<% @basket_credits = customer.add_basket_credits(@basket_credits) %>
-			<% end %>			
+			<% end %>
+				<% @add_shares = customer.add_share_check(@location_next_date + 7.weeks) %>
+				<% if @add_shares.any? %>
+				<br />Added share:
+					<% @add_shares.each do |share| %>
+						<% customer.return_share(share).each do |credit| %>
+						<% @week1 << credit %>
+						<%= credit %>,
+						<% end %>
+					<% end %>
+				<% end %>			
 		</td>	
 	</tr>
 	<% @fish_credits = 0 %>
@@ -475,7 +555,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 <tr style="background-color:#dbfedd">
 	<td></td>
 	<td>Total Customers: <%= @active_customers.count - @location_hold_customers.count %></td>
-	<td colspan="7"></td>
+	<td colspan="8"></td>
 	<td>
 		<% @totals << [location.id, @date, fish(@week1), shellfish(@week1)] %>
 		<%= @fish_lbs_text %><%= fish(@week1) %><br />
