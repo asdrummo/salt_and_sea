@@ -26,7 +26,7 @@ class AddSharesController < ApplicationController
   def new
     @add_share = AddShare.new
     @customer_names = Customer.all(:order => 'last_name ASC')
-    @products = Product.where("share_type = ? OR share_type = ?", "single", "double")
+    @products = Product.where("id = ? OR id = ?", 1, 3)
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @add_share }

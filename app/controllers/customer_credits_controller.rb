@@ -280,7 +280,7 @@ class CustomerCreditsController < ApplicationController
   end
   
   def add_used_credit(credit, customer_id, value)
-    @customer_credit_used = UsedCustomerCredit.new(:customer_id => customer_id, :product_id => credit.product_id, :credits_used => value).save
+    @customer_credit_used = UsedCustomerCredit.new(:customer_id => customer_id, :product_id => credit.product_id, :credits_used => value, :credit_type => Customer.find(customer_id).share_type).save
   end
   
   def remove_used_credit(credit, customer_id, value)
