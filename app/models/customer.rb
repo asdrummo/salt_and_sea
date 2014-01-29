@@ -175,7 +175,7 @@ class Customer < ActiveRecord::Base
           else
                    week = date.cweek
           end
-         # if week.even? == false
+          if week.even?
                  if (self.share_type == "single shellfish")
                    if shellfish > 0
                      return shellfish -= 1
@@ -191,9 +191,9 @@ class Customer < ActiveRecord::Base
                  else
                    return shellfish
                  end
-        #  else
-        #    return shellfish
-        #  end
+          else
+           return shellfish
+         end
 
    end
 
@@ -241,7 +241,7 @@ class Customer < ActiveRecord::Base
       return "X"
     elsif (fish > d) && (self.share_type == "double fish")
       return "XX"
-    elsif (shellfish > s) && (self.share_type == "single shellfish")
+    elsif ((shellfish * 2) > s) && (self.share_type == "single shellfish")
        return(@single_shellfish)
     elsif (shellfish > d) && (self.share_type == "double shellfish")
       return(@double_shellfish)
@@ -251,19 +251,19 @@ class Customer < ActiveRecord::Base
       return @double_basket
     elsif (fish > s) && (basket > s) && (self.share_type == "single fish + single basket")
       return ("X" + @basket)
-    elsif (fish > s) && (shellfish > s) && (self.share_type == "single fish + single shellfish")
+    elsif (fish > s) && ((shellfish * 2) > s) && (self.share_type == "single fish + single shellfish")
       return @single_fish_shellfish
     elsif (fish > s) && (self.share_type == "single fish + single shellfish")
       return("X")
-    elsif (shellfish > s) && (self.share_type == "single fish + single shellfish")
+    elsif ((shellfish * 2) > s) && (self.share_type == "single fish + single shellfish")
       return @single_shellfish
-    elsif (fish > d) && (shellfish > s) && (self.share_type == "double fish + single shellfish")
+    elsif (fish > d) && ((shellfish * 2) > s) && (self.share_type == "double fish + single shellfish")
         if week.even? == true
         return("XX + S")
         else
           return("XX")
         end
-    elsif (fish > d) && (shellfish > d) && (self.share_type == "double fish + double shellfish")
+    elsif (fish > d) && ((shellfish * 2) > d) && (self.share_type == "double fish + double shellfish")
         if week.even? == true
         return("XX + SS")
         else
@@ -302,7 +302,7 @@ class Customer < ActiveRecord::Base
       return "XX"
     elsif (fish > d) && (self.share_type == "double fish")
       return "XXXX"
-    elsif (shellfish > s) && (self.share_type == "single shellfish")
+    elsif ((shellfish * 2) > s) && (self.share_type == "single shellfish")
       return "SS"
     elsif ((shellfish + shellfish) > d) && (self.share_type == "double shellfish")
      return @double_shellfish
@@ -312,16 +312,16 @@ class Customer < ActiveRecord::Base
       return @double_basket
     elsif (fish > s) && (basket > s) && (self.share_type == "single fish + single basket")
       return ("XX" + @basket)
-    elsif (fish > s) && (shellfish > s) && (self.share_type == "single fish + single shellfish")
+    elsif (fish > s) && ((shellfish * 2) > s) && (self.share_type == "single fish + single shellfish")
       return @single_single
-    elsif (shellfish > s) && (self.share_type == "single fish + single shellfish")
+    elsif ((shellfish * 2) > s) && (self.share_type == "single fish + single shellfish")
       return @single_shellfish
       
-    elsif (fish == s) && (shellfish > s) && (self.share_type == "single fish + single shellfish")
+    elsif (fish == s) && ((shellfish * 2) > s) && (self.share_type == "single fish + single shellfish")
       return "X"     
-    elsif (fish > d) && (shellfish > s) && (self.share_type == "double fish + single shellfish")
+    elsif (fish > d) && ((shellfish * 2) > s) && (self.share_type == "double fish + single shellfish")
         return("XXXX + SS")
-    elsif (fish > d) && (shellfish > d) && (self.share_type == "double fish + double shellfish")
+    elsif (fish > d) && ((shellfish * 2) > d) && (self.share_type == "double fish + double shellfish")
         return("XXXX + SSSS")
     end
   end
