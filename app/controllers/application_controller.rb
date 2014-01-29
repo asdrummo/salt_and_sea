@@ -106,6 +106,29 @@ class ApplicationController < ActionController::Base
       end
     end
     
+      
+      def check_week(location, date, all_processed)
+        date = Date.parse(date)
+        location = DropLocation.find_by_id(location)
+        if (location.processed == true) && (all_processed == false)
+          week = (date + 1.week).cweek
+          if week == 53
+            week = 1
+          end
+        else
+          week = date.cweek
+        end
+
+          if week.even? == true
+            session[:week] = "even"
+          else
+            session[:week] = "odd"
+          end
+        end
+          
+          
+          
+    
     private
         
     def render_error(status, exception)

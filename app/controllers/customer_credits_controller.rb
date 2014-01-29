@@ -21,7 +21,7 @@ class CustomerCreditsController < ApplicationController
   end
   
   def use_credit
-  process_credit(params[:id])
+  process_credit(params[:id], params[:date], params[:location], params[:all_processed])
   flash[:notice] = 'Credit Processed'
   redirect_to(:back)
   end
@@ -41,11 +41,12 @@ class CustomerCreditsController < ApplicationController
           @share_date_exists = true
         end
       end
+      location = DropLocation.find_by_id(params[:id])
       if @exists == false
-        process_credit(customer.id)
+        process_credit(customer.id, params[:date], location, params[:all_processed])        
       end
       if @share_date_exists == true
-        process_credit(customer.id)
+        process_credit(customer.id, params[:date], location, params[:all_processed])        
       end
       @exists = false
       @share_date_exists = false
@@ -82,9 +83,10 @@ class CustomerCreditsController < ApplicationController
   end
 
   
-  def process_credit(customer_id)
+  def process_credit(customer_id, date, location, all_processed)    
     customer_credits = CustomerCredit.where(:customer_id => customer_id)
     customer = Customer.find_by_id(customer_id)
+    check_week(location, date, all_processed)
     @single_fish_stop = false
     @double_fish_stop = false
     @single_shellfish_stop = false
@@ -110,7 +112,7 @@ class CustomerCreditsController < ApplicationController
             end
           end
 
-          unless @single_shelfish_stop == true
+          unless (@single_shelfish_stop == true) || (session[:week] == "even")
             if (customer.share_type == "single shellfish") && (category == "shellfish")
               credit.credits_available -= 1
               add_used_credit(credit, customer_id, 1)

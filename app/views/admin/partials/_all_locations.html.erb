@@ -235,7 +235,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 <%= link_to 'mark as processed', :action => 'mark_as_processed', :id => location.id, :date => @week1_date %>(<%= location.processed %>)
 <table class="location" cellpadding="10">
     <tr class="account_title" style="">
-	<th class="date_links"><%= link_to 'Process All', {:controller => "customer_credits", :action => "use_credit_all", :id => location.id, :date => @week1_date}, data: { confirm: 'Are you sure?' } %> | <%= link_to 'UnProcess All', {:controller => "customer_credits", :action => "add_credit_all", :id => location.id, :date => @week1_date}, data: { confirm: 'Are you sure?' } %></th>
+	<th class="date_links"><%= link_to 'Process All', {:controller => "customer_credits", :action => "use_credit_all", :id => location.id, :date => @week1_date, :all_processed => @all_processed }, data: { confirm: 'Are you sure?' } %> | <%= link_to 'UnProcess All', {:controller => "customer_credits", :action => "add_credit_all", :id => location.id, :date => @week1_date}, data: { confirm: 'Are you sure?' } %></th>
       <th>Customer</th>
 	  <th>Recent History</th>
       <th>Email</th>
@@ -287,7 +287,7 @@ Customers who dislike <b><%= @fishy%></b>: <%= @customer_fish_prefs.collect{|u| 
 
 <% if (@fish_credits + @shellfish_credits + @basket_credits > 0) %>
 	<tr class="<%= cycle("odd", "even") %>">
-		<td><%= link_to 'process', :controller => "customer_credits", :action => "use_credit", :id => customer.id %></td>
+		<td><%= link_to 'process', :controller => "customer_credits", :action => "use_credit", :id => customer.id, :location => location, :date => @week1_date, :all_processed => @all_processed %></td>
 		<td><%= link_to customer.name, customer_path(customer) %></td>
 		<td><% credit = customer.used_customer_credits.order("created_at").last %>
 			<% if credit != nil %>
